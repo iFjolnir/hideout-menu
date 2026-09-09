@@ -1,51 +1,54 @@
 {
-"sections": [
-{
-"title": "Cocktails of the Month",
-"items": [
-{
-"name": "Karen-Shii",
-"price": 13,
-"photo": "karen-shii.jpg",
-"ingredients": [
-"Andong soju",
-"Omija cordial",
-"Elderflower liqueur",
-"Fino Sherry"
-]
-},
-{
-"name": "Master Collins",
-"price": 13,
-"photo": "master-collins.jpg",
-"ingredients": [
-"Andong soju",
-"Yuzu rice cordial",
-"Sparkling water"
-]
-},
-{
-"name": "Socu Socu Sour",
-"price": 13,
-"photo": "socu-socu-sour.jpg",
-"ingredients": [
-"Andong soju",
-"Cucumber cordial",
-"Egg white"
-]
-},
-{
-"name": "O-Mi-OH-My",
-"price": 9,
-"photo": "o-mi-oh-my.jpg",
-"mocktail": true,
-"ingredients": [
-"Omija cordial",
-"Coconut water",
-"Sugar syrup"
-]
-}
-]
-}
-]
+  "sections": [
+    {
+      "title": "Cocktails of the Month",
+      "items": [
+        {
+          "name": "Pear Me Up",
+          "price": 13,
+          "photo": "0926-pear-me-up.jpg",
+          "ingredients": [
+            "Gin",
+            "Korean pear cordial",
+            "Sauvignon Blanc",
+            "Lemon",
+            "Sparkling water"
+          ]
+        },
+        {
+          "name": "Is It Pink?",
+          "price": 13,
+          "photo": "0926-is-it-pink.jpg",
+          "ingredients": [
+            "Tequila blanco",
+            "Orange liqueur",
+            "Omija cordial",
+            "Sparkling water"
+          ]
+        },
+        {
+          "name": "Storm Chaser",
+          "price": 13,
+          "photo": "0926-storm-chaser.jpg",
+          "ingredients": [
+            "Plantation dark rum",
+            "Captain Morgan",
+            "Ginger soda"
+          ]
+        },
+        {
+          "name": "Pinky Promise",
+          "price": 9,
+          "photo": "0926-pinky-promise.jpg",
+          "mocktail": true,
+          "ingredients": [
+            "Korean pear cordial",
+            "Omija cordial",
+            "Sugar syrup",
+            "Sparkling water"
+          ]
+        }
+      ]
+    }
+  ]
 }
