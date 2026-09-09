@@ -68,14 +68,18 @@
      units of --x, so it scales with the screen: bump the
      multiplier, not the unit.
      --------------------------------------------------------- */
-  --heat-inset-x:4;   /* flame's gap from the LEFT edge of the photo */
-  --heat-inset-y:3;     /* and from the BOTTOM edge */
-  --heat-size:4;        /* width of one flame */
-  --heat-overlap:.8;   /* how far each flame sits over the one to its left */
+  --heat-inset-x:2.4;   /* flame's gap from the LEFT edge of the photo */
+  --heat-inset-y:2;     /* and from the BOTTOM edge */
+  --heat-size:7;        /* width of one flame */
+  --heat-overlap:2.4;   /* how far each flame sits over the one to its left */
 
   --note-gap:1.5;       /* gap between an item name and its note, where the
                            note is on its own line (Shots, Non-alcoholic) */
   --note-lead:1.4;      /* line spacing WITHIN a note that wraps */
+  --step-squeeze:2;     /* how much of the +/- buttons' height is allowed to
+                           overhang its row instead of pushing the note down.
+                           Raise it if --note-gap still bottoms out; lower it
+                           toward 0 to put the old spacing back. */
 
   --tile:#f6f4f1;      /* empty photo slot, before an image loads */
   --tile-fill:#f6f4f1; /* fill behind the name on a photoless card */
@@ -232,6 +236,16 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .rowname{font-size:var(--t-item);letter-spacing:.07em;text-transform:uppercase;line-height:1.3}
 .rowname .sub{margin-left:calc(var(--x)*2.4);font-size:var(--t-ing);
   letter-spacing:.09em;color:var(--dim)}
+/* The +/- buttons are set about twice the height of the item name beside
+   them, and a centred flex row takes its height from the tallest child. So
+   the name sat in the middle of a stepper-height row, with dead space under
+   it that --note-gap could add to but never remove. Negative block margins
+   let the buttons overhang the row instead of inflating it: the tap target
+   is unchanged, the row is now the height of the name, and --note-gap goes
+   all the way down to 0. Only on note-below rows — Beer and Bottles keep
+   the roomier row they already had. */
+.nbrow .vrow .step{margin-block:calc(var(--x) * var(--step-squeeze) * -1)}
+
 /* set by "noteBelow": true on a section — the note drops under the name
    instead of trailing it, for sections whose notes are ingredient lists.
    Price and stepper stay on the name's line, not centred on the pair. */
@@ -242,14 +256,30 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .vrow.single{padding:0}
 .vrow .rowname{flex:1;min-width:0}
 .vname{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
-/* variants share the row's width, each a label with its price and stepper */
-.vgrid{display:flex;gap:calc(var(--x)*4);margin-top:calc(var(--x)*2)}
-.vcell{flex:1 1 0;min-width:0;display:grid;
-  grid-template-columns:1fr auto;grid-template-rows:auto auto;
-  align-items:center;column-gap:calc(var(--x)*2)}
-.vcell .vname{grid-column:1/-1;margin-bottom:calc(var(--x)*.5)}
-.vcell .vpr{text-align:left}
-.vcell .step{padding-top:0;gap:0;justify-content:flex-end;min-width:0}
+/* ---------- two-price rows (Mixers, Bottles) ----------
+   Left column names the thing, right column stacks its sizes. Side by side
+   the two steppers sat next to the wrong prices, and the variety line
+   ("Bourbon") was styled identically to the size line ("Shot") — same grey,
+   same caps, different job. Splitting them by column tells them apart by
+   position instead of by adding a third grey, and gives the variety line a
+   home: on Mixers it can finally say which gin is in the gin and tonic.
+   One stepper per line, all of them ending at the same right edge. */
+.vsplit{display:flex;align-items:flex-start;gap:calc(var(--x)*5)}
+.vleft{flex:1 1 0;min-width:0}
+.vright{flex:1 1 0;min-width:0}
+.vline+.vline{border-top:1px solid var(--rule);
+  margin-top:calc(var(--x)*2.5);padding-top:calc(var(--x)*2.5)}
+/* An empty string in "variants" means the default size, which is left
+   unlabelled — a mixer is either nothing or a Double. The blank still holds
+   its line so the two sizes stay level with each other. */
+.vline .vname{display:block;min-height:calc(var(--t-ing) * 1.3)}
+.vfoot{display:flex;align-items:center;justify-content:space-between;
+  gap:calc(var(--x)*2);margin-top:calc(var(--x)*.5)}
+.vfoot .vpr{text-align:left}
+/* same trick as the note-below rows: let the buttons overhang rather than
+   inflate the line they sit on */
+.vfoot .step{padding-top:0;gap:calc(var(--x)*1);
+  margin-block:calc(var(--x) * var(--step-squeeze) * -1)}
 .vpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:.03em;
   white-space:nowrap;text-align:right}
 .vrow .step{padding-top:0;gap:calc(var(--x)*1);flex:0 0 auto;
@@ -596,7 +626,13 @@ function indexAll(){
       });
     }));
     if(T.list) T.list.forEach(s => s.rows.forEach(r => {
-      if(r.v) r.ids = r.v.map((p,i) => add(r.n, r.sub, p, s.vl[i]));
+      /* On a two-price row the note is a variety, and two rows sharing a
+         name are told apart by it alone — so it joins the name on an order
+         rather than trailing it as a qualifier: "Wild Turkey — Rye", then
+         "bottle" in grey. Single-price notes (a country, an ingredient
+         list) are not varieties and stay where they are. */
+      if(r.v) r.ids = r.v.map((p,i) =>
+        add(r.sub ? r.n + ' — ' + r.sub : r.n, '', p, s.vl[i]));
       else    r.id  = add(r.n, r.sub, r.p);
     }));
   }
@@ -843,6 +879,19 @@ function stepper(id, kind){
 const FLAME_BOX  = '0 0 24.634 33.978';
 const FLAME_PATH = 'M14.865,0c-5.521,5.09-7.645,11.879-7.645,17.83-1.699-2.553-1.699-4.679-2.124-8.07C.849,15.278,0,18.249,0,23.351c0,5.667,3.935,9.351,8.494,10.626-1-1.258-1.699-3.018-1.699-4.667,0-2.125.425-4.246,1.699-5.946.187,1.528.951,2.673,1.699,3.822,0-2.679.967-6.628,3.398-8.919.934,4.97,4.247,6.832,4.247,11.043,0,1.664-.705,3.403-1.699,4.667,4.714-1.241,8.494-4.904,8.494-10.626,0-9.351-7.645-12.312-9.769-23.351Z';
 
+/* At this level and above, the flames are joined by a word, on the grounds
+   that anyone who reads descriptions does not need warning and anyone who
+   does not read them will not see the flames either. Drop it to 2 to shout
+   about the medium ones too. */
+const SPICY_TAG_AT = 3;
+
+/* The loud labels at the top of an open panel. Nothing is ever both, but
+   the code does not need to care. */
+function panelTags(it){
+  return (it.mocktail ? '<span class="tag">Non-alcoholic!</span>' : '') +
+         (it.heat >= SPICY_TAG_AT ? '<span class="tag">Spicy!</span>' : '');
+}
+
 /* Level 1 is one flame; each extra level adds another to the LEFT and one
    shade lighter, so the rightmost is always full magenta. */
 function heatMark(level){
@@ -889,7 +938,7 @@ function card(it, kind, key){
   return `<article class="item" data-key="${key}">
     <div class="frame">
       <div class="shot" data-tap="${key}">${art}${it.mocktail?'<span class="star">&lowast;</span>':''}${heatMark(it.heat)}<span class="badge" data-b="${it.id}"></span></div>
-      <div class="panel"><div>${it.mocktail?'<span class="tag">Non-alcoholic!</span>':''}${inner}</div><div>${addonRows(it)}${stepper(it.id)}</div></div>
+      <div class="panel"><div>${panelTags(it)}${inner}</div><div>${addonRows(it)}${stepper(it.id)}</div></div>
     </div>
     <div class="cap"><div class="nm">${esc(it.n)}</div><div class="pr">${money(it.p)}</div></div>
   </article>`;
@@ -903,18 +952,25 @@ function listRow(r, s, ri){
      those overrun the name's line on a narrow phone and break the column. */
   const inline = s.nb ? '' : (r.sub ? `<span class="sub">${esc(r.sub)}</span>` : '');
   const below  = (s.nb && r.sub) ? `<div class="subline">${esc(r.sub)}</div>` : '';
+  const rc = below ? 'row nbrow' : 'row';
+  /* On a two-price row the note is ALWAYS under the name — it is the
+     variety, and it belongs beside the thing it names rather than above a
+     list of sizes. The section's noteBelow flag does not apply here. */
   if(r.v){
     return `<div class="row" data-row="${ri}">
-      <div class="rowname">${esc(r.n)}${inline}</div>
-      ${below}
-      <div class="vgrid">${r.ids.map((id,i)=>`<div class="vcell">
-        <span class="vname">${esc(s.vl[i])}</span>
-        <span class="vpr">${money(r.v[i])}</span>
-        ${stepper(id)}
-      </div>`).join('')}</div>
+      <div class="vsplit">
+        <div class="vleft">
+          <div class="rowname">${esc(r.n)}</div>
+          ${r.sub ? `<div class="subline">${esc(r.sub)}</div>` : ''}
+        </div>
+        <div class="vright">${r.ids.map((id,i)=>`<div class="vline">
+          <span class="vname">${esc(s.vl[i] || '')}</span>
+          <div class="vfoot"><span class="vpr">${money(r.v[i])}</span>${stepper(id)}</div>
+        </div>`).join('')}</div>
+      </div>
     </div>`;
   }
-  return `<div class="row" data-row="${ri}">
+  return `<div class="${rc}" data-row="${ri}">
     <div class="vrow single">
       <span class="rowname">${esc(r.n)}${inline}</span>
       <span class="vpr">${money(r.p)}</span>
@@ -939,7 +995,6 @@ function render(){
     </section>`).join('');
   else html += T.list.map((s,si)=>`
     <section class="sec"><div class="sec-head"><h2>${esc(s.t)}</h2><span class="rule"></span></div>
-      ${s.vl?`<p class="listnote">${esc(s.vl.join(' | '))}</p>`:''}
       <div class="list">${s.rows.map((r,ri)=>listRow(r,s,si+'-'+ri)).join('')}</div>
     </section>`).join('');
   main.innerHTML = html + `<p class="foot">Look test · tap any item to open it. Order is kept on this device.</p>`;
