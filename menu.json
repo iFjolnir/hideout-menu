@@ -149,7 +149,8 @@
                 "Pineapple rum",
                 "Lime",
                 "Pineapple",
-                "Cinnamon, vanilla"
+                "Cinnamon",
+                "vanilla"
               ]
             },
             {
@@ -159,8 +160,10 @@
                 "El Jimador tequila",
                 "Campari",
                 "Egg white",
-                "Lime, grapefruit",
-                "Cinnamon, vanilla"
+                "Lime",
+                "grapefruit",
+                "Cinnamon",
+                "vanilla"
               ]
             },
             {
@@ -170,7 +173,8 @@
                 "Raspberry vodka",
                 "Triple sec",
                 "Lemon",
-                "Grenadine, cranberry"
+                "Grenadine",
+                "cranberry"
               ]
             },
             {
@@ -180,8 +184,10 @@
                 "Plantation rum",
                 "Rondiaz 151",
                 "White rum",
-                "Lime, grenadine",
-                "Pineapple, grapefruit"
+                "Lime",
+                "grenadine",
+                "Pineapple",
+                "grapefruit"
               ]
             },
             {
@@ -215,7 +221,8 @@
               "ingredients": [
                 "Altos tequila",
                 "Grapefruit",
-                "Lime, sugar",
+                "Lime",
+                "sugar",
                 "Campari"
               ]
             },
@@ -310,7 +317,8 @@
                 "Soju",
                 "Strawberry",
                 "Grenadine",
-                "Cranberry, lime"
+                "Cranberry",
+                "lime"
               ]
             },
             {
@@ -318,7 +326,8 @@
               "price": 9,
               "ingredients": [
                 "Peachtree",
-                "Lime, pineapple",
+                "Lime",
+                "pineapple",
                 "Passion fruit",
                 "Cranberry"
               ]
@@ -329,7 +338,8 @@
               "ingredients": [
                 "Soju",
                 "Passoã",
-                "Lemon, pineapple",
+                "Lemon",
+                "pineapple",
                 "Passion fruit",
                 "Sparkling water"
               ]
@@ -350,7 +360,8 @@
               "ingredients": [
                 "Plantation rum",
                 "Bacardi white rum",
-                "Lime, orange",
+                "Lime",
+                "orange",
                 "Pineapple",
                 "Coconut cream"
               ]
@@ -524,7 +535,8 @@
                 "Citron vodka",
                 "Cointreau",
                 "Lemon",
-                "Cranberry, grenadine"
+                "Cranberry",
+                "grenadine"
               ]
             }
           ]
@@ -536,7 +548,9 @@
               "name": "Trash Can",
               "price": 11,
               "ingredients": [
-                "Vodka, rum, gin",
+                "Vodka",
+                "rum",
+                "gin",
                 "Triple sec",
                 "Blue curaçao",
                 "Peachtree",
@@ -547,10 +561,13 @@
               "name": "Long Island Iced Tea",
               "price": 9,
               "ingredients": [
-                "Vodka, rum, gin",
+                "Vodka",
+                "rum",
+                "gin",
                 "Tequila",
                 "Triple sec",
-                "Lemon, sugar",
+                "Lemon",
+                "sugar",
                 "Coke"
               ]
             },
@@ -558,10 +575,13 @@
               "name": "Adios Mother Fucker",
               "price": 11,
               "ingredients": [
-                "Vodka, rum, gin",
+                "Vodka",
+                "rum",
+                "gin",
                 "Tequila",
                 "Triple sec",
-                "Lemon, sugar",
+                "Lemon",
+                "sugar",
                 "Sprite"
               ]
             },
@@ -569,10 +589,13 @@
               "name": "Tokyo Iced Tea",
               "price": 11,
               "ingredients": [
-                "Vodka, rum, gin",
+                "Vodka",
+                "rum",
+                "gin",
                 "Tequila",
                 "Melon liqueur",
-                "Lemon, sugar",
+                "Lemon",
+                "sugar",
                 "Sprite"
               ]
             },
@@ -580,10 +603,13 @@
               "name": "Long Beach Iced Tea",
               "price": 9,
               "ingredients": [
-                "Vodka, rum, gin",
+                "Vodka",
+                "rum",
+                "gin",
                 "Tequila",
                 "Triple sec",
-                "Lemon, sugar",
+                "Lemon",
+                "sugar",
                 "Cranberry"
               ]
             }
