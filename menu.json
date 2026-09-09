@@ -1,0 +1,1090 @@
+{
+  "tabs": [
+    {
+      "name": "Specials",
+      "source": "specials.json"
+    },
+    {
+      "name": "Food",
+      "kind": "food",
+      "sections": [
+        {
+          "title": "Sets",
+          "layout": "stack",
+          "items": [
+            {
+              "name": "Monthly Special Set",
+              "price": 50,
+              "description": "2 cocktails of the month, 3 chili beef tacos, cheese quesadilla, dessert of choice.",
+              "photo": "monthly-special-set.jpg",
+              "ratio": "1008/932"
+            },
+            {
+              "name": "Mexican Set",
+              "price": 25,
+              "description": "Mexican karaage, Mexican pizza, dessert of choice.",
+              "photo": "mexican-set.jpg",
+              "ratio": "1526/672"
+            },
+            {
+              "name": "Fajita Set",
+              "price": 25,
+              "description": "Chicken al pastor fajita, nachos or fries, homemade brownie.",
+              "photo": "fajita-set.jpg",
+              "ratio": "1526/672"
+            }
+          ]
+        },
+        {
+          "title": "Food",
+          "items": [
+            {
+              "name": "Birria Tacos",
+              "price": 13,
+              "description": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip.",
+              "photo": "birria-tacos.jpg"
+            },
+            {
+              "name": "Chili Beef Tacos",
+              "price": 15,
+              "description": "Spiced ground beef, lettuce and melted cheese. Served with pickled onions and lime.",
+              "photo": "chili-beef-tacos.jpg"
+            },
+            {
+              "name": "Cheese Quesadilla",
+              "price": 8,
+              "description": "Tortilla with cheddar cheese, mozzarella. Served with salsa and pickled onions.",
+              "photo": "cheese-quesadilla.jpg"
+            },
+            {
+              "name": "Spicy Chicken Quesadilla",
+              "price": 14,
+              "description": "Tortilla with chicken thigh meat, spicy jalapeños, curry seasoning, cheddar cheese, and mozzarella. Served with salsa and pickled onions.",
+              "photo": "spicy-chicken-quesadilla.jpg"
+            },
+            {
+              "name": "Al Pastor Chicken Fajita",
+              "price": 14,
+              "description": "Spice-marinated chicken, grilled pineapple, broccoli, and onions. Served with warm tortillas, salsa roja and salsa verde.",
+              "photo": "al-pastor-fajita.jpg"
+            },
+            {
+              "name": "Gambas al Ajillo",
+              "price": 14,
+              "description": "Shrimp sautéed with garlic, onion, olive oil, and chili. Served with toasted bread.",
+              "photo": "gambas-al-ajillo.jpg"
+            },
+            {
+              "name": "Mexican Karaage & Fries",
+              "price": 13,
+              "description": "Crispy karaage chicken in sweet and spicy honey chipotle sauce. Served with fries, pickled onions, ketchup.",
+              "photo": "mexican-karaage.jpg"
+            },
+            {
+              "name": "Birria Ramen",
+              "price": 9,
+              "description": "Ramen cooked in birria broth, topped with shredded birria pork, cheddar cheese, and pickled onions.",
+              "photo": "birria-ramen.jpg"
+            },
+            {
+              "name": "Fondue",
+              "price": 20,
+              "description": "Melted Italian provolone cheese with white wine and cream. Served hot with toasted bread for dipping.",
+              "photo": "fondue.jpg"
+            },
+            {
+              "name": "Mexican Pizza",
+              "price": 11,
+              "description": "Homemade dough, salsa, mozzarella, jalapeño, avocado, crispy bacon.",
+              "photo": "mexican-pizza.jpg"
+            },
+            {
+              "name": "Pesto Pizza",
+              "price": 11,
+              "description": "Homemade dough, pesto, cream cheese, mozzarella, almonds, olive oil.",
+              "photo": "pesto-pizza.jpg"
+            },
+            {
+              "name": "French Fries",
+              "price": 8,
+              "description": "Served with classic ketchup."
+            },
+            {
+              "name": "Nachos",
+              "price": 8,
+              "description": "Served with salsa and cheese."
+            }
+          ]
+        },
+        {
+          "title": "Dessert",
+          "items": [
+            {
+              "name": "Brownie",
+              "price": 6.5,
+              "description": "In-house chocolate brownie served with vanilla ice cream, drizzled in chocolate sauce.",
+              "photo": "brownie.jpg"
+            },
+            {
+              "name": "Tiramisu",
+              "price": 6.5,
+              "description": "Creamy mascarpone, coffee-soaked biscuits and cocoa.",
+              "photo": "tiramisu.jpg"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cocktails",
+      "kind": "drink",
+      "sections": [
+        {
+          "title": "Bartender's Choice",
+          "items": [
+            {
+              "name": "Pineapple Daiquiri",
+              "price": 11,
+              "ingredients": [
+                "Pineapple rum",
+                "Lime",
+                "Pineapple",
+                "Cinnamon, vanilla"
+              ]
+            },
+            {
+              "name": "Baby Turtle",
+              "price": 13,
+              "ingredients": [
+                "El Jimador tequila",
+                "Campari",
+                "Egg white",
+                "Lime, grapefruit",
+                "Cinnamon, vanilla"
+              ]
+            },
+            {
+              "name": "Red Pill",
+              "price": 11,
+              "ingredients": [
+                "Raspberry vodka",
+                "Triple sec",
+                "Lemon",
+                "Grenadine, cranberry"
+              ]
+            },
+            {
+              "name": "Zombie",
+              "price": 11,
+              "ingredients": [
+                "Plantation rum",
+                "Rondiaz 151",
+                "White rum",
+                "Lime, grenadine",
+                "Pineapple, grapefruit"
+              ]
+            },
+            {
+              "name": "Wake Me Up, Fuck Me Up",
+              "price": 12,
+              "ingredients": [
+                "Caramel vodka",
+                "Dark cacao",
+                "Espresso",
+                "Sugar"
+              ]
+            },
+            {
+              "name": "Devil Margarita",
+              "price": 12,
+              "ingredients": [
+                "Altos tequila blanco",
+                "Lime",
+                "Red wine",
+                "Sugar"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Premium Cocktails",
+          "items": [
+            {
+              "name": "Siesta",
+              "price": 15,
+              "ingredients": [
+                "Altos tequila",
+                "Grapefruit",
+                "Lime, sugar",
+                "Campari"
+              ]
+            },
+            {
+              "name": "Last Word",
+              "price": 20,
+              "ingredients": [
+                "Tanqueray gin",
+                "Green Chartreuse",
+                "Maraschino",
+                "Lime"
+              ]
+            },
+            {
+              "name": "French Gimlet",
+              "price": 18,
+              "ingredients": [
+                "Tanqueray gin",
+                "St Germain",
+                "Lime",
+                "Saline solution"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Bold & Boozy",
+          "items": [
+            {
+              "name": "Dark Passion",
+              "price": 12,
+              "ingredients": [
+                "Plantation dark rum",
+                "Bacardi Carta Blanca",
+                "Passion fruit"
+              ]
+            },
+            {
+              "name": "Old Fashioned",
+              "price": 12,
+              "ingredients": [
+                "Jim Beam bourbon",
+                "Angostura bitters",
+                "Demerara syrup"
+              ]
+            },
+            {
+              "name": "Golden Hour",
+              "price": 15,
+              "ingredients": [
+                "Jim Beam bourbon",
+                "Hennessy",
+                "Triple sec",
+                "Bénédictine",
+                "Orange bitters"
+              ]
+            },
+            {
+              "name": "Faust",
+              "price": 11,
+              "ingredients": [
+                "Jim Beam",
+                "Rondiaz 151",
+                "Cassis"
+              ]
+            },
+            {
+              "name": "Rusty Nail",
+              "price": 12,
+              "ingredients": [
+                "Scotch whisky",
+                "Drambuie"
+              ]
+            },
+            {
+              "name": "Godfather",
+              "price": 12,
+              "ingredients": [
+                "Scotch whisky",
+                "Disaronno"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Fruity & Fun",
+          "items": [
+            {
+              "name": "Strawberry Soju Pop",
+              "price": 9,
+              "ingredients": [
+                "Soju",
+                "Strawberry",
+                "Grenadine",
+                "Cranberry, lime"
+              ]
+            },
+            {
+              "name": "Peach Crush",
+              "price": 9,
+              "ingredients": [
+                "Peachtree",
+                "Lime, pineapple",
+                "Passion fruit",
+                "Cranberry"
+              ]
+            },
+            {
+              "name": "Pornstar Sojutini",
+              "price": 9,
+              "ingredients": [
+                "Soju",
+                "Passoã",
+                "Lemon, pineapple",
+                "Passion fruit",
+                "Sparkling water"
+              ]
+            },
+            {
+              "name": "June Bug",
+              "price": 11,
+              "ingredients": [
+                "Melon liqueur",
+                "Banana liqueur",
+                "Malibu",
+                "Lime, pineapple"
+              ]
+            },
+            {
+              "name": "Piña Colada",
+              "price": 11,
+              "ingredients": [
+                "Plantation rum",
+                "Bacardi white rum",
+                "Lime, orange",
+                "Pineapple",
+                "Coconut cream"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Fresh & Light",
+          "items": [
+            {
+              "name": "Passion Sour",
+              "price": 10,
+              "ingredients": [
+                "Passoã",
+                "Lemon",
+                "Egg white",
+                "Pineapple",
+                "Passion fruit"
+              ]
+            },
+            {
+              "name": "Spiced Mule",
+              "price": 10,
+              "ingredients": [
+                "Vodka",
+                "Lime",
+                "Ginger beer",
+                "Cinnamon, vanilla"
+              ]
+            },
+            {
+              "name": "Bombay Highball",
+              "price": 10,
+              "ingredients": [
+                "Bombay gin",
+                "Lime",
+                "Grapefruit",
+                "Tonic water"
+              ]
+            },
+            {
+              "name": "Paloma",
+              "price": 11,
+              "ingredients": [
+                "Altos tequila blanco",
+                "Lime",
+                "Grapefruit",
+                "Sparkling water"
+              ]
+            },
+            {
+              "name": "Midori Sour",
+              "price": 11,
+              "ingredients": [
+                "Midori",
+                "Vodka",
+                "Lemon, lime",
+                "Sugar",
+                "Sparkling water"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Sweet & Creamy",
+          "items": [
+            {
+              "name": "Grasshopper",
+              "price": 12,
+              "ingredients": [
+                "Crème de menthe",
+                "White cacao",
+                "Heavy cream"
+              ]
+            },
+            {
+              "name": "White Russian",
+              "price": 10,
+              "ingredients": [
+                "Vodka",
+                "Kahlúa",
+                "Heavy cream"
+              ]
+            },
+            {
+              "name": "Coconut Margarita",
+              "price": 13,
+              "ingredients": [
+                "Altos tequila blanco",
+                "Triple sec",
+                "Pineapple",
+                "Coconut cream",
+                "Lime"
+              ]
+            },
+            {
+              "name": "Rum After Dark",
+              "price": 12,
+              "ingredients": [
+                "Bacardi Carta Blanca",
+                "Espresso",
+                "Chocolate bitters",
+                "Dark cacao",
+                "Demerara"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Classic Cocktails",
+          "items": [
+            {
+              "name": "Espresso Martini",
+              "price": 12,
+              "ingredients": [
+                "Vodka",
+                "Kahlúa",
+                "Espresso",
+                "Sugar"
+              ]
+            },
+            {
+              "name": "Martini",
+              "price": 14,
+              "ingredients": [
+                "Tanqueray gin",
+                "Vermouth",
+                "Olive brine"
+              ]
+            },
+            {
+              "name": "Daiquiri",
+              "price": 11,
+              "ingredients": [
+                "Bacardi white rum",
+                "Lime",
+                "Demerara"
+              ]
+            },
+            {
+              "name": "Sidecar",
+              "price": 20,
+              "ingredients": [
+                "Hennessy",
+                "Triple sec",
+                "Lemon"
+              ]
+            },
+            {
+              "name": "Negroni",
+              "price": 15,
+              "ingredients": [
+                "Beefeater gin",
+                "Vermouth",
+                "Campari"
+              ]
+            },
+            {
+              "name": "Margarita",
+              "price": 14,
+              "ingredients": [
+                "Altos tequila blanco",
+                "Triple sec",
+                "Lime, agave"
+              ]
+            },
+            {
+              "name": "Cosmopolitan",
+              "price": 12,
+              "ingredients": [
+                "Citron vodka",
+                "Cointreau",
+                "Lemon",
+                "Cranberry, grenadine"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Danger Zone",
+          "items": [
+            {
+              "name": "Trash Can",
+              "price": 11,
+              "ingredients": [
+                "Vodka, rum, gin",
+                "Triple sec",
+                "Blue curaçao",
+                "Peachtree",
+                "Red Bull"
+              ]
+            },
+            {
+              "name": "Long Island Iced Tea",
+              "price": 9,
+              "ingredients": [
+                "Vodka, rum, gin",
+                "Tequila",
+                "Triple sec",
+                "Lemon, sugar",
+                "Coke"
+              ]
+            },
+            {
+              "name": "Adios Mother Fucker",
+              "price": 11,
+              "ingredients": [
+                "Vodka, rum, gin",
+                "Tequila",
+                "Triple sec",
+                "Lemon, sugar",
+                "Sprite"
+              ]
+            },
+            {
+              "name": "Tokyo Iced Tea",
+              "price": 11,
+              "ingredients": [
+                "Vodka, rum, gin",
+                "Tequila",
+                "Melon liqueur",
+                "Lemon, sugar",
+                "Sprite"
+              ]
+            },
+            {
+              "name": "Long Beach Iced Tea",
+              "price": 9,
+              "ingredients": [
+                "Vodka, rum, gin",
+                "Tequila",
+                "Triple sec",
+                "Lemon, sugar",
+                "Cranberry"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mixers",
+      "sections": [
+        {
+          "title": "Simple Mixers",
+          "variants": [
+            "Standard",
+            "Double shot"
+          ],
+          "rows": [
+            {
+              "name": "Gin Tonic",
+              "prices": [
+                6,
+                9
+              ]
+            },
+            {
+              "name": "Rum Coke",
+              "prices": [
+                6,
+                9
+              ]
+            },
+            {
+              "name": "Vodka Cranberry",
+              "prices": [
+                6,
+                9
+              ]
+            },
+            {
+              "name": "Tequila Grapefruit",
+              "prices": [
+                6,
+                9
+              ]
+            },
+            {
+              "name": "Malibu Pineapple",
+              "prices": [
+                7,
+                11
+              ]
+            },
+            {
+              "name": "Jack Coke",
+              "prices": [
+                7,
+                11
+              ]
+            },
+            {
+              "name": "Kahlúa Milk",
+              "prices": [
+                7,
+                11
+              ]
+            },
+            {
+              "name": "Bombay Tonic",
+              "prices": [
+                7,
+                11
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Beer",
+      "sections": [
+        {
+          "title": "Bottled",
+          "rows": [
+            {
+              "name": "Budweiser",
+              "price": 5,
+              "note": "USA"
+            },
+            {
+              "name": "Cafri",
+              "price": 6,
+              "note": "South Africa"
+            },
+            {
+              "name": "Cass 0%",
+              "price": 6,
+              "note": "South Korea"
+            },
+            {
+              "name": "Somersby",
+              "price": 7.5,
+              "note": "Denmark"
+            },
+            {
+              "name": "Corona",
+              "price": 7.5,
+              "note": "Mexico"
+            },
+            {
+              "name": "Tiger",
+              "price": 7.5,
+              "note": "Singapore"
+            },
+            {
+              "name": "Asahi",
+              "price": 9,
+              "note": "Japan"
+            },
+            {
+              "name": "Paulaner",
+              "price": 9,
+              "note": "Germany"
+            },
+            {
+              "name": "Big Wave",
+              "price": 10,
+              "note": "USA"
+            },
+            {
+              "name": "Guinness",
+              "price": 10,
+              "note": "Ireland"
+            },
+            {
+              "name": "IPA",
+              "price": 10,
+              "note": "USA"
+            }
+          ]
+        },
+        {
+          "title": "On Tap",
+          "rows": [
+            {
+              "name": "Cass",
+              "price": 6
+            },
+            {
+              "name": "Stella",
+              "price": 8
+            },
+            {
+              "name": "Hand&Malt",
+              "price": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Shots",
+      "sections": [
+        {
+          "title": "Shots Fired",
+          "rows": [
+            {
+              "name": "B-52",
+              "price": 8,
+              "note": "Coffee liqueur, Irish cream, orange liqueur"
+            },
+            {
+              "name": "Irish Car Bomb",
+              "price": 8,
+              "note": "Irish whiskey, Irish cream, stout"
+            },
+            {
+              "name": "Baby Guinness",
+              "price": 6,
+              "note": "Coffee liqueur, Irish cream"
+            },
+            {
+              "name": "Lemon Drop",
+              "price": 5,
+              "note": "Vodka, lemon juice, sugar"
+            },
+            {
+              "name": "Yuzu Sake",
+              "price": 5,
+              "note": "Yuzu-flavoured sake"
+            },
+            {
+              "name": "Kamikaze",
+              "price": 5,
+              "note": "Vodka, triple sec, lemon juice"
+            },
+            {
+              "name": "Jagger Bomb",
+              "price": 8,
+              "note": "Jägermeister, Red Bull"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Bottles",
+      "sections": [
+        {
+          "title": "Whiskey",
+          "variants": [
+            "Shot",
+            "Bottle"
+          ],
+          "rows": [
+            {
+              "name": "Jameson",
+              "prices": [
+                6,
+                120
+              ]
+            },
+            {
+              "name": "Jack Daniel's",
+              "prices": [
+                8,
+                160
+              ]
+            },
+            {
+              "name": "Wild Turkey",
+              "prices": [
+                8,
+                180
+              ],
+              "note": "Bourbon"
+            },
+            {
+              "name": "Wild Turkey",
+              "prices": [
+                9,
+                180
+              ],
+              "note": "Rye"
+            },
+            {
+              "name": "Buffalo Trace",
+              "prices": [
+                8,
+                180
+              ]
+            },
+            {
+              "name": "Johnnie Walker",
+              "prices": [
+                9,
+                200
+              ],
+              "note": "Black"
+            },
+            {
+              "name": "Monkey Shoulder",
+              "prices": [
+                9,
+                200
+              ]
+            },
+            {
+              "name": "Maker's Mark",
+              "prices": [
+                9,
+                200
+              ]
+            },
+            {
+              "name": "Bulleit",
+              "prices": [
+                9,
+                200
+              ]
+            },
+            {
+              "name": "Kavalan",
+              "prices": [
+                12,
+                250
+              ],
+              "note": "No. 1"
+            },
+            {
+              "name": "Auchentoshan",
+              "prices": [
+                13,
+                260
+              ],
+              "note": "12 yrs"
+            },
+            {
+              "name": "Balvenie",
+              "prices": [
+                13,
+                350
+              ],
+              "note": "12 yrs"
+            },
+            {
+              "name": "Ballantine's",
+              "prices": [
+                28,
+                600
+              ],
+              "note": "21 yrs"
+            }
+          ]
+        },
+        {
+          "title": "Tequila",
+          "variants": [
+            "Shot",
+            "Bottle"
+          ],
+          "rows": [
+            {
+              "name": "Jose Cuervo",
+              "prices": [
+                6,
+                120
+              ]
+            },
+            {
+              "name": "El Jimador",
+              "prices": [
+                6,
+                120
+              ]
+            },
+            {
+              "name": "Olmeca Altos",
+              "prices": [
+                6,
+                120
+              ],
+              "note": "Blanco"
+            },
+            {
+              "name": "Herradura",
+              "prices": [
+                8,
+                180
+              ],
+              "note": "Blanco"
+            },
+            {
+              "name": "Herradura",
+              "prices": [
+                9,
+                200
+              ],
+              "note": "Reposado"
+            },
+            {
+              "name": "1800",
+              "prices": [
+                12,
+                250
+              ],
+              "note": "Blanco"
+            },
+            {
+              "name": "1800",
+              "prices": [
+                12,
+                250
+              ],
+              "note": "Reposado"
+            },
+            {
+              "name": "Don Julio",
+              "prices": [
+                14,
+                350
+              ],
+              "note": "Añejo"
+            },
+            {
+              "name": "Cenote",
+              "prices": [
+                15,
+                350
+              ],
+              "note": "Blanco"
+            },
+            {
+              "name": "Cenote",
+              "prices": [
+                16,
+                370
+              ],
+              "note": "Reposado"
+            },
+            {
+              "name": "Patrón",
+              "prices": [
+                15,
+                370
+              ],
+              "note": "Blanco"
+            },
+            {
+              "name": "Patrón",
+              "prices": [
+                16,
+                370
+              ],
+              "note": "Reposado"
+            }
+          ]
+        },
+        {
+          "title": "Mezcal",
+          "rows": [
+            {
+              "name": "Madre Mezcal",
+              "price": 11
+            },
+            {
+              "name": "Durambes Mezcal",
+              "price": 11
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Non-alcoholic",
+      "sections": [
+        {
+          "title": "Mocktails",
+          "rows": [
+            {
+              "name": "Blue Lemonade",
+              "price": 8.5,
+              "note": "Blue curaçao syrup, lemon, sparkling water"
+            },
+            {
+              "name": "Virgin Piña Colada",
+              "price": 8.5,
+              "note": "Coconut cream, pineapple, orange, lime"
+            },
+            {
+              "name": "Virgin Paloma",
+              "price": 8.5,
+              "note": "Grapefruit, passion fruit, lemon, sparkling water"
+            },
+            {
+              "name": "Virgin Spiced Mule",
+              "price": 8.5,
+              "note": "0% ginger beer, lime, cinnamon, vanilla"
+            },
+            {
+              "name": "Virgin Spiced Daiquiri",
+              "price": 8.5,
+              "note": "Pineapple, lime, cinnamon, vanilla"
+            }
+          ]
+        },
+        {
+          "title": "Coffee Corner",
+          "rows": [
+            {
+              "name": "Americano",
+              "price": 5,
+              "note": "Espresso"
+            },
+            {
+              "name": "Cafe Latte",
+              "price": 6,
+              "note": "Espresso, milk"
+            },
+            {
+              "name": "Cappuccino",
+              "price": 6,
+              "note": "Espresso, milk"
+            },
+            {
+              "name": "Coconut Latte",
+              "price": 6,
+              "note": "Espresso, milk, coconut cream"
+            },
+            {
+              "name": "Cinnamon Vanilla Latte",
+              "price": 6,
+              "note": "Espresso, milk, cinnamon, vanilla"
+            },
+            {
+              "name": "Hot Chocolate",
+              "price": 6,
+              "note": "Cacao, milk, Hershey's, heavy cream"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
