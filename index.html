@@ -1,1129 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f5f0"><!-- match --paper -->
+<title>HIDEOUT — look test v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===========================================================
+   TYPE SCALE — one knob. Ratios locked to your mockup:
+   nav 6x · section head 8x · item name+price 5x · ingredients 3x
+   =========================================================== */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  /* ---------------------------------------------------------
+     Everything below is a proportion of screen width, taken
+     from the 1179px draft. Change --railw and the whole grid
+     rescales; nothing here is a magic pixel.
+
+       card width  523.5179 / 1179 = .4440   (both tabs)
+       ckt photo   650.0545 / 1179 = .5514   → 4:5
+       ckt panel   342.0555 / 1179 = .2901   → .653 × card
+       ckt open    865.5734 / 1179 = .7342
+       food panel  523.5179 / 1179 = .4440   → 1.00 × card
+       food open  1047.0358 / 1179 = .8881
+       type unit        7.5 / 1179 = .00636
+     --------------------------------------------------------- */
+  --railw:393px;                     /* set by JS to the live width */
+
+  --f-card:.4440;
+  --f-open-drink:.7342;
+  --f-open-food:.8881;
+  --f-gut:.0509;
+  --f-gap:.0305;
+  --f-lead:.10;                      /* invisible card at the head of each rail */
+  --f-trail:.16;                     /* and at the tail — gives the ends room to centre */
+
+  --w-card:calc(var(--railw) * var(--f-card));
+  --w-open-drink:calc(var(--railw) * var(--f-open-drink));
+  --w-open-food:calc(var(--railw) * var(--f-open-food));
+  --gut:calc(var(--railw) * var(--f-gut));
+  --gap:calc(var(--railw) * var(--f-gap));
+  --lead:calc(var(--railw) * var(--f-lead));
+  --trail:calc(var(--railw) * var(--f-trail));
+
+  /* type: 1x scales with the screen, clamped so it stays readable
+     on a 320px phone and doesn't bloat on a 430px one */
+  --x:clamp(2.15px, calc(var(--railw) * .00636), 2.95px);
+  --t-nav:calc(var(--x)*6);
+  --t-head:calc(var(--x)*8);
+  --t-item:calc(var(--x)*5);
+  --t-ing:calc(var(--x)*3);
+
+  --paper:#fff;     /* page background */
+  --ink:#131313;       /* body text, headings, order bar */
+  --dim:#8b877f;       /* secondary text: notes, variant labels, descriptions */
+  --rule:#b3b0a8;      /* hairlines: card borders, row dividers */
+  --magenta:#e6155a;   /* prices, cart badge, non-alcoholic tag */
+  --heat-mid:#f2679a;  /* second flame from the right */
+  --heat-soft:#f9b4cd; /* third — each step left is lighter */
+
+  /* ---------------------------------------------------------
+     TWEAK BLOCK — the numbers you will actually want to nudge
+     while looking at the thing on a phone. Everything is in
+     units of --x, so it scales with the screen: bump the
+     multiplier, not the unit.
+     --------------------------------------------------------- */
+  --heat-inset-x:4;   /* flame's gap from the LEFT edge of the photo */
+  --heat-inset-y:3;     /* and from the BOTTOM edge */
+  --heat-size:4;        /* width of one flame */
+  --heat-overlap:.8;   /* how far each flame sits over the one to its left */
+
+  --note-gap:1.5;       /* gap between an item name and its note, where the
+                           note is on its own line (Shots, Non-alcoholic) */
+  --note-lead:1.4;      /* line spacing WITHIN a note that wraps */
+
+  --tile:#f6f4f1;      /* empty photo slot, before an image loads */
+  --tile-fill:#f6f4f1; /* fill behind the name on a photoless card */
+  --tile-ink:#b4ada0;  /* that card's lettering */
+  --on-magenta:#fff;   /* text sitting on a magenta background */
+
+  font-family:'Jost',system-ui,sans-serif;
+}
+body{background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:40px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- masthead ---------- */
+.mast{position:sticky;top:0;z-index:30;background:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;padding:18px var(--gut) 13px}
+.wordmark{font-weight:700;font-size:26px;letter-spacing:.01em;text-transform:uppercase;line-height:1}
+.burger{display:flex;flex-direction:column;gap:5px;padding:6px 2px}
+.burger i{width:25px;height:2.5px;background:var(--ink)}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:57px;z-index:29;background:var(--paper);display:flex;align-items:center;
+  overflow-x:auto;padding:0 var(--gut) 12px;scrollbar-width:none;border-bottom:1px solid var(--rule)}
+.nav::-webkit-scrollbar{display:none}
+.nav button{flex:0 0 auto;font-size:var(--t-nav);letter-spacing:.05em;text-transform:uppercase;
+  white-space:nowrap;padding:2px 0;color:var(--ink);font-weight:400}
+.nav .bar{flex:0 0 auto;width:1px;height:calc(var(--t-nav)*.95);background:var(--rule);margin:0 10px}
+.nav button.on{font-weight:600;box-shadow:0 2px 0 var(--ink)}
+
+/* ---------- section ---------- */
+.sec{padding:30px 0 2px}
+.sec-head{display:flex;align-items:center;gap:15px;padding:0 var(--gut);margin-bottom:16px}
+.sec-head h2{font-weight:600;font-size:var(--t-head);letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.sec-head .rule{flex:1;height:1px;background:var(--ink);opacity:.8}
+
+/* ---------- carousel ---------- */
+.rail{position:relative;display:flex;align-items:flex-start;gap:var(--gap);overflow-x:auto;padding:0 var(--gut) 2px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.rail::-webkit-scrollbar{display:none}
+.rail::before{content:'';flex:0 0 var(--lead)}
+.rail::after{content:'';flex:0 0 var(--trail)}
+
+.item{flex:0 0 auto;width:var(--w-card);transition:width .3s cubic-bezier(.3,.85,.35,1)}
+.item.open{width:var(--w-open)}
+/* same card width on both tabs — only the photo's aspect and the
+   panel's share of the open card differ */
+.rail.food  .item{--w-open:var(--w-open-food); --ar:1;   --shot-h:var(--w-card)}
+.rail.drink .item{--w-open:var(--w-open-drink);--ar:4/5; --shot-h:calc(var(--w-card)*1.25)}
+
+.frame{display:flex;align-items:flex-start}
+/* photo width is frozen — it never re-scales, so nothing repaints on open */
+.shot{position:relative;flex:0 0 var(--w-card);width:var(--w-card);aspect-ratio:var(--ar);overflow:hidden;
+  border:1px solid var(--rule);background:var(--tile)}
+.ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  padding:12px;text-align:center;background:var(--tile-fill)}
+.ph span{font-weight:500;font-size:var(--t-item);line-height:1.25;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--tile-ink)}
+
+/* the panel that unfurls — same hairline, shares the photo's edge */
+.panel{flex:0 0 0;width:0;height:0;min-width:0;overflow:hidden;opacity:0;
+  border:0;padding:0;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:opacity .18s .08s}
+.item.open .panel{flex:1 1 auto;width:auto;height:var(--shot-h);opacity:1;
+  border:1px solid var(--rule);border-left:0;padding:9px 11px 8px}
+.desc{font-size:var(--t-ing);letter-spacing:.08em;text-transform:uppercase;line-height:1.85}
+.ing{list-style:none}
+.ing li{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;line-height:1.85}
+.step{display:flex;align-items:center;justify-content:space-between;padding-top:8px}
+.step button{font-size:calc(var(--x)*10);line-height:1;font-weight:300;padding:0 4px}
+.step .q{font-size:calc(var(--x)*9);font-weight:400;min-width:22px;text-align:center}
+/* untouched item: just a magenta +. The − and the count hold their space
+   so the + doesn't jump when the first one is added. */
+.step [data-step="-1"],.step .q{transition:opacity .16s}
+.step.empty [data-step="-1"],.step.empty .q{opacity:0;pointer-events:none}
+.step.empty [data-step="1"]{color:var(--magenta)}
+
+/* ---------- add-ons ----------
+   A sub-line of the parent item: its own cart line, but it cannot exist
+   without the parent and never outnumbers it. Magenta + means another one
+   can be added; grey means it cannot — no parent yet, or already matched.
+   Two states only, because the customer is reading this in a dark bar. */
+.addrow{display:flex;align-items:center;justify-content:space-between;
+  gap:calc(var(--x)*2);border-top:1px solid var(--rule);
+  margin-top:calc(var(--x)*3);padding-top:calc(var(--x)*2.5)}
+.addlbl{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;
+  color:var(--dim);line-height:1.3}
+.addpr{color:var(--magenta)}
+.step.addon{padding-top:0;flex:0 0 auto}
+.step.addon button{font-size:calc(var(--x)*8);color:var(--dim)}
+.step.addon .q{font-size:calc(var(--x)*7);color:var(--dim);min-width:calc(var(--x)*7)}
+.step.addon [data-step="1"]{color:var(--rule)}
+.step.addon.can [data-step="1"]{color:var(--magenta)}
+
+/* caption — right-aligned to the PHOTO's right edge, never the panel's */
+.cap{width:var(--w-card);padding-top:9px;text-align:right}
+/* Each price sits directly under its own name. Names wrap to different
+   line counts, so prices across a row are deliberately ragged: the rail
+   shows about two cards at a time, so they are never compared side by
+   side, and padding every name up to the tallest one left a visible hole
+   under the short ones. */
+.cap .nm{font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase;
+  line-height:1.3}
+.cap .pr{font-size:var(--t-item);color:var(--magenta);letter-spacing:.03em;margin-top:1px}
+
+/* ---------- plain list tabs (mixers / beer / shots / bottles / non-alc) ---------- */
+.list{padding:0 var(--gut)}
+.listnote{font-size:var(--t-ing);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+  padding:0 var(--gut) 12px;margin-top:-6px}
+
+/* ---------- sets: static, full width, no expansion ---------- */
+.stack{padding:0 var(--gut)}
+.setcard+.setcard{margin-top:calc(var(--x)*11)}
+.setshot{position:relative;width:100%;overflow:hidden;border:1px solid var(--rule);background:var(--tile)}
+.setmeta{padding-top:calc(var(--x)*4)}
+.settop{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.setnm{font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase}
+.setpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:.03em;white-space:nowrap}
+.setdesc{font-size:var(--t-ing);letter-spacing:.08em;text-transform:uppercase;
+  line-height:1.85;margin-top:calc(var(--x)*2)}
+.setmeta .step{padding-top:calc(var(--x)*2);justify-content:flex-end;gap:calc(var(--x)*2)}
+
+/* ---------- non-alcoholic marker ---------- */
+.star{position:absolute;left:0;top:0;z-index:2;
+  padding:calc(var(--x)*1) calc(var(--x)*2.4);
+  color:var(--magenta);font-size:calc(var(--x)*7);line-height:1;font-weight:500}
+/* ---------- heat marker ----------
+   Bottom-LEFT, deliberately: the cart badge stays bottom-right so it reads
+   beside the item name. Flames overlap and get lighter leftwards, so the
+   right-hand one is always full magenta and always on top — later siblings
+   paint over earlier ones, so DOM order is simply left to right. */
+.heat{position:absolute;left:0;bottom:0;z-index:2;display:flex;align-items:flex-end;
+  padding:calc(var(--x) * var(--heat-inset-y)) calc(var(--x) * var(--heat-inset-x))}
+.heat svg{display:block;width:calc(var(--x) * var(--heat-size));height:auto;position:relative}
+.heat svg+svg{margin-left:calc(var(--x) * var(--heat-overlap) * -1)}
+.h1{color:var(--magenta)}
+.h2{color:var(--heat-mid)}
+.h3{color:var(--heat-soft)}
+
+.tag{display:inline-block;margin-bottom:calc(var(--x)*3);
+  padding:calc(var(--x)*1.2) calc(var(--x)*2.4);
+  background:var(--magenta);color:var(--on-magenta);font-size:calc(var(--x)*3);
+  letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+
+/* ---------- cart badge on the photo card ---------- */
+.badge{position:absolute;right:0;bottom:0;display:none;
+  min-width:calc(var(--x)*8);height:calc(var(--x)*8);padding:0 calc(var(--x)*1.6);
+  background:var(--magenta);color:var(--on-magenta);font-size:calc(var(--x)*4.4);font-weight:500;
+  letter-spacing:.02em;align-items:center;justify-content:center}
+.badge.on{display:flex}
+
+/* ---------- list rows ---------- */
+.row{border-bottom:1px solid var(--rule);padding:calc(var(--x)*4) 0}
+.row:first-child{border-top:1px solid var(--rule)}
+.rowname{font-size:var(--t-item);letter-spacing:.07em;text-transform:uppercase;line-height:1.3}
+.rowname .sub{margin-left:calc(var(--x)*2.4);font-size:var(--t-ing);
+  letter-spacing:.09em;color:var(--dim)}
+/* set by "noteBelow": true on a section — the note drops under the name
+   instead of trailing it, for sections whose notes are ingredient lists.
+   Price and stepper stay on the name's line, not centred on the pair. */
+.subline{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;
+  color:var(--dim);line-height:var(--note-lead);
+  margin-top:calc(var(--x) * var(--note-gap))}
+.vrow{display:flex;align-items:center;gap:calc(var(--x)*4);padding:calc(var(--x)*1.5) 0}
+.vrow.single{padding:0}
+.vrow .rowname{flex:1;min-width:0}
+.vname{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+/* variants share the row's width, each a label with its price and stepper */
+.vgrid{display:flex;gap:calc(var(--x)*4);margin-top:calc(var(--x)*2)}
+.vcell{flex:1 1 0;min-width:0;display:grid;
+  grid-template-columns:1fr auto;grid-template-rows:auto auto;
+  align-items:center;column-gap:calc(var(--x)*2)}
+.vcell .vname{grid-column:1/-1;margin-bottom:calc(var(--x)*.5)}
+.vcell .vpr{text-align:left}
+.vcell .step{padding-top:0;gap:0;justify-content:flex-end;min-width:0}
+.vpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:.03em;
+  white-space:nowrap;text-align:right}
+.vrow .step{padding-top:0;gap:calc(var(--x)*1);flex:0 0 auto;
+  min-width:calc(var(--x)*22);justify-content:flex-end}
+.chip{display:none}
+
+/* ---------- order bar ---------- */
+body.hasbar{padding-bottom:calc(var(--x)*30)}
+.obar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--ink);color:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:calc(var(--x)*4) var(--gut) calc(var(--x)*4 + env(safe-area-inset-bottom));
+  transform:translateY(110%);transition:transform .24s cubic-bezier(.3,.85,.35,1)}
+.obar.show{transform:none}
+.ob-l{font-size:var(--t-item);letter-spacing:.07em;text-transform:uppercase}
+.ob-l .dot{margin:0 7px;opacity:.5}
+.ob-go{border:1px solid var(--paper);padding:calc(var(--x)*3) calc(var(--x)*7);
+  font-size:var(--t-item);letter-spacing:.12em;text-transform:uppercase}
+
+/* ---------- order page ---------- */
+.sheet,.waiter{position:fixed;inset:0;z-index:50;background:var(--paper);
+  display:flex;flex-direction:column;transform:translateY(100%);
+  transition:transform .26s cubic-bezier(.3,.85,.35,1)}
+.sheet.show,.waiter.show{transform:none}
+.waiter{z-index:60}
+.sheet-top,.wtop{display:flex;align-items:center;justify-content:space-between;
+  padding:calc(var(--x)*7) var(--gut) calc(var(--x)*5);border-bottom:1px solid var(--rule)}
+.sheet-top h2,.wtop h2{font-size:var(--t-head);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.x{font-size:calc(var(--x)*11);line-height:1;padding:0 4px;color:var(--dim)}
+.sheet-body{flex:1;overflow-y:auto;padding:0 var(--gut)}
+/* An item and its add-ons are one block with one divider around them.
+   Add-on rows are always present while the parent is in the order, even at
+   zero, so a customer can add or take back fries without going hunting for
+   the card again — and cannot accidentally delete the row out of existence. */
+.ogroup{border-bottom:1px solid var(--rule)}
+.oline{display:flex;align-items:center;gap:calc(var(--x)*4);padding:calc(var(--x)*5) 0}
+.oline.ohas{padding-bottom:calc(var(--x)*1.5)}
+.oline.oadd{padding:calc(var(--x)*1.5) 0 calc(var(--x)*4)}
+.oaddnm{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.oadd .ostep{gap:calc(var(--x)*1.5)}
+.oadd .ostep button{font-size:calc(var(--x)*6);color:var(--dim)}
+.oadd .ostep .q{font-size:var(--t-ing);color:var(--dim);min-width:calc(var(--x)*7)}
+.oadd .ostep .q.off,.oadd .ostep [data-o="-1"].off{opacity:0;pointer-events:none}
+.oadd .ostep [data-o="1"]{color:var(--rule)}
+.oadd .ostep [data-o="1"].can{color:var(--magenta)}
+.oadd .opr{font-size:var(--t-ing)}
+.oadd .opr.zero{color:var(--dim)}
+/* keeps the add-on's price in the same column as the item's, where the
+   parent row has a × button and the add-on row does not */
+.oxs{flex:0 0 calc(var(--x)*9)}
+.ol{flex:1;min-width:0}
+.onm{font-size:var(--t-item);letter-spacing:.07em;text-transform:uppercase;line-height:1.3}
+.osub{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.ostep{display:flex;align-items:center;gap:calc(var(--x)*2)}
+.ostep button{font-size:calc(var(--x)*8);line-height:1;font-weight:300;padding:0 calc(var(--x)*1.5)}
+.ostep .q{font-size:var(--t-item);min-width:calc(var(--x)*7);text-align:center}
+.opr{font-size:var(--t-item);color:var(--magenta);min-width:calc(var(--x)*13);text-align:right}
+.ox{flex:0 0 calc(var(--x)*9);font-size:calc(var(--x)*7);line-height:1;
+  color:var(--dim);padding:0;text-align:right}
+.sheet-foot{border-top:1px solid var(--ink);padding:calc(var(--x)*5) var(--gut)
+  calc(var(--x)*6 + env(safe-area-inset-bottom))}
+.sheet-foot.hide{display:none}
+.totrow{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:calc(var(--x)*5)}
+.totlbl{font-size:var(--t-item);letter-spacing:.14em;text-transform:uppercase}
+.totval{font-size:calc(var(--x)*10);font-weight:600}
+.acts{display:flex;gap:calc(var(--x)*3)}
+.btn{flex:1;padding:calc(var(--x)*5);font-size:var(--t-item);letter-spacing:.12em;text-transform:uppercase}
+.ghost{border:1px solid var(--rule);color:var(--dim)}
+.solid{background:var(--ink);color:var(--paper)}
+.mt{padding:calc(var(--x)*24) 0;text-align:center;color:var(--dim);
+  font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- waiter view — no prices, big enough to read across a bar ---------- */
+.wbody{flex:1;overflow-y:auto;padding:calc(var(--x)*3) var(--gut) calc(var(--x)*10)}
+.wbody h3{font-size:var(--t-item);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+  padding:calc(var(--x)*8) 0 calc(var(--x)*2);border-bottom:1px solid var(--rule)}
+.wline{display:flex;align-items:baseline;gap:calc(var(--x)*4);padding:calc(var(--x)*4) 0}
+.wq{flex:0 0 calc(var(--x)*13);text-align:right;white-space:nowrap;
+  font-size:calc(var(--x)*7);font-weight:600}
+/* flex, not inline text: the add-on note sits on the vertical centre of the
+   dish name rather than dropping to its baseline, which reads as a footnote */
+.wn{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;
+  gap:calc(var(--x)*2.5);font-size:calc(var(--x)*7);letter-spacing:.04em;
+  text-transform:uppercase;line-height:1.25}
+.wn em{font-style:normal;color:var(--dim);font-size:calc(var(--x)*5);line-height:1.25}
+
+/* staff notice when running from cache */
+.stale{position:fixed;left:0;right:0;top:0;z-index:99;background:var(--magenta);color:var(--on-magenta);
+  padding:calc(var(--x)*3) var(--gut);font-size:var(--t-ing);letter-spacing:.06em;
+  text-transform:uppercase;line-height:1.5;text-align:center}
+
+/* ---------- event poster ---------- */
+.poster-sec{padding:calc(var(--x)*11) 0 0}
+.poster{position:relative;margin:0 var(--gut);aspect-ratio:4/5;
+  overflow:hidden;border:1px solid var(--rule);background:var(--tile)}
+.poster .ph span{font-size:calc(var(--x)*9)}
+
+.stub{padding:60px var(--gut);text-align:center;color:var(--dim);
+  font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase}
+.foot{padding:36px var(--gut) 8px;margin-top:30px;border-top:1px solid var(--rule);
+  font-size:calc(var(--x)*4);line-height:1.8;color:var(--dim);letter-spacing:.02em}
+
+@media(min-width:560px){
+  body{max-width:430px;margin:0 auto;border-left:1px solid var(--rule);border-right:1px solid var(--rule);min-height:100vh}
+}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wordmark">Hideout</div>
+  <button class="burger" aria-label="Menu"><i></i><i></i><i></i></button>
+</header>
+<nav class="nav" id="nav"></nav>
+<main id="main"></main>
+
+<div class="obar" id="obar">
+  <div class="ob-l"><span id="ocount">0 items</span><span class="dot">·</span><span id="ototal">₩0</span></div>
+  <button class="ob-go" id="oopen">Order</button>
+</div>
+
+<section class="sheet" id="sheet" aria-hidden="true">
+  <div class="sheet-top">
+    <h2>Your order</h2>
+    <button class="x" id="sheetclose" aria-label="Close">&times;</button>
+  </div>
+  <div class="sheet-body" id="sheetbody"></div>
+  <div class="sheet-foot" id="sheetfoot">
+    <div class="totrow"><span class="totlbl">Total</span><span class="totval" id="ototal2">₩0</span></div>
+    <div class="acts">
+      <button class="btn ghost" id="clearorder">Clear</button>
+      <button class="btn solid" id="showwaiter">Show to waiter</button>
+    </div>
+  </div>
+</section>
+
+<section class="waiter" id="waiter" aria-hidden="true">
+  <div class="wtop"><h2>Order</h2><button class="x" id="waiterclose" aria-label="Close">&times;</button></div>
+  <div class="wbody" id="waiterbody"></div>
+</section>
+
+<script id="events-data" type="application/json">
 {
-  "tabs": [
+  "events": [
     {
-      "name": "Specials",
-      "source": "specials.json"
+      "date": "today",
+      "name": "Preview Event",
+      "poster": "",
+      "from": "00:00",
+      "to": "23:59",
+      "_note": "date:'today' and this wide window are a preview aid only. Real entries use a real date and can omit from/to."
     },
     {
-      "name": "Food",
-      "kind": "food",
-      "sections": [
-        {
-          "title": "Sets",
-          "layout": "stack",
-          "items": [
-            {
-              "name": "Monthly Special Set",
-              "price": 50,
-              "description": "2 cocktails of the month, 3 chili beef tacos, cheese quesadilla, dessert of choice.",
-              "photo": "monthly-special-set.jpg",
-              "ratio": "1008/932"
-            },
-            {
-              "name": "Mexican Set",
-              "price": 25,
-              "description": "Mexican karaage, Mexican pizza, dessert of choice.",
-              "photo": "mexican-set.jpg",
-              "ratio": "1526/672"
-            },
-            {
-              "name": "Fajita Set",
-              "price": 25,
-              "description": "Chicken al pastor fajita, nachos or fries, homemade brownie.",
-              "photo": "fajita-set.jpg",
-              "ratio": "1526/672"
-            }
-          ]
-        },
-        {
-          "title": "Food",
-          "items": [
-            {
-              "name": "Birria Tacos",
-              "heat": 1,
-              "price": 13,
-              "description": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip.",
-              "photo": "birria-tacos.jpg",
-              "addons": [ { "name": "Add fries", "price": 2 } ]
-            },
-            {
-              "name": "Chili Beef Tacos",
-              "heat": 1,
-              "price": 15,
-              "description": "Spiced ground beef, lettuce and melted cheese. Served with pickled onions and lime.",
-              "photo": "chili-beef-tacos.jpg",
-              "addons": [ { "name": "Add fries", "price": 2 } ]
-            },
-            {
-              "name": "Cheese Quesadilla",
-              "price": 8,
-              "description": "Tortilla with cheddar cheese, mozzarella. Served with salsa and pickled onions.",
-              "photo": "cheese-quesadilla.jpg"
-            },
-            {
-              "name": "Spicy Chicken Quesadilla",
-              "heat": 3,
-              "price": 14,
-              "description": "Tortilla with chicken thigh meat, spicy jalapeños, curry seasoning, cheddar cheese, and mozzarella. Served with salsa and pickled onions.",
-              "photo": "spicy-chicken-quesadilla.jpg"
-            },
-            {
-              "name": "Al Pastor Chicken Fajita",
-              "price": 14,
-              "description": "Spice-marinated chicken, grilled pineapple, broccoli, and onions. Served with warm tortillas, salsa roja and salsa verde.",
-              "photo": "al-pastor-fajita.jpg"
-            },
-            {
-              "name": "Gambas al Ajillo",
-              "heat": 1,
-              "price": 14,
-              "description": "Shrimp sautéed with garlic, onion, olive oil, and chili. Served with toasted bread.",
-              "photo": "gambas-al-ajillo.jpg"
-            },
-            {
-              "name": "Mexican Karaage & Fries",
-              "price": 13,
-              "description": "Crispy karaage chicken in sweet and spicy honey chipotle sauce. Served with fries, pickled onions, ketchup.",
-              "photo": "mexican-karaage.jpg"
-            },
-            {
-              "name": "Birria Ramen",
-              "heat": 1,
-              "price": 9,
-              "description": "Ramen cooked in birria broth, topped with shredded birria pork, cheddar cheese, and pickled onions.",
-              "photo": "birria-ramen.jpg",
-              "addons": [ { "name": "Add spicy", "price": 0.5 } ]
-            },
-            {
-              "name": "Fondue",
-              "price": 20,
-              "description": "Melted Italian provolone cheese with white wine and cream. Served hot with toasted bread for dipping.",
-              "photo": "fondue.jpg"
-            },
-            {
-              "name": "Mexican Pizza",
-              "heat": 2,
-              "price": 11,
-              "description": "Homemade dough, salsa, mozzarella, jalapeño, avocado, crispy bacon.",
-              "photo": "mexican-pizza.jpg"
-            },
-            {
-              "name": "Pesto Pizza",
-              "price": 11,
-              "description": "Homemade dough, pesto, cream cheese, mozzarella, almonds, olive oil.",
-              "photo": "pesto-pizza.jpg"
-            },
-            {
-              "name": "Seasoned French Fries",
-              "price": 8,
-              "description": "Served with classic ketchup.",
-              "addons": [ { "name": "Add cheese", "price": 2 } ]
-            },
-            {
-              "name": "Nachos",
-              "price": 8,
-              "description": "Served with salsa and cheese."
-            }
-          ]
-        },
-        {
-          "title": "Dessert",
-          "items": [
-            {
-              "name": "Brownie",
-              "price": 6.5,
-              "description": "In-house chocolate brownie served with vanilla ice cream, drizzled in chocolate sauce.",
-              "photo": "brownie.jpg"
-            },
-            {
-              "name": "Tiramisu",
-              "price": 6.5,
-              "description": "Creamy mascarpone, coffee-soaked biscuits and cocoa.",
-              "photo": "tiramisu.jpg"
-            }
-          ]
-        }
-      ]
+      "date": "2026-08-15",
+      "name": "Latin Night",
+      "poster": "latin-night.jpg"
     },
     {
-      "name": "Cocktails",
-      "kind": "drink",
-      "sections": [
-        {
-          "title": "Bartender's Choice",
-          "items": [
-            {
-              "name": "Pineapple Daiquiri",
-              "price": 11,
-              "ingredients": [
-                "Pineapple rum",
-                "Lime",
-                "Pineapple",
-                "Cinnamon",
-                "vanilla"
-              ]
-            },
-            {
-              "name": "Baby Turtle",
-              "price": 13,
-              "ingredients": [
-                "El Jimador tequila",
-                "Campari",
-                "Egg white",
-                "Lime",
-                "grapefruit",
-                "Cinnamon",
-                "vanilla"
-              ]
-            },
-            {
-              "name": "Red Pill",
-              "price": 11,
-              "ingredients": [
-                "Raspberry vodka",
-                "Triple sec",
-                "Lemon",
-                "Grenadine",
-                "cranberry"
-              ]
-            },
-            {
-              "name": "Zombie",
-              "price": 11,
-              "ingredients": [
-                "Plantation rum",
-                "Rondiaz 151",
-                "White rum",
-                "Lime",
-                "grenadine",
-                "Pineapple",
-                "grapefruit"
-              ]
-            },
-            {
-              "name": "Wake Me Up, Fuck Me Up",
-              "price": 12,
-              "ingredients": [
-                "Caramel vodka",
-                "Dark cacao",
-                "Espresso",
-                "Sugar"
-              ]
-            },
-            {
-              "name": "Devil Margarita",
-              "price": 12,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Lime",
-                "Red wine",
-                "Sugar"
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Premium Cocktails",
-          "items": [
-            {
-              "name": "Siesta",
-              "price": 15,
-              "ingredients": [
-                "Altos tequila",
-                "Grapefruit",
-                "Lime",
-                "sugar",
-                "Campari"
-              ]
-            },
-            {
-              "name": "Last Word",
-              "price": 20,
-              "ingredients": [
-                "Tanqueray gin",
-                "Green Chartreuse",
-                "Maraschino",
-                "Lime"
-              ]
-            },
-            {
-              "name": "French Gimlet",
-              "price": 18,
-              "ingredients": [
-                "Tanqueray gin",
-                "St Germain",
-                "Lime",
-                "Saline solution"
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Bold & Boozy",
-          "items": [
-            {
-              "name": "Dark Passion",
-              "price": 12,
-              "ingredients": [
-                "Plantation dark rum",
-                "Bacardi Carta Blanca",
-                "Passion fruit"
-              ]
-            },
-            {
-              "name": "Old Fashioned",
-              "price": 12,
-              "ingredients": [
-                "Jim Beam bourbon",
-                "Angostura bitters",
-                "Demerara syrup"
-              ]
-            },
-            {
-              "name": "Golden Hour",
-              "price": 15,
-              "ingredients": [
-                "Jim Beam bourbon",
-                "Hennessy",
-                "Triple sec",
-                "Bénédictine",
-                "Orange bitters"
-              ]
-            },
-            {
-              "name": "Faust",
-              "price": 11,
-              "ingredients": [
-                "Jim Beam",
-                "Rondiaz 151",
-                "Cassis"
-              ]
-            },
-            {
-              "name": "Rusty Nail",
-              "price": 12,
-              "ingredients": [
-                "Scotch whisky",
-                "Drambuie"
-              ]
-            },
-            {
-              "name": "Godfather",
-              "price": 12,
-              "ingredients": [
-                "Scotch whisky",
-                "Disaronno"
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Fruity & Fun",
-          "items": [
-            {
-              "name": "Strawberry Soju Pop",
-              "price": 9,
-              "ingredients": [
-                "Soju",
-                "Strawberry",
-                "Grenadine",
-                "Cranberry",
-                "lime"
-              ]
-            },
-            {
-              "name": "Peach Crush",
-              "price": 9,
-              "ingredients": [
-                "Peachtree",
-                "Lime",
-                "pineapple",
-                "Passion fruit",
-                "Cranberry"
-              ]
-            },
-            {
-              "name": "Pornstar Sojutini",
-              "price": 9,
-              "ingredients": [
-                "Soju",
-                "Passoã",
-                "Lemon",
-                "pineapple",
-                "Passion fruit",
-                "Sparkling water"
-              ]
-            },
-            {
-              "name": "June Bug",
-              "price": 11,
-              "ingredients": [
-                "Melon liqueur",
-                "Banana liqueur",
-                "Malibu",
-                "Lime, pineapple"
-              ]
-            },
-            {
-              "name": "Piña Colada",
-              "price": 11,
-              "ingredients": [
-                "Plantation rum",
-                "Bacardi white rum",
-                "Lime",
-                "orange",
-                "Pineapple",
-                "Coconut cream"
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Fresh & Light",
-          "items": [
-            {
-              "name": "Passion Sour",
-              "price": 10,
-              "ingredients": [
-                "Passoã",
-                "Lemon",
-                "Egg white",
-                "Pineapple",
-                "Passion fruit"
-              ]
-            },
-            {
-              "name": "Spiced Mule",
-              "price": 10,
-              "ingredients": [
-                "Vodka",
-                "Lime",
-                "Ginger beer",
-                "Cinnamon, vanilla"
-              ]
-            },
-            {
-              "name": "Bombay Highball",
-              "price": 10,
-              "ingredients": [
-                "Bombay gin",
-                "Lime",
-                "Grapefruit",
-                "Tonic water"
-              ]
-            },
-            {
-              "name": "Paloma",
-              "price": 11,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Lime",
-                "Grapefruit",
-                "Sparkling water"
-              ]
-            },
-            {
-              "name": "Midori Sour",
-              "price": 11,
-              "ingredients": [
-                "Midori",
-                "Vodka",
-                "Lemon, lime",
-                "Sugar",
-                "Sparkling water"
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Sweet & Creamy",
-          "items": [
-            {
-              "name": "Grasshopper",
-              "price": 12,
-              "ingredients": [
-                "Crème de menthe",
-                "White cacao",
-                "Heavy cream"
-              ]
-            },
-            {
-              "name": "White Russian",
-              "price": 10,
-              "ingredients": [
-                "Vodka",
-                "Kahlúa",
-                "Heavy cream"
-              ]
-            },
-            {
-              "name": "Coconut Margarita",
-              "price": 13,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Triple sec",
-                "Pineapple",
-                "Coconut cream",
-                "Lime"
-              ]
-            },
-            {
-              "name": "Rum After Dark",
-              "price": 12,
-              "ingredients": [
-                "Bacardi Carta Blanca",
-                "Espresso",
-                "Chocolate bitters",
-                "Dark cacao",
-                "Demerara"
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Classic Cocktails",
-          "items": [
-            {
-              "name": "Espresso Martini",
-              "price": 12,
-              "ingredients": [
-                "Vodka",
-                "Kahlúa",
-                "Espresso",
-                "Sugar"
-              ]
-            },
-            {
-              "name": "Martini",
-              "price": 14,
-              "ingredients": [
-                "Tanqueray gin",
-                "Vermouth",
-                "Olive brine"
-              ]
-            },
-            {
-              "name": "Daiquiri",
-              "price": 11,
-              "ingredients": [
-                "Bacardi white rum",
-                "Lime",
-                "Demerara"
-              ]
-            },
-            {
-              "name": "Sidecar",
-              "price": 20,
-              "ingredients": [
-                "Hennessy",
-                "Triple sec",
-                "Lemon"
-              ]
-            },
-            {
-              "name": "Negroni",
-              "price": 15,
-              "ingredients": [
-                "Beefeater gin",
-                "Vermouth",
-                "Campari"
-              ]
-            },
-            {
-              "name": "Margarita",
-              "price": 14,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Triple sec",
-                "Lime, agave"
-              ]
-            },
-            {
-              "name": "Cosmopolitan",
-              "price": 12,
-              "ingredients": [
-                "Citron vodka",
-                "Cointreau",
-                "Lemon",
-                "Cranberry",
-                "grenadine"
-              ]
-            }
-          ]
-        },
-        {
-          "title": "Danger Zone",
-          "items": [
-            {
-              "name": "Trash Can",
-              "price": 11,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Triple sec",
-                "Blue curaçao",
-                "Peachtree",
-                "Red Bull"
-              ]
-            },
-            {
-              "name": "Long Island Iced Tea",
-              "price": 9,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Triple sec",
-                "Lemon",
-                "sugar",
-                "Coke"
-              ]
-            },
-            {
-              "name": "Adios Mother Fucker",
-              "price": 11,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Triple sec",
-                "Lemon",
-                "sugar",
-                "Sprite"
-              ]
-            },
-            {
-              "name": "Tokyo Iced Tea",
-              "price": 11,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Melon liqueur",
-                "Lemon",
-                "sugar",
-                "Sprite"
-              ]
-            },
-            {
-              "name": "Long Beach Iced Tea",
-              "price": 9,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Triple sec",
-                "Lemon",
-                "sugar",
-                "Cranberry"
-              ]
-            }
-          ]
-        }
-      ]
-    },
+      "date": "2026-08-22",
+      "name": "Pub Quiz",
+      "poster": "pub-quiz.jpg",
+      "from": "20:00",
+      "to": "02:00"
+    }
+  ]
+}
+</script>
+
+<script id="specials-data" type="application/json">
+{
+  "sections": [
     {
-      "name": "Mixers",
-      "sections": [
+      "title": "Cocktails of the Month",
+      "items": [
         {
-          "title": "Simple Mixers",
-          "variants": [
-            "Standard",
-            "Double shot"
+          "name": "Cocktail One",
+          "price": 12,
+          "photo": "",
+          "ingredients": [
+            "Base spirit",
+            "Liqueur",
+            "Citrus",
+            "Sweetener"
+          ]
+        },
+        {
+          "name": "Cocktail Two",
+          "price": 13,
+          "photo": "",
+          "ingredients": [
+            "Base spirit",
+            "Liqueur",
+            "Juice",
+            "Bitters",
+            "Garnish"
+          ]
+        },
+        {
+          "name": "Cocktail Three",
+          "price": 11,
+          "photo": "",
+          "ingredients": [
+            "Base spirit",
+            "Citrus",
+            "Syrup"
+          ]
+        },
+        {
+          "name": "Virgin Cocktail",
+          "price": 14,
+          "photo": "",
+          "ingredients": [
+            "Base spirit",
+            "Liqueur",
+            "Cream",
+            "Spice"
           ],
-          "rows": [
-            {
-              "name": "Gin Tonic",
-              "prices": [
-                6,
-                9
-              ]
-            },
-            {
-              "name": "Rum Coke",
-              "prices": [
-                6,
-                9
-              ]
-            },
-            {
-              "name": "Vodka Cranberry",
-              "prices": [
-                6,
-                9
-              ]
-            },
-            {
-              "name": "Tequila Grapefruit",
-              "prices": [
-                6,
-                9
-              ]
-            },
-            {
-              "name": "Malibu Pineapple",
-              "prices": [
-                7,
-                11
-              ]
-            },
-            {
-              "name": "Jack Coke",
-              "prices": [
-                7,
-                11
-              ]
-            },
-            {
-              "name": "Kahlúa Milk",
-              "prices": [
-                7,
-                11
-              ]
-            },
-            {
-              "name": "Bombay Tonic",
-              "prices": [
-                7,
-                11
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Beer",
-      "sections": [
-        {
-          "title": "Bottled",
-          "rows": [
-            {
-              "name": "Budweiser",
-              "price": 5,
-              "note": "USA"
-            },
-            {
-              "name": "Cafri",
-              "price": 6,
-              "note": "South Korea"
-            },
-            {
-              "name": "Cass 0%",
-              "price": 6,
-              "note": "South Korea"
-            },
-            {
-              "name": "Somersby",
-              "price": 7.5,
-              "note": "Denmark"
-            },
-            {
-              "name": "Corona",
-              "price": 7.5,
-              "note": "Mexico"
-            },
-            {
-              "name": "Tiger",
-              "price": 7.5,
-              "note": "Singapore"
-            },
-            {
-              "name": "Asahi",
-              "price": 9,
-              "note": "Japan"
-            },
-            {
-              "name": "Paulaner",
-              "price": 9,
-              "note": "Germany"
-            },
-            {
-              "name": "Big Wave",
-              "price": 10,
-              "note": "USA"
-            },
-            {
-              "name": "Guinness",
-              "price": 10,
-              "note": "Ireland"
-            },
-            {
-              "name": "IPA",
-              "price": 10,
-              "note": "USA"
-            }
-          ]
-        },
-        {
-          "title": "On Tap",
-          "rows": [
-            {
-              "name": "Cass",
-              "price": 6
-            },
-            {
-              "name": "Stella",
-              "price": 8
-            },
-            {
-              "name": "Hand&Malt",
-              "price": 8
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Shots",
-      "sections": [
-        {
-          "title": "Shots Fired", 
-          "noteBelow": true,
-          "rows": [
-            {
-              "name": "B-52",
-              "price": 8,
-              "note": "Coffee liqueur, Irish cream, orange liqueur"
-            },
-            {
-              "name": "Irish Car Bomb",
-              "price": 8,
-              "note": "Irish whiskey, Irish cream, stout"
-            },
-            {
-              "name": "Baby Guinness",
-              "price": 6,
-              "note": "Coffee liqueur, Irish cream"
-            },
-            {
-              "name": "Lemon Drop",
-              "price": 5,
-              "note": "Vodka, lemon juice, sugar"
-            },
-            {
-              "name": "Yuzu Sake",
-              "price": 5,
-              "note": "Yuzu-flavoured sake"
-            },
-            {
-              "name": "Kamikaze",
-              "price": 5,
-              "note": "Vodka, triple sec, lemon juice"
-            },
-            {
-              "name": "Jagger Bomb",
-              "price": 8,
-              "note": "Jägermeister, Red Bull"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Bottles",
-      "sections": [
-        {
-          "title": "Whiskey",
-          "variants": [
-            "Shot",
-            "Bottle"
-          ],
-          "rows": [
-            {
-              "name": "Jameson",
-              "prices": [
-                6,
-                120
-              ]
-            },
-            {
-              "name": "Jack Daniel's",
-              "prices": [
-                8,
-                160
-              ]
-            },
-            {
-              "name": "Wild Turkey",
-              "prices": [
-                8,
-                180
-              ],
-              "note": "Bourbon"
-            },
-            {
-              "name": "Wild Turkey",
-              "prices": [
-                9,
-                180
-              ],
-              "note": "Rye"
-            },
-            {
-              "name": "Buffalo Trace",
-              "prices": [
-                8,
-                180
-              ]
-            },
-            {
-              "name": "Johnnie Walker",
-              "prices": [
-                9,
-                200
-              ],
-              "note": "Black"
-            },
-            {
-              "name": "Monkey Shoulder",
-              "prices": [
-                9,
-                200
-              ]
-            },
-            {
-              "name": "Maker's Mark",
-              "prices": [
-                9,
-                200
-              ]
-            },
-            {
-              "name": "Bulleit",
-              "prices": [
-                9,
-                200
-              ]
-            },
-            {
-              "name": "Kavalan",
-              "prices": [
-                12,
-                250
-              ],
-              "note": "No. 1"
-            },
-            {
-              "name": "Auchentoshan",
-              "prices": [
-                13,
-                260
-              ],
-              "note": "12 yrs"
-            },
-            {
-              "name": "Balvenie",
-              "prices": [
-                13,
-                350
-              ],
-              "note": "12 yrs"
-            },
-            {
-              "name": "Ballantine's",
-              "prices": [
-                28,
-                600
-              ],
-              "note": "21 yrs"
-            }
-          ]
-        },
-        {
-          "title": "Tequila",
-          "variants": [
-            "Shot",
-            "Bottle"
-          ],
-          "rows": [
-            {
-              "name": "Jose Cuervo",
-              "prices": [
-                6,
-                120
-              ]
-            },
-            {
-              "name": "El Jimador",
-              "prices": [
-                6,
-                120
-              ]
-            },
-            {
-              "name": "Olmeca Altos",
-              "prices": [
-                6,
-                120
-              ],
-              "note": "Blanco"
-            },
-            {
-              "name": "Herradura",
-              "prices": [
-                8,
-                180
-              ],
-              "note": "Blanco"
-            },
-            {
-              "name": "Herradura",
-              "prices": [
-                9,
-                200
-              ],
-              "note": "Reposado"
-            },
-            {
-              "name": "1800",
-              "prices": [
-                12,
-                250
-              ],
-              "note": "Blanco"
-            },
-            {
-              "name": "1800",
-              "prices": [
-                12,
-                250
-              ],
-              "note": "Reposado"
-            },
-            {
-              "name": "Don Julio",
-              "prices": [
-                14,
-                350
-              ],
-              "note": "Añejo"
-            },
-            {
-              "name": "Cenote",
-              "prices": [
-                15,
-                350
-              ],
-              "note": "Blanco"
-            },
-            {
-              "name": "Cenote",
-              "prices": [
-                16,
-                370
-              ],
-              "note": "Reposado"
-            },
-            {
-              "name": "Patrón",
-              "prices": [
-                15,
-                370
-              ],
-              "note": "Blanco"
-            },
-            {
-              "name": "Patrón",
-              "prices": [
-                16,
-                370
-              ],
-              "note": "Reposado"
-            }
-          ]
-        },
-        {
-          "title": "Mezcal",
-          "rows": [
-            {
-              "name": "Madre Mezcal",
-              "price": 11
-            },
-            {
-              "name": "Durambes Mezcal",
-              "price": 11
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Non-alcoholic",
-      "sections": [
-        {
-          "title": "Mocktails",
-          "noteBelow": true,
-          "rows": [
-            {
-              "name": "Blue Lemonade",
-              "price": 8.5,
-              "note": "Blue curaçao syrup, lemon, sparkling water"
-            },
-            {
-              "name": "Virgin Piña Colada",
-              "price": 8.5,
-              "note": "Coconut cream, pineapple, orange, lime"
-            },
-            {
-              "name": "Virgin Paloma",
-              "price": 8.5,
-              "note": "Grapefruit, passion fruit, lemon, sparkling water"
-            },
-            {
-              "name": "Virgin Spiced Mule",
-              "price": 8.5,
-              "note": "0% ginger beer, lime, cinnamon, vanilla"
-            },
-            {
-              "name": "Virgin Spiced Daiquiri",
-              "price": 8.5,
-              "note": "Pineapple, lime, cinnamon, vanilla"
-            }
-          ]
-        },
-        {
-          "title": "Coffee Corner",
-          "noteBelow": true,
-          "rows": [
-            {
-              "name": "Americano",
-              "price": 5,
-              "note": "Espresso"
-            },
-            {
-              "name": "Cafe Latte",
-              "price": 6,
-              "note": "Espresso, milk"
-            },
-            {
-              "name": "Cappuccino",
-              "price": 6,
-              "note": "Espresso, milk"
-            },
-            {
-              "name": "Coconut Latte",
-              "price": 6,
-              "note": "Espresso, milk, coconut cream"
-            },
-            {
-              "name": "Cinnamon Vanilla Latte",
-              "price": 6,
-              "note": "Espresso, milk, cinnamon, vanilla"
-            },
-            {
-              "name": "Hot Chocolate",
-              "price": 6,
-              "note": "Cacao, milk, Hershey's, heavy cream"
-            }
-          ]
+          "mocktail": true
         }
       ]
     }
   ]
 }
+</script>
+
+<script id="imgdata" type="application/json">{"al-pastor-fajita": "img/food/al-pastor-fajita.jpg", "birria-ramen": "img/food/birria-ramen.jpg", "birria-tacos": "img/food/birria-tacos.jpg", "brownie": "img/food/brownie.jpg", "cheese-quesadilla": "img/food/cheese-quesadilla.jpg", "chili-beef-tacos": "img/food/chili-beef-tacos.jpg", "fajita-set": "img/food/fajita-set.jpg", "fondue": "img/food/fondue.jpg", "gambas-al-ajillo": "img/food/gambas-al-ajillo.jpg", "mexican-karaage": "img/food/mexican-karaage.jpg", "mexican-pizza": "img/food/mexican-pizza.jpg", "mexican-set": "img/food/mexican-set.jpg", "monthly-special-set": "img/food/monthly-special-set.jpg", "pesto-pizza": "img/food/pesto-pizza.jpg", "spicy-chicken-quesadilla": "img/food/spicy-chicken-quesadilla.jpg", "tiramisu": "img/food/tiramisu.jpg"}</script>
+<script>
+const IMG = JSON.parse(document.getElementById('imgdata').textContent);
+const pic = id => IMG[id] || null;
+
+/* ============================================================
+   MENU DATA — lives in menu.json, not in this file.
+
+   Single source of truth. There is deliberately no duplicate copy
+   baked in here: a stale duplicate would silently serve last year's
+   prices the day menu.json breaks, and wrong prices are worse than
+   no menu. Instead, the last version that parsed cleanly is cached
+   on the device, so a bad commit mid-service degrades to yesterday's
+   menu rather than a blank screen.
+   ============================================================ */
+const MENU_CACHE = 'hideout.menu.v1';
+let TABS = {}, TAB_ORDER = [];
+
+function buildTabs(json){
+  const tabs = (json && Array.isArray(json.tabs)) ? json.tabs : null;
+  if(!tabs || !tabs.length) throw new Error('no tabs array');
+
+  const built = {}, order = [];
+  for(const t of tabs){
+    if(!t || !t.name) continue;
+    order.push(t.name);
+
+    if(t.source === 'specials.json'){          // filled in by applySpecials
+      built[t.name] = {stub:'Nothing on special right now'};
+      continue;
+    }
+    const secs = (t.sections||[]).map(s=>{
+      if(s.rows){
+        return {
+          t: String(s.title||''),
+          vl: Array.isArray(s.variants) ? s.variants : null,
+          nb: s.noteBelow === true,
+          rows: (s.rows||[]).map(r => Array.isArray(r.prices)
+            ? {n:String(r.name||''), sub:r.note||'', v:r.prices.map(Number)}
+            : {n:String(r.name||''), sub:r.note||'', p:Number(r.price)||0})
+        };
+      }
+      return {
+        t: String(s.title||''),
+        layout: s.layout || null,
+        items: (s.items||[]).map(it=>({
+          n   : String(it.name||'Untitled'),
+          p   : Number(it.price)||0,
+          ing : Array.isArray(it.ingredients) ? it.ingredients.map(String) : [],
+          desc: it.description ? String(it.description) : '',
+          ar  : it.ratio || null,
+          mocktail: it.mocktail === true,
+          heat: Math.max(0, Math.min(3, Number(it.heat) || 0)),
+          add : Array.isArray(it.addons)
+                ? it.addons.map(a => ({n:String(a.name||''), p:Number(a.price)||0}))
+                : [],
+          /* No "photo" field needed: the filename is derived from the item
+             name, so dropping baby-turtle.jpg into img/cocktails/ is all it
+             takes. A file that isn't there falls back to the lettered tile.
+             Set "photo" explicitly only for a different name or a .png. */
+          img : (t.kind==='food' ? 'img/food/' : 'img/cocktails/') +
+                (it.photo || slug(String(it.name||'')) + '.jpg')
+        }))
+      };
+    });
+    const isList = (t.sections||[]).some(s => s.rows);
+    built[t.name] = isList ? {list:secs} : {kind:t.kind||'drink', secs};
+  }
+  if(!order.length) throw new Error('no usable tabs');
+  return {built, order};
+}
+
+function applyMenu(raw, where){
+  const json = typeof raw === 'string' ? JSON.parse(raw) : raw;
+  const {built, order} = buildTabs(json);
+  TABS = built; TAB_ORDER = order;
+  indexAll();
+  return json;
+}
+
+/* tab order is the order of the tabs array in menu.json */
+function paintNav(){
+  document.getElementById('nav').innerHTML = TAB_ORDER.filter(n=>TABS[n]).map((n,i)=>
+    `${i?'<span class="bar"></span>':''}<button data-tab="${esc(n)}">${esc(n)}</button>`).join('');
+}
+
+/* ---------- flat index of every orderable line ----------
+   Built once from TABS. Ids are stable across tab switches, so the
+   cart survives navigation; variants (shot vs bottle) are separate
+   lines because they are separate things to pour. */
+/* Strip accents before slugging, so "Piña Colada" is pina-colada rather
+   than pi-a-colada. NFD splits a letter from its accent; the range below
+   is the combining marks. A few letters have no decomposition, so they
+   get named directly. This matches the filename rule in HOW-TO-UPDATE.md. */
+const slug = s => String(s)
+  .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  .replace(/ø/gi,'o').replace(/æ/gi,'ae').replace(/œ/gi,'oe')
+  .replace(/ß/g,'ss').replace(/đ/gi,'d').replace(/ł/gi,'l')
+  .toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const INDEX = {};
+
+function indexAll(){
+  Object.keys(INDEX).forEach(k => delete INDEX[k]);
+  for(const [tabName,T] of Object.entries(TABS)){
+    const group = tabName === 'Food' ? 'food' : 'drink';
+    const add = (name, sub, price, variant) => {
+      const id = [slug(tabName), slug(name + ' ' + (sub||'')), variant?slug(variant):''].filter(Boolean).join('/');
+      INDEX[id] = {id, name, sub:sub||'', variant:variant||'', price, group, tab:tabName};
+      return id;
+    };
+    if(T.secs) T.secs.forEach(s => s.items.forEach(it => {
+      it.id = add(it.n, '', it.p);
+      (it.add||[]).forEach(a => {
+        a.id = add(it.n + ' ' + a.n, '', a.p);
+        /* name stays the parent's, so the order sheet and the waiter view
+           both read "Birria tacos / add fries" rather than a loose line */
+        INDEX[a.id].name   = it.n;
+        INDEX[a.id].sub    = a.n;
+        INDEX[a.id].parent = it.id;
+      });
+    }));
+    if(T.list) T.list.forEach(s => s.rows.forEach(r => {
+      if(r.v) r.ids = r.v.map((p,i) => add(r.n, r.sub, p, s.vl[i]));
+      else    r.id  = add(r.n, r.sub, r.p);
+    }));
+  }
+}
+
+/* ============================================================
+   SPECIALS — the only part the owners touch.
+
+   Source of truth is specials.json sitting next to index.html.
+   The block baked into the page below is the fallback, so the
+   menu still works if that file is missing, empty or malformed.
+   Nothing here can break the rest of the menu.
+   ============================================================ */
+function applySpecials(raw, where){
+  let json;
+  try{
+    json = typeof raw === 'string' ? JSON.parse(raw) : raw;
+  }catch(err){
+    console.warn('specials: could not read ' + where, err);
+    if(TAB_ORDER.includes('Specials')){ TABS.Specials = {stub:'Specials unavailable'}; indexAll(); }
+    return false;
+  }
+  const secs = ((json && json.sections) || []).map(s => ({
+    t: String(s.title || 'Specials'),
+    items: ((s.items) || []).map(it => ({
+      n  : String(it.name || 'Untitled'),
+      p  : Number(it.price) || 0,
+      ing: Array.isArray(it.ingredients) ? it.ingredients.map(String) : [],
+      mocktail: it.mocktail === true,
+      img: 'img/specials/' + (it.photo || slug(String(it.name||'')) + '.jpg')
+    }))
+  })).filter(s => s.items.length);
+
+  if(!TAB_ORDER.includes('Specials')) return true;   // menu.json didn't ask for it
+  TABS.Specials = secs.length ? {kind:'drink', secs} : {stub:'Nothing on special right now'};
+  indexAll();
+  return true;
+}
+
+/* If a standalone specials.json is present, it wins. Fails silently
+   on file:// where fetch is blocked — the baked-in block covers it. */
+function refreshSpecials(){
+  if(typeof fetch !== 'function') return;
+  try{
+    fetch('specials.json', {cache:'no-store'})
+      .then(r => r.ok ? r.text() : Promise.reject(r.status))
+      .then(txt => {
+        if(!applySpecials(txt, 'specials.json')) return;
+        pruneCart();
+        if(tab === 'Specials'){ render(); sizeRails(); requestAnimationFrame(parkRails); }
+      })
+      .catch(()=>{});
+  }catch(e){}
+}
+
+/* ============================================================
+   EVENTS — one-night things, logged ahead, shown only on the night.
+
+   Times are Asia/Seoul wall clock, NOT the customer's device clock.
+   A tourist's phone on London time would otherwise never see tonight's
+   poster. Default window is 18:00 on the date through 04:00 the next
+   morning, because the bar day doesn't end at midnight.
+   ============================================================ */
+let EVENTS = [];
+
+function applyEvents(raw, where){
+  try{
+    const json = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    EVENTS = ((json && json.events) || []).filter(e => e && e.date);
+    return true;
+  }catch(err){
+    console.warn('events: could not read ' + where, err);
+    EVENTS = [];
+    return false;
+  }
+}
+
+const toMin = hhmm => {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(String(hhmm||''));
+  return m ? (+m[1])*60 + (+m[2]) : null;
+};
+
+/* Whole days since the epoch, so a run of nights is plain arithmetic and
+   never touches the device's timezone. */
+function dayNum(iso){
+  const [y,m,d] = iso.split('-').map(Number);
+  return Math.round(Date.UTC(y, m-1, d) / 86400000);
+}
+
+/* Current Seoul date + minutes-past-midnight.
+   ?when=2026-08-15        → that night at 21:00
+   ?when=2026-08-16T02:30  → those small hours
+   Both are read as Seoul wall clock, so testing isn't tz-dependent. */
+function seoulNow(){
+  try{
+    const q = new URLSearchParams(location.search).get('when');
+    if(q){
+      const m = /^(\d{4}-\d{2}-\d{2})(?:[T ](\d{1,2}):(\d{2}))?$/.exec(q.trim());
+      if(m) return { date:m[1], min: m[2] ? (+m[2])*60 + (+m[3]) : 21*60 };
+    }
+  }catch(e){}
+  const p = {};
+  new Intl.DateTimeFormat('en-CA', {
+    timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', hour12:false
+  }).formatToParts(new Date()).forEach(x => { p[x.type] = x.value; });
+  const hr = (+p.hour) % 24;                       // some engines report 24 for midnight
+  return { date:`${p.year}-${p.month}-${p.day}`, min: hr*60 + (+p.minute) };
+}
+
+/* One continuous window, however many nights long. "until" is the LAST
+   night of a run — Chuseok over the 24th, 25th and 26th is one entry with
+   date 2026-09-24 and until 2026-09-26, and the poster stays up the whole
+   time rather than blinking out each morning. Omit it for a single night.
+   First match in file order wins, so if two ever overlap, put the more
+   specific one higher up. */
+function activeEvent(){
+  const now  = seoulNow();
+  const nowN = dayNum(now.date) * 1440 + now.min;
+  for(const ev of EVENTS){
+    const on   = ev.date === 'today' ? now.date : ev.date;    // 'today' is a preview aid
+    const from = toMin(ev.from) ?? 18*60;
+    const to   = toMin(ev.to)   ?? 4*60;
+    const last = ev.until || on;
+    const startN = dayNum(on) * 1440 + from;
+    /* an end time at or before the start time means it lands the next morning */
+    const endN   = (dayNum(last) + (to <= from ? 1 : 0)) * 1440 + to;
+    if(endN > startN && nowN >= startN && nowN < endN) return ev;
+  }
+  return null;
+}
+
+function posterHTML(ev){
+  const art = ev.poster
+    ? `<img src="img/events/${esc(ev.poster)}" alt="${esc(ev.name||'')}">`
+    : `<div class="ph"><span>${esc(ev.name||'Event')}</span></div>`;
+  return `<section class="sec poster-sec"><div class="poster">${art}</div></section>`;
+}
+
+applyEvents(document.getElementById('events-data').textContent, 'the built-in block');
+
+function refreshEvents(){
+  if(typeof fetch !== 'function') return;
+  try{
+    fetch('events.json', {cache:'no-store'})
+      .then(r => r.ok ? r.text() : Promise.reject(r.status))
+      .then(txt => { if(applyEvents(txt, 'events.json') && tab === 'Specials'){
+        render(); sizeRails(); requestAnimationFrame(parkRails);
+      }})
+      .catch(()=>{});
+  }catch(e){}
+}
+
+/* Land on Specials when there's something there — a live event poster or
+   this month's cocktails. An empty Specials tab is a worse first screen
+   than the food, so fall through to Food if it has nothing. */
+function landingTab(){
+  const shown = TAB_ORDER.filter(n => TABS[n]);
+  const has = n => shown.includes(n);
+  if(has('Specials')){
+    if(activeEvent()) return 'Specials';
+    const S = TABS.Specials;
+    if(S && S.secs && S.secs.some(s => s.items.length)) return 'Specials';
+  }
+  return has('Food') ? 'Food' : shown[0];   // whatever the menu actually offers
+}
+
+let tab = 'Food';
+let cart = loadCart();
+
+function loadCart(){
+  try{ const c = JSON.parse(localStorage.getItem('hideout.cart')||'{}');
+       Object.keys(c).forEach(k=>{ if(!INDEX[k] || !(c[k]>0)) delete c[k]; });
+       Object.keys(c).forEach(k=>{
+         const r = INDEX[k];
+         if(r && r.parent && !(c[r.parent] > 0)) delete c[k];
+       });
+       return c; }
+  catch(e){ return {}; }
+}
+function saveCart(){ try{ localStorage.setItem('hideout.cart', JSON.stringify(cart)); }catch(e){} }
+/* a special that vanished this month must not linger in someone's order */
+function pruneCart(){
+  let changed = false;
+  Object.keys(cart).forEach(k => { if(!INDEX[k]){ delete cart[k]; changed = true; } });
+  if(changed){ saveCart(); paintAllQty(); paintBar(); }
+}
+
+const lines      = () => Object.keys(cart).map(id => ({...INDEX[id], qty:cart[id]}));
+const cartCount  = () => Object.values(cart).reduce((a,b)=>a+b,0);
+const cartTotal  = () => lines().reduce((a,l)=>a + l.price*l.qty, 0);
+const won        = n => '₩' + Math.round(n*1000).toLocaleString('en-US');
+
+const kidsOf = id => Object.values(INDEX).filter(r => r.parent === id);
+
+/* Two tacos, at most two portions of fries. Anything else and the kitchen
+   gets an order for fries that belong to nothing. */
+function clampAddons(){
+  let changed = false;
+  Object.keys(cart).forEach(k => {
+    const r = INDEX[k];
+    if(!r || !r.parent) return;
+    const cap = cart[r.parent] || 0;
+    if(cart[k] > cap){ if(cap) cart[k] = cap; else delete cart[k]; changed = true; }
+  });
+  return changed;
+}
+
+function setQty(id, n){
+  const rec = INDEX[id];
+  n = Math.max(0, Math.min(99, n));
+  if(rec && rec.parent) n = Math.min(n, cart[rec.parent] || 0);
+  if(n) cart[id] = n; else delete cart[id];
+  clampAddons();
+  saveCart(); paintAllQty(); paintBar();
+}
+function bump(id, d){ setQty(id, (cart[id]||0) + d); }
+/* The full stop IS the thousands marker: 13. is 13,000 and 6.5 is 6,500.
+   So a price with a decimal already has its dot and must not get another.
+   Rounded first — 6.5 * 3 is exact in binary, but not every price will be. */
+const money = n => {
+  const v = Math.round(n * 10) / 10;
+  return Number.isInteger(v) ? v + '.' : String(v);
+};
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+
+const main = document.getElementById('main');
+
+function stepper(id, kind){
+  return `<div class="step${kind ? ' ' + kind : ''}">
+    <button data-step="-1" data-id="${id}">−</button>
+    <span class="q" data-q="${id}">0</span>
+    <button data-step="1" data-id="${id}">+</button>
+  </div>`;
+}
+
+/* ---------------------------------------------------------------
+   THE FLAME. To change the icon, replace the d="..." string below and
+   nothing else — the viewBox must match whatever the new path is drawn
+   against. Everything about stacking, colour and placement is handled by
+   heatMark() and the .heat rules in the stylesheet.
+   --------------------------------------------------------------- */
+const FLAME_BOX  = '0 0 24.634 33.978';
+const FLAME_PATH = 'M14.865,0c-5.521,5.09-7.645,11.879-7.645,17.83-1.699-2.553-1.699-4.679-2.124-8.07C.849,15.278,0,18.249,0,23.351c0,5.667,3.935,9.351,8.494,10.626-1-1.258-1.699-3.018-1.699-4.667,0-2.125.425-4.246,1.699-5.946.187,1.528.951,2.673,1.699,3.822,0-2.679.967-6.628,3.398-8.919.934,4.97,4.247,6.832,4.247,11.043,0,1.664-.705,3.403-1.699,4.667,4.714-1.241,8.494-4.904,8.494-10.626,0-9.351-7.645-12.312-9.769-23.351Z';
+
+/* Level 1 is one flame; each extra level adds another to the LEFT and one
+   shade lighter, so the rightmost is always full magenta. */
+function heatMark(level){
+  if(!level) return '';
+  let out = '';
+  for(let i = 0; i < level; i++){
+    out += `<svg class="h${level - i}" viewBox="${FLAME_BOX}" aria-hidden="true">` +
+           `<path fill="currentColor" d="${FLAME_PATH}"/></svg>`;
+  }
+  return `<span class="heat" title="Spicy ${level} of 3">${out}</span>`;
+}
+
+function addonRows(it){
+  return (it.add||[]).map(a => `<div class="addrow">
+    <span class="addlbl">${esc(a.n)} <span class="addpr">+${money(a.p)}</span></span>
+    ${stepper(a.id, 'addon')}
+  </div>`).join('');
+}
+
+/* Sets don't expand — everything is on show, so the stepper just sits there.
+   Full content width, photo keeps its own printed proportion. */
+function setCard(it){
+  const art = it.img
+    ? `<img loading="lazy" src="${it.img}" alt="" data-fallback="${esc(it.n)}">`
+    : `<div class="ph"><span>${esc(it.n)}</span></div>`;
+  return `<article class="setcard">
+    <div class="setshot" style="aspect-ratio:${it.ar||'1/1'}">${art}${heatMark(it.heat)}</div>
+    <div class="setmeta">
+      <div class="settop"><span class="setnm">${esc(it.n)}</span><span class="setpr">${money(it.p)}</span></div>
+      <p class="setdesc">${esc(it.desc)}</p>
+      ${addonRows(it)}
+      ${stepper(it.id)}
+    </div>
+  </article>`;
+}
+
+function card(it, kind, key){
+  const inner = kind==='food'
+    ? `<p class="desc">${esc(it.desc)}</p>`
+    : `<ul class="ing">${it.ing.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
+  const art = it.img
+    ? `<img loading="lazy" src="${it.img}" alt="" data-fallback="${esc(it.n)}">`
+    : `<div class="ph"><span>${esc(it.n)}</span></div>`;
+  return `<article class="item" data-key="${key}">
+    <div class="frame">
+      <div class="shot" data-tap="${key}">${art}${it.mocktail?'<span class="star">&lowast;</span>':''}${heatMark(it.heat)}<span class="badge" data-b="${it.id}"></span></div>
+      <div class="panel"><div>${it.mocktail?'<span class="tag">Non-alcoholic!</span>':''}${inner}</div><div>${addonRows(it)}${stepper(it.id)}</div></div>
+    </div>
+    <div class="cap"><div class="nm">${esc(it.n)}</div><div class="pr">${money(it.p)}</div></div>
+  </article>`;
+}
+
+function listRow(r, s, ri){
+  /* Name once, then the variants side by side. Two lines total instead of
+     three, and the prices sit next to their labels rather than at the edge. */
+  /* "noteBelow": true on the section drops the note to its own line. Used
+     where the note is an ingredient list rather than a country or an age —
+     those overrun the name's line on a narrow phone and break the column. */
+  const inline = s.nb ? '' : (r.sub ? `<span class="sub">${esc(r.sub)}</span>` : '');
+  const below  = (s.nb && r.sub) ? `<div class="subline">${esc(r.sub)}</div>` : '';
+  if(r.v){
+    return `<div class="row" data-row="${ri}">
+      <div class="rowname">${esc(r.n)}${inline}</div>
+      ${below}
+      <div class="vgrid">${r.ids.map((id,i)=>`<div class="vcell">
+        <span class="vname">${esc(s.vl[i])}</span>
+        <span class="vpr">${money(r.v[i])}</span>
+        ${stepper(id)}
+      </div>`).join('')}</div>
+    </div>`;
+  }
+  return `<div class="row" data-row="${ri}">
+    <div class="vrow single">
+      <span class="rowname">${esc(r.n)}${inline}</span>
+      <span class="vpr">${money(r.p)}</span>
+      ${stepper(r.id)}
+    </div>
+    ${below}
+  </div>`;
+}
+
+function render(){
+  const T = TABS[tab];
+  let html = '';
+  const ev = tab === 'Specials' ? activeEvent() : null;
+  if(ev) html += posterHTML(ev);
+  /* a poster plus "nothing on special" reads as a contradiction */
+  if(T.stub) html += ev ? '' : `<p class="stub">${esc(T.stub)}</p>`;
+  else if(T.secs) html += T.secs.map((s,si)=>`
+    <section class="sec"><div class="sec-head"><h2>${esc(s.t)}</h2><span class="rule"></span></div>
+      ${s.layout === 'stack'
+        ? `<div class="stack">${s.items.map(setCard).join('')}</div>`
+        : `<div class="rail ${T.kind}">${s.items.map((it,i)=>card(it,T.kind,si+'-'+i)).join('')}</div>`}
+    </section>`).join('');
+  else html += T.list.map((s,si)=>`
+    <section class="sec"><div class="sec-head"><h2>${esc(s.t)}</h2><span class="rule"></span></div>
+      ${s.vl?`<p class="listnote">${esc(s.vl.join(' | '))}</p>`:''}
+      <div class="list">${s.rows.map((r,ri)=>listRow(r,s,si+'-'+ri)).join('')}</div>
+    </section>`).join('');
+  main.innerHTML = html + `<p class="foot">Look test · tap any item to open it. Order is kept on this device.</p>`;
+  paintAllQty();
+}
+
+/* ---------- quantity painting (targeted, never a full re-render) ---------- */
+function paintQty(id){
+  main.querySelectorAll(`[data-q="${id}"]`).forEach(el=>{
+    el.textContent = cart[id]||0;
+    el.closest('.step').classList.toggle('empty', !cart[id]);
+  });
+  main.querySelectorAll('[data-b]').forEach(el=>{
+    const ids = el.dataset.b.split(',');
+    if(!ids.includes(id)) return;
+    const n = ids.reduce((a,i)=>a+(cart[i]||0),0);
+    el.textContent = n || '';
+    el.classList.toggle('on', n>0);
+  });
+}
+function paintAllQty(){
+  main.querySelectorAll('[data-q]').forEach(el=>{
+    const id = el.dataset.q, n = cart[id]||0, rec = INDEX[id];
+    el.textContent = n;
+    const step = el.closest('.step');
+    step.classList.toggle('empty', !n);
+    /* magenta only while another one can actually be added */
+    if(rec && rec.parent) step.classList.toggle('can', n < (cart[rec.parent]||0));
+  });
+  main.querySelectorAll('[data-b]').forEach(el=>{
+    const n = el.dataset.b.split(',').reduce((a,i)=>a+(cart[i]||0),0);
+    el.textContent = n || '';
+    el.classList.toggle('on', n>0);
+  });
+}
+
+/* ---------- geometry ----------
+   Read the ratios straight out of CSS so there is one source of truth. */
+const ratio = n => parseFloat(getComputedStyle(document.documentElement).getPropertyValue(n));
+
+/* 'boundary' → the seam between photo and panel lands on screen centre
+   'card'     → the whole open card is centred
+   Identical on Food (photo and panel are the same width); they differ
+   by half a photo on Drinks, where the panel is narrower. */
+const ALIGN = 'boundary';
+
+function geo(rail){
+  const W = main.clientWidth;
+  return {
+    W,
+    card : W * ratio('--f-card'),
+    open : W * ratio(rail.classList.contains('food') ? '--f-open-food' : '--f-open-drink'),
+    gut  : W * ratio('--f-gut'),
+    gap  : W * ratio('--f-gap'),
+    lead : W * ratio('--f-lead')
+  };
+}
+
+/* Deterministic, not measured: a card mid-transition reports an
+   interpolated width, so reading offsetLeft during one lies. */
+function leftOf(rail, i){
+  const g = geo(rail);
+  return g.gut + g.lead + g.gap + i * (g.card + g.gap);
+}
+
+/* Re-clamps every frame. The rail's scrollWidth grows while the card
+   expands, so a target computed up front would otherwise be clipped. */
+function glide(rail, target, ms){
+  const from = rail.scrollLeft, t0 = performance.now();
+  cancelAnimationFrame(rail._raf);
+  const step = now => {
+    const p = Math.min(1, (now - t0) / ms);
+    const e = 1 - Math.pow(1 - p, 3);
+    const max = Math.max(0, rail.scrollWidth - rail.clientWidth);
+    rail.scrollLeft = Math.min(max, Math.max(0, from + (target - from) * e));
+    if(p < 1) rail._raf = requestAnimationFrame(step);
+  };
+  rail._raf = requestAnimationFrame(step);
+}
+
+function centreOpen(rail, i){
+  const g = geo(rail);
+  const anchor = ALIGN === 'boundary' ? g.card : g.open / 2;
+  glide(rail, leftOf(rail, i) + anchor - rail.clientWidth / 2, 340);
+}
+
+/* Park each rail past its leading spacer so it looks untouched at rest,
+   while leaving room to scroll left when the first card opens. */
+function parkRails(){
+  document.querySelectorAll('.rail').forEach(r=>{
+    const first = r.querySelector('.item');
+    if(first) r.scrollLeft = geo(r).lead + geo(r).gap;
+  });
+}
+/* A photo named in menu.json that isn't in the folder yet would otherwise
+   render as the browser's broken-image icon. Swap in the same typographic
+   tile used when no photo is named. Error events don't bubble, so capture. */
+main.addEventListener('error', e=>{
+  const img = e.target;
+  if(!img || img.tagName !== 'IMG' || !img.dataset.fallback) return;
+  const tile = document.createElement('div');
+  tile.className = 'ph';
+  tile.innerHTML = `<span>${esc(img.dataset.fallback)}</span>`;
+  img.replaceWith(tile);
+}, true);
+
+function sizeRails(){
+  const w = main.clientWidth || document.documentElement.clientWidth || 393;
+  document.documentElement.style.setProperty('--railw', w + 'px');
+}
+addEventListener('resize', sizeRails);
+addEventListener('load', sizeRails);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(sizeRails);
+
+main.addEventListener('click', e=>{
+  const tap = e.target.closest('[data-tap]');
+  if(tap){
+    const key = tap.dataset.tap;
+    const el  = main.querySelector(`.item[data-key="${key}"]`);
+    const rail= el.parentElement;
+    const items = [...rail.querySelectorAll('.item')];
+    main.querySelectorAll('.item.open').forEach(o=>{ if(o!==el) o.classList.remove('open'); });
+    const opening = !el.classList.contains('open');
+    el.classList.toggle('open', opening);
+    if(opening) centreOpen(rail, items.indexOf(el));
+    return;
+  }
+  const st = e.target.closest('[data-step]');
+  if(st){ bump(st.dataset.id, Number(st.dataset.step)); }
+});
+
+/* ============================================================
+   ORDER BAR / ORDER PAGE / WAITER VIEW
+   ============================================================ */
+const obar   = document.getElementById('obar');
+const sheet  = document.getElementById('sheet');
+const waiter = document.getElementById('waiter');
+
+function paintBar(){
+  const n = cartCount();
+  document.getElementById('ocount').textContent = n + (n===1?' item':' items');
+  document.getElementById('ototal').textContent = won(cartTotal());
+  obar.classList.toggle('show', n>0);
+  document.body.classList.toggle('hasbar', n>0);
+  if(sheet.classList.contains('show')) paintSheet();
+}
+
+function paintSheet(){
+  const ls = lines();
+  const body = document.getElementById('sheetbody');
+  if(!ls.some(l => !l.parent)){
+    body.innerHTML = `<p class="mt">Nothing here yet</p>`;
+    document.getElementById('sheetfoot').classList.add('hide');
+    return;
+  }
+  document.getElementById('sheetfoot').classList.remove('hide');
+  body.innerHTML = ls.filter(l => !l.parent).map(l=>{
+    /* every add-on of this dish, whether or not any have been ordered — a
+       zero row is an offer, not a leftover */
+    const kids = kidsOf(l.id).map(k=>{
+      const q = cart[k.id] || 0;
+      const off = q ? '' : ' off';
+      return `<div class="oline oadd">
+      <div class="ol"><div class="oaddnm">${esc(k.sub)}</div></div>
+      <div class="ostep">
+        <button data-o="-1" data-id="${k.id}" class="${off.trim()}">−</button>
+        <span class="q${off}">${q}</span>
+        <button data-o="1" data-id="${k.id}" class="${q < l.qty ? 'can' : ''}">+</button>
+      </div>
+      <div class="opr${q ? '' : ' zero'}">${q ? money(k.price*q) : '+' + money(k.price)}</div>
+      <span class="oxs"></span>
+    </div>`;}).join('');
+    return `<div class="ogroup">
+    <div class="oline${kids ? ' ohas' : ''}">
+      <div class="ol">
+        <div class="onm">${esc(l.name)}</div>
+        ${(l.sub||l.variant)?`<div class="osub">${esc([l.sub,l.variant].filter(Boolean).join(' · '))}</div>`:''}
+      </div>
+      <div class="ostep">
+        <button data-o="-1" data-id="${l.id}">−</button>
+        <span class="q">${l.qty}</span>
+        <button data-o="1" data-id="${l.id}">+</button>
+      </div>
+      <div class="opr">${money(l.price*l.qty)}</div>
+      <button class="ox" data-del="${l.id}" aria-label="Remove">×</button>
+    </div>${kids}</div>`;}).join('');
+  document.getElementById('ototal2').textContent = won(cartTotal());
+}
+
+function paintWaiter(){
+  const ls = lines();
+  const block = (label, g) => {
+    const rows = ls.filter(l => l.group === g && !l.parent);
+    if(!rows.length) return '';
+    return `<h3>${label}</h3>` + rows.map(l=>{
+      /* an add-on is a modification of a dish, not a dish — it reads on the
+         parent's line so the bar counts plates, not lines */
+      const extras = ls.filter(x => x.parent === l.id)
+                       .map(x => `+${x.qty} ${x.sub}`).join(', ');
+      const note = [l.sub, l.variant, extras].filter(Boolean).join(' ');
+      return `<div class="wline"><span class="wq">${l.qty} &times;</span>
+      <span class="wn"><span>${esc(l.name)}</span>${note?`<em>${esc(note)}</em>`:''}</span></div>`;
+    }).join('');
+  };
+  document.getElementById('waiterbody').innerHTML =
+    (block('Drinks','drink') + block('Food','food')) || `<p class="mt">Nothing to show</p>`;
+}
+
+const openSheet  = () => { paintSheet();  sheet.classList.add('show');  document.body.style.overflow='hidden'; };
+const closeSheet = () => { sheet.classList.remove('show');  document.body.style.overflow=''; };
+const openWaiter = () => { paintWaiter(); waiter.classList.add('show'); };
+const closeWaiter= () => waiter.classList.remove('show');
+
+document.getElementById('oopen').addEventListener('click', openSheet);
+document.getElementById('sheetclose').addEventListener('click', closeSheet);
+document.getElementById('waiterclose').addEventListener('click', closeWaiter);
+document.getElementById('showwaiter').addEventListener('click', openWaiter);
+document.getElementById('clearorder').addEventListener('click', ()=>{
+  cart = {}; saveCart(); paintAllQty(); paintBar(); paintSheet();
+});
+
+document.getElementById('sheetbody').addEventListener('click', e=>{
+  const del = e.target.closest('[data-del]');
+  if(del){ setQty(del.dataset.del, 0); paintSheet(); return; }
+  const st = e.target.closest('[data-o]');
+  if(st){ bump(st.dataset.id, Number(st.dataset.o)); paintSheet(); }
+});
+
+
+document.getElementById('nav').addEventListener('click', e=>{
+  const b = e.target.closest('[data-tab]'); if(!b) return;
+  showTab(b.dataset.tab);
+  scrollTo({top:0});
+});
+
+function showTab(name){
+  tab = name;
+  document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x.dataset.tab === tab));
+  render();
+  sizeRails();
+  requestAnimationFrame(parkRails);
+}
+
+/* ---------- boot ---------- */
+function fatal(msg){
+  document.getElementById('main').innerHTML =
+    `<p class="stub">${esc(msg)}</p>`;
+  document.getElementById('nav').innerHTML = '';
+}
+
+/* Staff-only notice. Customers see a working menu; whoever is on shift
+   sees that it is the cached one and that menu.json needs fixing. */
+function staleWarning(){
+  const el = document.createElement('div');
+  el.className = 'stale';
+  el.textContent = 'Menu file has an error — showing the last saved version. Tell whoever edited it.';
+  document.body.appendChild(el);
+  el.addEventListener('click', ()=> el.remove());
+}
+
+function start(){
+  paintNav();
+  applySpecials(document.getElementById('specials-data').textContent, 'the built-in block');
+  showTab(landingTab());
+  paintBar();
+  refreshSpecials();
+  refreshEvents();
+}
+
+function loadMenu(){
+  const cached = (()=>{ try{ return localStorage.getItem(MENU_CACHE); }catch(e){ return null; } })();
+
+  /* Two tiers, deliberately. There is no copy of the menu baked into this
+     file: one would need regenerating every time menu.json changed, and a
+     forgotten regeneration means serving last year's prices to a paying
+     customer. Wrong prices are worse than no menu. */
+  const useCached = (why) => {
+    console.warn('menu: could not use menu.json —', why);
+    if(cached){
+      try{ applyMenu(cached, 'device cache'); start(); staleWarning(); return; }catch(e){}
+    }
+    fatal(location.protocol === 'file:'
+      ? 'This page needs to be opened through a local server, not by opening the file directly.'
+      : 'Menu unavailable. Please ask at the bar.');
+  };
+
+  if(typeof fetch !== 'function'){ useCached('no fetch available'); return; }
+
+  fetch('menu.json', {cache:'no-store'})
+    .then(r => r.ok ? r.text() : Promise.reject('HTTP ' + r.status))
+    .then(txt => {
+      applyMenu(txt, 'menu.json');          // throws if malformed
+      try{ localStorage.setItem(MENU_CACHE, txt); }catch(e){}
+      start();
+    })
+    .catch(useCached);
+}
+
+loadMenu();
+</script>
+</body>
+</html>
