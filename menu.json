@@ -639,6 +639,7 @@
           "rows": [
             {
               "name": "Gin Tonic",
+              "note": "Beefeater gin",
               "prices": [
                 6,
                 9
@@ -646,6 +647,7 @@
             },
             {
               "name": "Rum Coke",
+              "note": "Bacardi White rum",
               "prices": [
                 6,
                 9
@@ -653,6 +655,7 @@
             },
             {
               "name": "Vodka Cranberry",
+              "note": "Smirnoff vodka",
               "prices": [
                 6,
                 9
@@ -660,6 +663,7 @@
             },
             {
               "name": "Tequila Grapefruit",
+              "note": "Altos tequila blanco",
               "prices": [
                 6,
                 9
@@ -667,6 +671,7 @@
             },
             {
               "name": "Malibu Pineapple",
+              "note": "Malibu rum",
               "prices": [
                 7,
                 11
@@ -674,6 +679,7 @@
             },
             {
               "name": "Jack Coke",
+              "note": "Jack Daniel's whiskey",
               "prices": [
                 7,
                 11
@@ -681,6 +687,7 @@
             },
             {
               "name": "Kahlúa Milk",
+              "note": "Kahlúa coffee liqueur",
               "prices": [
                 7,
                 11
@@ -688,6 +695,7 @@
             },
             {
               "name": "Bombay Tonic",
+              "note": "Bombay Sapphire gin",
               "prices": [
                 7,
                 11
