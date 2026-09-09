@@ -1,60 +1,95 @@
 {
-"events": [
-{
-"date": "2026-08-18",
-"name": "Taco Tuesday",
-"poster": "taco-tuesday.jpg",
-"from": "16:00",
-"to": "05:00"
-},
-{
-"date": "2026-08-22",
-"name": "Margarita Night",
-"poster": "margarita-night.jpg",
-"from": "17:00",
-"to": "05:00"
-},
-{
-"date": "2026-08-25",
-"name": "Taco Tuesday",
-"poster": "taco-tuesday.jpg",
-"from": "16:00",
-"to": "05:00"
-},
-{
-"date": "2026-08-25",
-"name": "Uruguay Day",
-"poster": "uruguay-day.jpg",
-"from": "17:00",
-"to": "05:00"
-},
-{
-"date": "2026-08-29",
-"name": "New Semester Party",
-"poster": "new-semester-party.jpg",
-"from": "17:00",
-"to": "05:00"
-},
-{
-"date": "2026-08-30",
-"name": "Aperol Spritz Brunch",
-"poster": "aperol-spritz-brunch.jpg",
-"from": "17:00",
-"to": "05:00"
-},
-{
-"date": "2026-08-31",
-"name": "Trinidad and Tobago Day",
-"poster": "trinidad-and-tobago-day.jpg",
-"from": "17:00",
-"to": "05:00"
-},
-{
-"date": "2026-09-01",
-"name": "Taco Tuesday",
-"poster": "taco-tuesday.jpg",
-"from": "16:00",
-"to": "05:00"
-}
-]
+  "events": [
+    {
+      "date": "2026-09-09",
+      "name": "Caipirinha Festival",
+      "poster": "caipirinha-festival.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-14",
+      "name": "Industry Night",
+      "poster": "industry-night.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-15",
+      "name": "Taco Tuesday",
+      "poster": "taco-tuesday.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-16",
+      "name": "Mexico National Day",
+      "poster": "mexico-national-day.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-18",
+      "name": "Mojito Night",
+      "poster": "mojito-night.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-19",
+      "name": "Cocktail World Tour",
+      "poster": "cocktail-world-tour.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-20",
+      "name": "Trivia Night",
+      "poster": "trivia-night.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-22",
+      "name": "Taco Tuesday",
+      "poster": "taco-tuesday.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-24",
+      "name": "Chuseok",
+      "poster": "chuseok.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-25",
+      "name": "Chuseok",
+      "poster": "chuseok.jpg",
+      "from": "02:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-26",
+      "name": "Chuseok",
+      "poster": "chuseok.jpg",
+      "from": "02:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-27",
+      "name": "Spritz Brunch",
+      "poster": "spritz-brunch.jpg",
+      "from": "16:00",
+      "to": "02:00"
+    },
+    {
+      "date": "2026-09-29",
+      "name": "Taco Tuesday",
+      "poster": "taco-tuesday.jpg",
+      "from": "18:00",
+      "to": "02:00"
+    }
+  ]
 }
