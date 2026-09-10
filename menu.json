@@ -1,144 +1,299 @@
 {
   "tabs": [
     {
-      "name": "Specials",
+      "name": {
+        "en": "Specials",
+        "ko": "스페셜"
+      },
       "source": "specials.json"
     },
     {
-      "name": "Food",
+      "name": {
+        "en": "Food",
+        "ko": "음식"
+      },
       "kind": "food",
       "sections": [
         {
-          "title": "Sets",
+          "title": {
+            "en": "Sets",
+            "ko": "세트"
+          },
           "layout": "stack",
           "items": [
             {
-              "name": "Monthly Special Set",
+              "name": {
+                "en": "Monthly Special Set",
+                "ko": "이달의 스페셜 세트"
+              },
               "price": 50,
-              "description": "2 cocktails of the month, 3 chili beef tacos, cheese quesadilla, dessert of choice.",
+              "description": {
+                "en": "2 cocktails of the month\n+ 3 chili beef tacos\n+ cheese quesadilla\n+ dessert of choice",
+                "ko": "이달의 칵테일 2잔\n+ 칠리 비프 타코 3개\n+ 치즈 퀘사디야\n+ 디저트 선택"
+              },
               "photo": "monthly-special-set.jpg",
               "ratio": "1008/932"
             },
             {
-              "name": "Mexican Set",
+              "name": {
+                "en": "Mexican Set",
+                "ko": "멕시칸 세트"
+              },
               "price": 25,
-              "description": "Mexican karaage, Mexican pizza, dessert of choice.",
+              "description": {
+                "en": "Mexican karaage\n+ Mexican pizza\n+ dessert of choice",
+                "ko": "멕시칸 가라아게\n+ 멕시칸 피자\n+ 디저트 선택"
+              },
               "photo": "mexican-set.jpg",
               "ratio": "1526/672"
             },
             {
-              "name": "Fajita Set",
+              "name": {
+                "en": "Fajita Set",
+                "ko": "파히타 세트"
+              },
               "price": 25,
-              "description": "Chicken al pastor fajita, nachos or fries, homemade brownie.",
+              "description": {
+                "en": "Chicken al pastor fajita\n+ nachos or fries\n+ homemade brownie",
+                "ko": "알 파스토르 치킨 파히타\n+ 나초 또는 감자튀김\n+ 자체 제작 브라우니"
+              },
               "photo": "fajita-set.jpg",
               "ratio": "1526/672"
             }
           ]
         },
         {
-          "title": "Food",
+          "title": {
+            "en": "Food",
+            "ko": "음식"
+          },
           "items": [
             {
-              "name": "Birria Tacos",
+              "name": {
+                "en": "Birria Tacos",
+                "ko": "비리아 타코"
+              },
               "heat": 1,
               "price": 13,
-              "description": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip.",
+              "description": {
+                "en": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip.",
+                "ko": "천천히 저온 조리한\n비리아 돼지고기, 모짜렐라.\n비리아 디핑 소스, 피클 곁들임."
+              },
               "photo": "birria-tacos.jpg",
-              "addons": [ { "name": "Add fries", "price": 2 } ]
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add fries",
+                    "ko": "감자튀김 추가"
+                  },
+                  "price": 2
+                }
+              ]
             },
             {
-              "name": "Chili Beef Tacos",
+              "name": {
+                "en": "Chili Beef Tacos",
+                "ko": "칠리 비프 타코"
+              },
               "heat": 1,
               "price": 15,
-              "description": "Spiced ground beef, lettuce and melted cheese. Served with pickled onions and lime.",
+              "description": {
+                "en": "Spiced ground beef, lettuce\nand melted cheese. Served\nwith pickled onions and lime.",
+                "ko": "양념 소고기, 양상추, 녹인 치즈.\n피클 어니언, 라임 곁들임."
+              },
               "photo": "chili-beef-tacos.jpg",
-              "addons": [ { "name": "Add fries", "price": 2 } ]
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add fries",
+                    "ko": "감자튀김 추가"
+                  },
+                  "price": 2
+                }
+              ]
             },
             {
-              "name": "Cheese Quesadilla",
+              "name": {
+                "en": "Cheese Quesadilla",
+                "ko": "치즈 퀘사디야"
+              },
               "price": 8,
-              "description": "Tortilla with cheddar cheese, mozzarella. Served with salsa and pickled onions.",
+              "description": {
+                "en": "Tortilla with cheddar cheese, mozzarella. Served with salsa and pickled onions.",
+                "ko": "체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공."
+              },
               "photo": "cheese-quesadilla.jpg"
             },
             {
-              "name": "Spicy Chicken Quesadilla",
+              "name": {
+                "en": "Spicy Chicken Quesadilla",
+                "ko": "매운 치킨 퀘사디야"
+              },
               "heat": 3,
               "price": 14,
-              "description": "Tortilla with chicken thigh meat, spicy jalapeños, curry seasoning, cheddar cheese, and mozzarella. Served with salsa and pickled onions.",
+              "description": {
+                "en": "Tortilla with chicken thigh meat, spicy jalapeños, curry seasoning, cheddar cheese, and mozzarella. Served with salsa and pickled onions.",
+                "ko": "닭다리살, 할라피뇨, 커리 양념,\n체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공."
+              },
               "photo": "spicy-chicken-quesadilla.jpg"
             },
             {
-              "name": "Al Pastor Chicken Fajita",
+              "name": {
+                "en": "Al Pastor Chicken Fajita",
+                "ko": "알 파스토르 치킨 파히타"
+              },
               "price": 14,
-              "description": "Spice-marinated chicken, grilled pineapple, broccoli, and onions. Served with warm tortillas, salsa roja and salsa verde.",
+              "description": {
+                "en": "Spice-marinated chicken, grilled pineapple, broccoli, and onions. Served with warm tortillas, salsa roja and salsa verde.",
+                "ko": "향신료 마리네이드 치킨,\n구운 파인애플, 브로콜리,\n양파, 따뜻한 또르띠야.\n살사 로하, 살사 베르데 제공."
+              },
               "photo": "al-pastor-fajita.jpg"
             },
             {
-              "name": "Gambas al Ajillo",
+              "name": {
+                "en": "Gambas al Ajillo",
+                "ko": "감바스 알 아히요"
+              },
               "heat": 1,
               "price": 14,
-              "description": "Shrimp sautéed with garlic, onion, olive oil, and chili. Served with toasted bread.",
+              "description": {
+                "en": "Shrimp sautéed with garlic, onion, olive oil, and chili. Served with toasted bread.",
+                "ko": "마늘, 양파, 올리브 오일,\n고추로 볶은 새우.\n토스트한 바게트 곁들임."
+              },
               "photo": "gambas-al-ajillo.jpg"
             },
             {
-              "name": "Mexican Karaage & Fries",
+              "name": {
+                "en": "Mexican Karaage & Fries",
+                "ko": "멕시칸 가라아게 & 감자튀김"
+              },
               "price": 13,
-              "description": "Crispy karaage chicken in sweet and spicy honey chipotle sauce. Served with fries, pickled onions, ketchup.",
+              "description": {
+                "en": "Crispy karaage chicken in sweet and spicy honey chipotle sauce. Served with fries, pickled onions, and ketchup.",
+                "ko": "달콤하고 매콤한 허니 치폴레 소스를 입힌 바삭한 가라아게와 감자튀김. 피클 어니언, 케첩 제공."
+              },
               "photo": "mexican-karaage.jpg"
             },
             {
-              "name": "Birria Ramen",
+              "name": {
+                "en": "Birria Ramen",
+                "ko": "비리아 라멘"
+              },
               "heat": 1,
               "price": 9,
-              "description": "Ramen cooked in birria broth, topped with shredded birria pork, cheddar cheese, and pickled onions.",
+              "description": {
+                "en": "Ramen cooked in birria broth, topped with shredded birria pork, cheddar cheese, and pickled onions.",
+                "ko": "비리아 육수로 끓인 라멘.\n비리아 돼지고기, 체다 치즈,\n피클 양파 토핑."
+              },
               "photo": "birria-ramen.jpg",
-              "addons": [ { "name": "Add spicy", "price": 0.5 } ]
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add spicy",
+                    "ko": "매운맛 추가"
+                  },
+                  "price": 0.5
+                }
+              ]
             },
             {
-              "name": "Fondue",
+              "name": {
+                "en": "Fondue",
+                "ko": "퐁듀"
+              },
               "price": 20,
-              "description": "Melted Italian provolone cheese with white wine and cream. Served hot with toasted bread for dipping.",
+              "description": {
+                "en": "Melted Italian provolone cheese with white wine and cream.\nServed hot over flame with\ntoasted bread for dipping.",
+                "ko": "화이트 와인과 크림에 녹인\n이탈리아 프로볼로네 치즈.\n토스트한 빵 제공."
+              },
               "photo": "fondue.jpg"
             },
             {
-              "name": "Mexican Pizza",
+              "name": {
+                "en": "Mexican Pizza",
+                "ko": "멕시칸 피자"
+              },
               "heat": 2,
               "price": 11,
-              "description": "Homemade dough, salsa, mozzarella, jalapeño, avocado, crispy bacon.",
+              "description": {
+                "en": "Homemade dough, salsa,\nmozzarella, jalapeño,\navocado, crispy bacon.",
+                "ko": "살사, 모짜렐라, 할라피뇨,\n아보카도, 바삭한 베이컨을\n올린 수제 피자."
+              },
               "photo": "mexican-pizza.jpg"
             },
             {
-              "name": "Pesto Pizza",
+              "name": {
+                "en": "Pesto Pizza",
+                "ko": "페스토 피자"
+              },
               "price": 11,
-              "description": "Homemade dough, pesto, cream cheese, mozzarella, almonds, olive oil.",
+              "description": {
+                "en": "Homemade dough, pesto,\ncream cheese, mozzarella,\nalmonds, olive oil.",
+                "ko": "페스토, 크림 치즈, 모짜렐라,\n아몬드, 올리브 오일을\n올린 수제 피자."
+              },
               "photo": "pesto-pizza.jpg"
             },
             {
-              "name": "Seasoned French Fries",
+              "name": {
+                "en": "Seasoned French Fries",
+                "ko": "양념 감자튀김"
+              },
               "price": 8,
-              "description": "Served with classic ketchup.",
-              "addons": [ { "name": "Add cheese", "price": 2 } ]
+              "description": {
+                "en": "Served with classic ketchup.",
+                "ko": "클래식 케첩 제공."
+              },
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add cheese",
+                    "ko": "치즈 추가"
+                  },
+                  "price": 2
+                }
+              ]
             },
             {
-              "name": "Nachos",
+              "name": {
+                "en": "Nachos",
+                "ko": "나초"
+              },
               "price": 8,
-              "description": "Served with salsa and cheese."
+              "description": {
+                "en": "Served with salsa and cheese.",
+                "ko": "살사와 치즈 곁들임."
+              }
             }
           ]
         },
         {
-          "title": "Dessert",
+          "title": {
+            "en": "Dessert",
+            "ko": "디저트"
+          },
           "items": [
             {
-              "name": "Brownie",
+              "name": {
+                "en": "Brownie",
+                "ko": "브라우니"
+              },
               "price": 6.5,
-              "description": "In-house chocolate brownie served with vanilla ice cream, drizzled in chocolate sauce.",
+              "description": {
+                "en": "In-house chocolate brownie served with vanilla ice cream, drizzled in chocolate sauce.",
+                "ko": "홈메이드 초콜릿 브라우니,\n바닐라 아이스크림, 초콜릿 소스."
+              },
               "photo": "brownie.jpg"
             },
             {
-              "name": "Tiramisu",
+              "name": {
+                "en": "Tiramisu",
+                "ko": "티라미수"
+              },
               "price": 6.5,
-              "description": "Creamy mascarpone, coffee-soaked biscuits and cocoa.",
+              "description": {
+                "en": "Creamy mascarpone, coffee-soaked biscuits and cocoa.",
+                "ko": "크리미한 마스카르포네,\n커피에 적신 비스킷, 코코아."
+              },
               "photo": "tiramisu.jpg"
             }
           ]
@@ -146,7 +301,10 @@
       ]
     },
     {
-      "name": "Cocktails",
+      "name": {
+        "en": "Cocktails",
+        "ko": "칵테일"
+      },
       "kind": "drink",
       "sections": [
         {
@@ -155,70 +313,126 @@
             {
               "name": "Pineapple Daiquiri",
               "price": 11,
-              "ingredients": [
-                "Pineapple rum",
-                "Lime",
-                "Pineapple",
-                "Cinnamon",
-                "vanilla"
-              ]
+              "ingredients": {
+                "en": [
+                  "Pineapple rum",
+                  "Lime",
+                  "Pineapple",
+                  "Cinnamon",
+                  "vanilla"
+                ],
+                "ko": [
+                  "파인애플 럼",
+                  "라임",
+                  "파인애플",
+                  "시나몬",
+                  "바닐라"
+                ]
+              }
             },
             {
               "name": "Baby Turtle",
               "price": 13,
-              "ingredients": [
-                "El Jimador tequila",
-                "Campari",
-                "Egg white",
-                "Lime",
-                "grapefruit",
-                "Cinnamon",
-                "vanilla"
-              ]
+              "ingredients": {
+                "en": [
+                  "El Jimador tequila",
+                  "Campari",
+                  "Egg white",
+                  "Lime",
+                  "grapefruit",
+                  "Cinnamon",
+                  "vanilla"
+                ],
+                "ko": [
+                  "엘 히마도르 데킬라",
+                  "캄파리",
+                  "에그 화이트",
+                  "라임",
+                  "자몽",
+                  "시나몬",
+                  "바닐라"
+                ]
+              }
             },
             {
               "name": "Red Pill",
               "price": 11,
-              "ingredients": [
-                "Raspberry vodka",
-                "Triple sec",
-                "Lemon",
-                "Grenadine",
-                "cranberry"
-              ]
+              "ingredients": {
+                "en": [
+                  "Raspberry vodka",
+                  "Triple sec",
+                  "Lemon",
+                  "Grenadine",
+                  "cranberry"
+                ],
+                "ko": [
+                  "라즈베리 보드카",
+                  "트리플 섹",
+                  "레몬",
+                  "그레나딘",
+                  "크랜베리"
+                ]
+              }
             },
             {
               "name": "Zombie",
               "price": 11,
-              "ingredients": [
-                "Plantation rum",
-                "Rondiaz 151",
-                "White rum",
-                "Lime",
-                "grenadine",
-                "Pineapple",
-                "grapefruit"
-              ]
+              "ingredients": {
+                "en": [
+                  "Plantation rum",
+                  "Rondiaz 151",
+                  "White rum",
+                  "Lime",
+                  "grenadine",
+                  "Pineapple",
+                  "grapefruit"
+                ],
+                "ko": [
+                  "플랜테이션 럼",
+                  "론디아즈 151",
+                  "화이트 럼",
+                  "라임",
+                  "그레나딘",
+                  "파인애플",
+                  "자몽"
+                ]
+              }
             },
             {
               "name": "Wake Me Up, Fuck Me Up",
               "price": 12,
-              "ingredients": [
-                "Caramel vodka",
-                "Dark cacao",
-                "Espresso",
-                "Sugar"
-              ]
+              "ingredients": {
+                "en": [
+                  "Caramel vodka",
+                  "Dark cacao",
+                  "Espresso",
+                  "Sugar"
+                ],
+                "ko": [
+                  "카라멜 보드카",
+                  "다크 카카오",
+                  "에스프레소",
+                  "설탕"
+                ]
+              }
             },
             {
               "name": "Devil Margarita",
               "price": 12,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Lime",
-                "Red wine",
-                "Sugar"
-              ]
+              "ingredients": {
+                "en": [
+                  "Altos tequila blanco",
+                  "Lime",
+                  "Red wine",
+                  "Sugar"
+                ],
+                "ko": [
+                  "알토스 블랑코 데킬라",
+                  "라임",
+                  "설탕",
+                  "레드 와인"
+                ]
+              }
             }
           ]
         },
@@ -228,33 +442,58 @@
             {
               "name": "Siesta",
               "price": 15,
-              "ingredients": [
-                "Altos tequila",
-                "Grapefruit",
-                "Lime",
-                "sugar",
-                "Campari"
-              ]
+              "ingredients": {
+                "en": [
+                  "Altos tequila",
+                  "Grapefruit",
+                  "Lime",
+                  "sugar",
+                  "Campari"
+                ],
+                "ko": [
+                  "알토스 블랑코 데킬라",
+                  "캄파리",
+                  "자몽",
+                  "라임",
+                  "설탕"
+                ]
+              }
             },
             {
               "name": "Last Word",
               "price": 20,
-              "ingredients": [
-                "Tanqueray gin",
-                "Green Chartreuse",
-                "Maraschino",
-                "Lime"
-              ]
+              "ingredients": {
+                "en": [
+                  "Tanqueray gin",
+                  "Green Chartreuse",
+                  "Maraschino",
+                  "Lime"
+                ],
+                "ko": [
+                  "탱커레이 진",
+                  "그린 샤르트뢰즈",
+                  "마라스키노",
+                  "라임"
+                ]
+              }
             },
             {
               "name": "French Gimlet",
               "price": 18,
-              "ingredients": [
-                "Tanqueray gin",
-                "St Germain",
-                "Lime",
-                "Saline solution"
-              ]
+              "ingredients": {
+                "en": [
+                  "Tanqueray gin",
+                  "St Germain",
+                  "Lime",
+                  "Saline solution"
+                ],
+                "ko": [
+                  "탱커레이 진",
+                  "생제르망",
+                  "라임",
+                  "살라인 솔루션"
+                ]
+              }
             }
           ]
         },
@@ -264,56 +503,98 @@
             {
               "name": "Dark Passion",
               "price": 12,
-              "ingredients": [
-                "Plantation dark rum",
-                "Bacardi Carta Blanca",
-                "Passion fruit"
-              ]
+              "ingredients": {
+                "en": [
+                  "Plantation dark rum",
+                  "Bacardi Carta Blanca",
+                  "Passion fruit"
+                ],
+                "ko": [
+                  "플랜테이션 다크 럼",
+                  "바카디 럼",
+                  "패션후르츠"
+                ]
+              }
             },
             {
               "name": "Old Fashioned",
               "price": 12,
-              "ingredients": [
-                "Jim Beam bourbon",
-                "Angostura bitters",
-                "Demerara syrup"
-              ]
+              "ingredients": {
+                "en": [
+                  "Jim Beam bourbon",
+                  "Angostura bitters",
+                  "Demerara syrup"
+                ],
+                "ko": [
+                  "짐 빔 버번",
+                  "앙고스투라 비터",
+                  "데메라라"
+                ]
+              }
             },
             {
               "name": "Golden Hour",
               "price": 15,
-              "ingredients": [
-                "Jim Beam bourbon",
-                "Hennessy",
-                "Triple sec",
-                "Bénédictine",
-                "Orange bitters"
-              ]
+              "ingredients": {
+                "en": [
+                  "Jim Beam bourbon",
+                  "Hennessy",
+                  "Triple sec",
+                  "Bénédictine",
+                  "Orange bitters"
+                ],
+                "ko": [
+                  "짐 빔 버번",
+                  "헤네시",
+                  "트리플 섹",
+                  "베네딕틴",
+                  "오렌지 비터"
+                ]
+              }
             },
             {
               "name": "Faust",
               "price": 11,
-              "ingredients": [
-                "Jim Beam",
-                "Rondiaz 151",
-                "Cassis"
-              ]
+              "ingredients": {
+                "en": [
+                  "Jim Beam",
+                  "Rondiaz 151",
+                  "Cassis"
+                ],
+                "ko": [
+                  "짐 빔",
+                  "론디아즈 151",
+                  "카시스"
+                ]
+              }
             },
             {
               "name": "Rusty Nail",
               "price": 12,
-              "ingredients": [
-                "Scotch whisky",
-                "Drambuie"
-              ]
+              "ingredients": {
+                "en": [
+                  "Scotch whisky",
+                  "Drambuie"
+                ],
+                "ko": [
+                  "스카치 위스키",
+                  "드람뷔"
+                ]
+              }
             },
             {
               "name": "Godfather",
               "price": 12,
-              "ingredients": [
-                "Scotch whisky",
-                "Disaronno"
-              ]
+              "ingredients": {
+                "en": [
+                  "Scotch whisky",
+                  "Disaronno"
+                ],
+                "ko": [
+                  "스카치 위스키",
+                  "디사론노"
+                ]
+              }
             }
           ]
         },
@@ -323,58 +604,105 @@
             {
               "name": "Strawberry Soju Pop",
               "price": 9,
-              "ingredients": [
-                "Soju",
-                "Strawberry",
-                "Grenadine",
-                "Cranberry",
-                "lime"
-              ]
+              "ingredients": {
+                "en": [
+                  "Soju",
+                  "Strawberry",
+                  "Grenadine",
+                  "Cranberry",
+                  "lime"
+                ],
+                "ko": [
+                  "소주",
+                  "라임",
+                  "딸기",
+                  "그레나딘",
+                  "크랜베리"
+                ]
+              }
             },
             {
               "name": "Peach Crush",
               "price": 9,
-              "ingredients": [
-                "Peachtree",
-                "Lime",
-                "pineapple",
-                "Passion fruit",
-                "Cranberry"
-              ]
+              "ingredients": {
+                "en": [
+                  "Peachtree",
+                  "Lime",
+                  "pineapple",
+                  "Passion fruit",
+                  "Cranberry"
+                ],
+                "ko": [
+                  "피치트리",
+                  "파인애플",
+                  "패션후르츠",
+                  "크랜베리 주스",
+                  "라임"
+                ]
+              }
             },
             {
               "name": "Pornstar Sojutini",
               "price": 9,
-              "ingredients": [
-                "Soju",
-                "Passoã",
-                "Lemon",
-                "pineapple",
-                "Passion fruit",
-                "Sparkling water"
-              ]
+              "ingredients": {
+                "en": [
+                  "Soju",
+                  "Passoã",
+                  "Lemon",
+                  "pineapple",
+                  "Passion fruit",
+                  "Sparkling water"
+                ],
+                "ko": [
+                  "소주",
+                  "파소아",
+                  "레몬",
+                  "파인애플",
+                  "패션후르츠",
+                  "탄산수"
+                ]
+              }
             },
             {
               "name": "June Bug",
               "price": 11,
-              "ingredients": [
-                "Melon liqueur",
-                "Banana liqueur",
-                "Malibu",
-                "Lime, pineapple"
-              ]
+              "ingredients": {
+                "en": [
+                  "Melon liqueur",
+                  "Banana liqueur",
+                  "Malibu",
+                  "Lime, pineapple"
+                ],
+                "ko": [
+                  "멜론 리큐르",
+                  "바나나 리큐르",
+                  "말리부",
+                  "라임",
+                  "파인애플"
+                ]
+              }
             },
             {
               "name": "Piña Colada",
               "price": 11,
-              "ingredients": [
-                "Plantation rum",
-                "Bacardi white rum",
-                "Lime",
-                "orange",
-                "Pineapple",
-                "Coconut cream"
-              ]
+              "ingredients": {
+                "en": [
+                  "Plantation rum",
+                  "Bacardi white rum",
+                  "Lime",
+                  "orange",
+                  "Pineapple",
+                  "Coconut cream"
+                ],
+                "ko": [
+                  "플랜테이션 럼",
+                  "바카디 럼",
+                  "라임",
+                  "오렌지",
+                  "파인애플",
+                  "코코넛 크림"
+                ]
+              }
             }
           ]
         },
@@ -384,54 +712,98 @@
             {
               "name": "Passion Sour",
               "price": 10,
-              "ingredients": [
-                "Passoã",
-                "Lemon",
-                "Egg white",
-                "Pineapple",
-                "Passion fruit"
-              ]
+              "ingredients": {
+                "en": [
+                  "Passoã",
+                  "Lemon",
+                  "Egg white",
+                  "Pineapple",
+                  "Passion fruit"
+                ],
+                "ko": [
+                  "파소아",
+                  "레몬",
+                  "에그 화이트",
+                  "파인애플",
+                  "패션후르츠"
+                ]
+              }
             },
             {
               "name": "Spiced Mule",
               "price": 10,
-              "ingredients": [
-                "Vodka",
-                "Lime",
-                "Ginger beer",
-                "Cinnamon, vanilla"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "Lime",
+                  "Ginger beer",
+                  "Cinnamon, vanilla"
+                ],
+                "ko": [
+                  "보드카",
+                  "라임",
+                  "진저 비어",
+                  "시나몬",
+                  "바닐라"
+                ]
+              }
             },
             {
               "name": "Bombay Highball",
               "price": 10,
-              "ingredients": [
-                "Bombay gin",
-                "Lime",
-                "Grapefruit",
-                "Tonic water"
-              ]
+              "ingredients": {
+                "en": [
+                  "Bombay gin",
+                  "Lime",
+                  "Grapefruit",
+                  "Tonic water"
+                ],
+                "ko": [
+                  "봄베이 진",
+                  "라임",
+                  "자몽",
+                  "토닉 워터"
+                ]
+              }
             },
             {
               "name": "Paloma",
               "price": 11,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Lime",
-                "Grapefruit",
-                "Sparkling water"
-              ]
+              "ingredients": {
+                "en": [
+                  "Altos tequila blanco",
+                  "Lime",
+                  "Grapefruit",
+                  "Sparkling water"
+                ],
+                "ko": [
+                  "알토스 블랑코 데킬라",
+                  "라임",
+                  "자몽",
+                  "탄산수"
+                ]
+              }
             },
             {
               "name": "Midori Sour",
               "price": 11,
-              "ingredients": [
-                "Midori",
-                "Vodka",
-                "Lemon, lime",
-                "Sugar",
-                "Sparkling water"
-              ]
+              "ingredients": {
+                "en": [
+                  "Midori",
+                  "Vodka",
+                  "Lemon, lime",
+                  "Sugar",
+                  "Sparkling water"
+                ],
+                "ko": [
+                  "미도리",
+                  "보드카",
+                  "레몬",
+                  "라임",
+                  "설탕",
+                  "탄산수"
+                ]
+              }
             }
           ]
         },
@@ -441,42 +813,74 @@
             {
               "name": "Grasshopper",
               "price": 12,
-              "ingredients": [
-                "Crème de menthe",
-                "White cacao",
-                "Heavy cream"
-              ]
+              "ingredients": {
+                "en": [
+                  "Crème de menthe",
+                  "White cacao",
+                  "Heavy cream"
+                ],
+                "ko": [
+                  "크렘 드 멘트",
+                  "화이트 카카오",
+                  "생크림"
+                ]
+              }
             },
             {
               "name": "White Russian",
               "price": 10,
-              "ingredients": [
-                "Vodka",
-                "Kahlúa",
-                "Heavy cream"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "Kahlúa",
+                  "Heavy cream"
+                ],
+                "ko": [
+                  "보드카",
+                  "깔루아",
+                  "생크림"
+                ]
+              }
             },
             {
               "name": "Coconut Margarita",
               "price": 13,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Triple sec",
-                "Pineapple",
-                "Coconut cream",
-                "Lime"
-              ]
+              "ingredients": {
+                "en": [
+                  "tequila blanco",
+                  "Triple sec",
+                  "Pineapple",
+                  "Coconut cream",
+                  "Lime"
+                ],
+                "ko": [
+                  "데킬라 블랑코",
+                  "트리플 섹",
+                  "라임",
+                  "코코넛 크림",
+                  "파인애플"
+                ]
+              }
             },
             {
               "name": "Rum After Dark",
               "price": 12,
-              "ingredients": [
-                "Bacardi Carta Blanca",
-                "Espresso",
-                "Chocolate bitters",
-                "Dark cacao",
-                "Demerara"
-              ]
+              "ingredients": {
+                "en": [
+                  "Bacardi Rum",
+                  "Espresso",
+                  "Chocolate bitters",
+                  "Dark cacao",
+                  "Demerara"
+                ],
+                "ko": [
+                  "바카디 럼",
+                  "다크 카카오",
+                  "에스프레소",
+                  "데메라라",
+                  "초콜릿 비터"
+                ]
+              }
             }
           ]
         },
@@ -486,68 +890,121 @@
             {
               "name": "Espresso Martini",
               "price": 12,
-              "ingredients": [
-                "Vodka",
-                "Kahlúa",
-                "Espresso",
-                "Sugar"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "Kahlúa",
+                  "Espresso",
+                  "Sugar"
+                ],
+                "ko": [
+                  "보드카",
+                  "깔루아",
+                  "에스프레소",
+                  "설탕"
+                ]
+              }
             },
             {
               "name": "Martini",
               "price": 14,
-              "ingredients": [
-                "Tanqueray gin",
-                "Vermouth",
-                "Olive brine"
-              ]
+              "ingredients": {
+                "en": [
+                  "Tanqueray gin",
+                  "Dry Vermouth",
+                  "Olive brine"
+                ],
+                "ko": [
+                  "탱커레이 진",
+                  "드라이 베르무트",
+                  "올리브 브라인"
+                ]
+              }
             },
             {
               "name": "Daiquiri",
               "price": 11,
-              "ingredients": [
-                "Bacardi white rum",
-                "Lime",
-                "Demerara"
-              ]
+              "ingredients": {
+                "en": [
+                  "Bacardi white rum",
+                  "Lime",
+                  "Demerara"
+                ],
+                "ko": [
+                  "바카디 카르타 블랑카 럼",
+                  "라임",
+                  "데메라라"
+                ]
+              }
             },
             {
               "name": "Sidecar",
               "price": 20,
-              "ingredients": [
-                "Hennessy",
-                "Triple sec",
-                "Lemon"
-              ]
+              "ingredients": {
+                "en": [
+                  "Hennessy",
+                  "Triple sec",
+                  "Lemon"
+                ],
+                "ko": [
+                  "헤네시",
+                  "트리플 섹",
+                  "레몬"
+                ]
+              }
             },
             {
               "name": "Negroni",
               "price": 15,
-              "ingredients": [
-                "Beefeater gin",
-                "Vermouth",
-                "Campari"
-              ]
+              "ingredients": {
+                "en": [
+                  "Beefeater gin",
+                  "Sweet Vermouth",
+                  "Campari"
+                ],
+                "ko": [
+                  "비피터 진",
+                  "스위트 베르무트",
+                  "캄파리"
+                ]
+              }
             },
             {
               "name": "Margarita",
               "price": 14,
-              "ingredients": [
-                "Altos tequila blanco",
-                "Triple sec",
-                "Lime, agave"
-              ]
+              "ingredients": {
+                "en": [
+                  "Altos tequila blanco",
+                  "Triple sec",
+                  "Lime, agave"
+                ],
+                "ko": [
+                  "알토스 블랑코 데킬라",
+                  "트리플 섹",
+                  "라임",
+                  "아가베"
+                ]
+              }
             },
             {
               "name": "Cosmopolitan",
               "price": 12,
-              "ingredients": [
-                "Citron vodka",
-                "Cointreau",
-                "Lemon",
-                "Cranberry",
-                "grenadine"
-              ]
+              "ingredients": {
+                "en": [
+                  "Citron vodka",
+                  "Cointreau",
+                  "Lemon",
+                  "Cranberry",
+                  "grenadine"
+                ],
+                "ko": [
+                  "시트론 보드카",
+                  "코인트로",
+                  "레몬",
+                  "크랜베리",
+                  "그레나딘"
+                ]
+              }
             }
           ]
         },
@@ -557,96 +1014,180 @@
             {
               "name": "Trash Can",
               "price": 11,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Triple sec",
-                "Blue curaçao",
-                "Peachtree",
-                "Red Bull"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "rum",
+                  "gin",
+                  "Triple sec",
+                  "Blue curaçao",
+                  "Peachtree",
+                  "Red Bull"
+                ],
+                "ko": [
+                  "보드카",
+                  "럼",
+                  "진",
+                  "트리플 섹",
+                  "블루 큐라소",
+                  "피치트리",
+                  "레드불"
+                ]
+              }
             },
             {
               "name": "Long Island Iced Tea",
               "price": 9,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Triple sec",
-                "Lemon",
-                "sugar",
-                "Coke"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "rum",
+                  "gin",
+                  "Tequila",
+                  "Triple sec",
+                  "Lemon",
+                  "sugar",
+                  "Coke"
+                ],
+                "ko": [
+                  "보드카",
+                  "럼",
+                  "진",
+                  "데킬라",
+                  "트리플 섹",
+                  "레몬",
+                  "설탕",
+                  "콜라"
+                ]
+              }
             },
             {
               "name": "Adios Mother Fucker",
               "price": 11,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Triple sec",
-                "Lemon",
-                "sugar",
-                "Sprite"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "rum",
+                  "gin",
+                  "Tequila",
+                  "Triple sec",
+                  "Lemon",
+                  "sugar",
+                  "Sprite"
+                ],
+                "ko": [
+                  "보드카",
+                  "럼",
+                  "진",
+                  "데킬라",
+                  "트리플 섹",
+                  "레몬",
+                  "설탕",
+                  "사이다"
+                ]
+              }
             },
             {
               "name": "Tokyo Iced Tea",
               "price": 11,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Melon liqueur",
-                "Lemon",
-                "sugar",
-                "Sprite"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "rum",
+                  "gin",
+                  "Tequila",
+                  "Melon liqueur",
+                  "Lemon",
+                  "sugar",
+                  "Sprite"
+                ],
+                "ko": [
+                  "보드카",
+                  "럼",
+                  "진",
+                  "데킬라",
+                  "멜론 리큐르",
+                  "레몬",
+                  "설탕",
+                  "사이다"
+                ]
+              }
             },
             {
               "name": "Long Beach Iced Tea",
               "price": 9,
-              "ingredients": [
-                "Vodka",
-                "rum",
-                "gin",
-                "Tequila",
-                "Triple sec",
-                "Lemon",
-                "sugar",
-                "Cranberry"
-              ]
+              "ingredients": {
+                "en": [
+                  "Vodka",
+                  "rum",
+                  "gin",
+                  "Tequila",
+                  "Triple sec",
+                  "Lemon",
+                  "sugar",
+                  "Cranberry"
+                ],
+                "ko": [
+                  "보드카",
+                  "럼",
+                  "진",
+                  "데킬라",
+                  "트리플 섹",
+                  "레몬",
+                  "설탕",
+                  "크랜베리"
+                ]
+              }
             }
           ]
         }
       ]
     },
     {
-      "name": "Mixers",
+      "name": {
+        "en": "Mixers",
+        "ko": "믹서"
+      },
       "sections": [
         {
           "title": "Simple Mixers",
           "variants": [
-            "Standard",
-            "Double shot"
+            {
+              "en": "Standard",
+              "ko": "기본"
+            },
+            {
+              "en": "Double shot",
+              "ko": "더블샷"
+            }
+          ],
+          "variantsShort": [
+            {
+              "en": "",
+              "ko": ""
+            },
+            {
+              "en": "Double",
+              "ko": "더블"
+            }
           ],
           "rows": [
             {
-              "name": "Gin Tonic",
-              "note": "Beefeater gin",
+              "name": {
+                "en": "Gin Tonic",
+                "ko": "진 토닉"
+              },
+              "note":"Beefeater gin",
               "prices": [
                 6,
                 9
               ]
             },
             {
-              "name": "Rum Coke",
+              "name": {
+                "en": "Rum Coke",
+                "ko": "럼 콜라"
+              },
               "note": "Bacardi White rum",
               "prices": [
                 6,
@@ -654,7 +1195,10 @@
               ]
             },
             {
-              "name": "Vodka Cranberry",
+              "name": {
+                "en": "Vodka Cranberry",
+                "ko": "보드카 크랜베리"
+              },
               "note": "Smirnoff vodka",
               "prices": [
                 6,
@@ -662,7 +1206,10 @@
               ]
             },
             {
-              "name": "Tequila Grapefruit",
+              "name": {
+                "en": "Tequila Grapefruit",
+                "ko": "데킬라 자몽"
+              },
               "note": "Altos tequila blanco",
               "prices": [
                 6,
@@ -670,7 +1217,10 @@
               ]
             },
             {
-              "name": "Malibu Pineapple",
+              "name": {
+                "en": "Malibu Pineapple",
+                "ko": "말리부 파인애플"
+              },
               "note": "Malibu rum",
               "prices": [
                 7,
@@ -678,7 +1228,10 @@
               ]
             },
             {
-              "name": "Jack Coke",
+              "name": {
+                "en": "Jack Coke",
+                "ko": "잭 콜라"
+              },
               "note": "Jack Daniel's whiskey",
               "prices": [
                 7,
@@ -686,7 +1239,10 @@
               ]
             },
             {
-              "name": "Kahlúa Milk",
+              "name": {
+                "en": "Kahlúa Milk",
+                "ko": "깔루아 밀크"
+              },
               "note": "Kahlúa coffee liqueur",
               "prices": [
                 7,
@@ -694,7 +1250,10 @@
               ]
             },
             {
-              "name": "Bombay Tonic",
+              "name": {
+                "en": "Bombay Tonic",
+                "ko": "봄베이 토닉"
+              },
               "note": "Bombay Sapphire gin",
               "prices": [
                 7,
@@ -706,81 +1265,164 @@
       ]
     },
     {
-      "name": "Beer",
+      "name": {
+        "en": "Beer",
+        "ko": "맥주"
+      },
       "sections": [
         {
-          "title": "Bottled",
+          "title": {
+            "en": "Bottled",
+            "ko": "병맥주"
+          },
+          "titleOnOrder": true,
           "rows": [
             {
-              "name": "Budweiser",
+              "name": {
+                "en": "Budweiser",
+                "ko": "버드와이저"
+              },
               "price": 5,
-              "note": "USA"
+              "note": {
+                "en": "USA",
+                "ko": "미국"
+              }
             },
             {
-              "name": "Cafri",
+              "name": {
+                "en": "Cafri",
+                "ko": "카프리"
+              },
               "price": 6,
-              "note": "South Korea"
+              "note": {
+                "en": "South Korea",
+                "ko": "남아프리카공화국"
+              }
             },
             {
-              "name": "Cass 0%",
+              "name": {
+                "en": "Cass 0%",
+                "ko": "카스 0%"
+              },
               "price": 6,
-              "note": "South Korea"
+              "note": {
+                "en": "South Korea",
+                "ko": "대한민국"
+              }
             },
             {
-              "name": "Somersby",
+              "name": {
+                "en": "Somersby",
+                "ko": "서머스비"
+              },
               "price": 7.5,
-              "note": "Denmark"
+              "note": {
+                "en": "Denmark",
+                "ko": "덴마크"
+              }
             },
             {
-              "name": "Corona",
+              "name": {
+                "en": "Corona",
+                "ko": "코로나"
+              },
               "price": 7.5,
-              "note": "Mexico"
+              "note": {
+                "en": "Mexico",
+                "ko": "멕시코"
+              }
             },
             {
-              "name": "Tiger",
+              "name": {
+                "en": "Tiger",
+                "ko": "타이거"
+              },
               "price": 7.5,
-              "note": "Singapore"
+              "note": {
+                "en": "Singapore",
+                "ko": "싱가포르"
+              }
             },
             {
-              "name": "Asahi",
+              "name": {
+                "en": "Asahi",
+                "ko": "아사히"
+              },
               "price": 9,
-              "note": "Japan"
+              "note": {
+                "en": "Japan",
+                "ko": "일본"
+              }
             },
             {
-              "name": "Paulaner",
+              "name": {
+                "en": "Paulaner",
+                "ko": "파울라너"
+              },
               "price": 9,
-              "note": "Germany"
+              "note": {
+                "en": "Germany",
+                "ko": "독일"
+              }
             },
             {
-              "name": "Big Wave",
+              "name": {
+                "en": "Big Wave",
+                "ko": "빅 웨이브"
+              },
               "price": 10,
-              "note": "USA"
+              "note": {
+                "en": "USA",
+                "ko": "미국"
+              }
             },
             {
-              "name": "Guinness",
+              "name": {
+                "en": "Guinness",
+                "ko": "기네스"
+              },
               "price": 10,
-              "note": "Ireland"
+              "note": {
+                "en": "Ireland",
+                "ko": "아일랜드"
+              }
             },
             {
               "name": "IPA",
               "price": 10,
-              "note": "USA"
+              "note": {
+                "en": "USA",
+                "ko": "미국"
+              }
             }
           ]
         },
         {
-          "title": "On Tap",
+          "title": {
+            "en": "On Tap",
+            "ko": "생맥주"
+          },
+          "titleOnOrder": true,
           "rows": [
             {
-              "name": "Cass",
+              "name": {
+                "en": "Cass",
+                "ko": "카스"
+              },
               "price": 6
             },
             {
-              "name": "Stella",
+              "name": {
+                "en": "Stella",
+                "ko": "스텔라"
+              },
               "price": 8
             },
             {
-              "name": "Hand&Malt",
+              "name": {
+                "en": "Hand&Malt",
+                "ko": "핸드앤몰트"
+              },
               "price": 8
             }
           ]
@@ -788,261 +1430,445 @@
       ]
     },
     {
-      "name": "Shots",
+      "name": {
+        "en": "Shots",
+        "ko": "샷"
+      },
       "sections": [
         {
-          "title": "Shots Fired", 
+          "title": "Shots Fired",
           "noteBelow": true,
+          "centreRow": true,
           "rows": [
             {
               "name": "B-52",
               "price": 8,
-              "note": "Coffee liqueur, Irish cream, orange liqueur"
+              "note": {
+                "en": "Coffee liqueur, Irish cream, orange liqueur",
+                "ko": "커피 리큐르, 아이리시 크림, 오렌지 리큐르"
+              }
             },
             {
-              "name": "Irish Car Bomb",
+              "name": {
+                "en": "Irish Car Bomb",
+                "ko": "아이리시 카 밤"
+              },
               "price": 8,
-              "note": "Irish whiskey, Irish cream, stout"
+              "note": {
+                "en": "Irish whiskey, Irish cream, stout",
+                "ko": "아이리시 위스키, 아이리시 크림, 스타우트 맥주"
+              }
             },
             {
-              "name": "Baby Guinness",
+              "name": {
+                "en": "Baby Guinness",
+                "ko": "베이비 기네스"
+              },
               "price": 6,
-              "note": "Coffee liqueur, Irish cream"
+              "note": {
+                "en": "Coffee liqueur, Irish cream",
+                "ko": "커피 리큐르, 아이리시 크림 리큐르"
+              }
             },
             {
-              "name": "Lemon Drop",
+              "name": {
+                "en": "Lemon Drop",
+                "ko": "레몬 드롭"
+              },
               "price": 5,
-              "note": "Vodka, lemon juice, sugar"
+              "note": {
+                "en": "Vodka, lemon juice, sugar",
+                "ko": "보드카, 레몬 주스, 설탕"
+              }
             },
             {
-              "name": "Yuzu Sake",
+              "name": {
+                "en": "Yuzu Sake",
+                "ko": "유자 사케"
+              },
               "price": 5,
-              "note": "Yuzu-flavoured sake"
+              "note": {
+                "en": "Yuzu-flavoured sake",
+                "ko": "유자 향 사케"
+              }
             },
             {
-              "name": "Kamikaze",
+              "name": {
+                "en": "Kamikaze",
+                "ko": "가미카제"
+              },
               "price": 5,
-              "note": "Vodka, triple sec, lemon juice"
+              "note": {
+                "en": "Vodka, triple sec, lemon juice",
+                "ko": "보드카, 트리플 섹, 레몬 주스"
+              }
             },
             {
-              "name": "Jagger Bomb",
+              "name": {
+                "en": "Jagger Bomb",
+                "ko": "예거 밤"
+              },
               "price": 8,
-              "note": "Jägermeister, Red Bull"
+              "note": {
+                "en": "Jägermeister, Red Bull",
+                "ko": "예거마이스터, 레드불"
+              }
             }
           ]
         }
       ]
     },
     {
-      "name": "Bottles",
+      "name": {
+        "en": "Bottles",
+        "ko": "보틀"
+      },
       "sections": [
         {
           "title": "Whiskey",
           "variants": [
-            "Shot",
-            "Bottle"
+            {
+              "en": "Shot",
+              "ko": "샷"
+            },
+            {
+              "en": "Bottle",
+              "ko": "보틀"
+            }
           ],
           "rows": [
             {
-              "name": "Jameson",
+              "name": {
+                "en": "Jameson",
+                "ko": "제임슨"
+              },
               "prices": [
                 6,
                 120
               ]
             },
             {
-              "name": "Jack Daniel's",
+              "name": {
+                "en": "Jack Daniel's",
+                "ko": "잭 다니엘스"
+              },
               "prices": [
                 8,
                 160
               ]
             },
             {
-              "name": "Wild Turkey",
+              "name": {
+                "en": "Wild Turkey",
+                "ko": "와일드 터키"
+              },
               "prices": [
                 8,
                 180
               ],
-              "note": "Bourbon"
+              "note": {
+                "en": "Bourbon",
+                "ko": "버번"
+              }
             },
             {
-              "name": "Wild Turkey",
+              "name": {
+                "en": "Wild Turkey",
+                "ko": "와일드 터키"
+              },
               "prices": [
                 9,
                 180
               ],
-              "note": "Rye"
+              "note": {
+                "en": "Rye",
+                "ko": "라이"
+              }
             },
             {
-              "name": "Buffalo Trace",
+              "name": {
+                "en": "Buffalo Trace",
+                "ko": "버팔로 트레이스"
+              },
               "prices": [
                 8,
                 180
               ]
             },
             {
-              "name": "Johnnie Walker",
+              "name": {
+                "en": "Johnnie Walker",
+                "ko": "조니 워커"
+              },
               "prices": [
                 9,
                 200
               ],
-              "note": "Black"
+              "note": {
+                "en": "Black",
+                "ko": "블랙"
+              }
             },
             {
-              "name": "Monkey Shoulder",
+              "name": {
+                "en": "Monkey Shoulder",
+                "ko": "몽키 숄더"
+              },
               "prices": [
                 9,
                 200
               ]
             },
             {
-              "name": "Maker's Mark",
+              "name": {
+                "en": "Maker's Mark",
+                "ko": "메이커스 마크"
+              },
               "prices": [
                 9,
                 200
               ]
             },
             {
-              "name": "Bulleit",
+              "name": {
+                "en": "Bulleit",
+                "ko": "불렛"
+              },
               "prices": [
                 9,
                 200
               ]
             },
             {
-              "name": "Kavalan",
+              "name": {
+                "en": "Kavalan",
+                "ko": "카발란"
+              },
               "prices": [
                 12,
                 250
               ],
-              "note": "No. 1"
+              "note": {
+                "en": "No. 1",
+                "ko": "No. 1"
+              }
             },
             {
-              "name": "Auchentoshan",
+              "name": {
+                "en": "Auchentoshan",
+                "ko": "오켄토션"
+              },
               "prices": [
                 13,
                 260
               ],
-              "note": "12 yrs"
+              "note": {
+                "en": "12 yrs",
+                "ko": "12년"
+              }
             },
             {
-              "name": "Balvenie",
+              "name": {
+                "en": "Balvenie",
+                "ko": "발베니"
+              },
               "prices": [
                 13,
                 350
               ],
-              "note": "12 yrs"
+              "note": {
+                "en": "12 yrs",
+                "ko": "12년"
+              }
             },
             {
-              "name": "Ballantine's",
+              "name": {
+                "en": "Ballantine's",
+                "ko": "발렌타인"
+              },
               "prices": [
                 28,
                 600
               ],
-              "note": "21 yrs"
+              "note": {
+                "en": "21 yrs",
+                "ko": "21년"
+              }
             }
           ]
         },
         {
           "title": "Tequila",
           "variants": [
-            "Shot",
-            "Bottle"
+            {
+              "en": "Shot",
+              "ko": "샷"
+            },
+            {
+              "en": "Bottle",
+              "ko": "보틀"
+            }
           ],
           "rows": [
             {
-              "name": "Jose Cuervo",
+              "name": {
+                "en": "Jose Cuervo",
+                "ko": "호세 쿠엘보"
+              },
               "prices": [
                 6,
                 120
               ]
             },
             {
-              "name": "El Jimador",
+              "name": {
+                "en": "El Jimador",
+                "ko": "엘 히마도르"
+              },
               "prices": [
                 6,
                 120
               ]
             },
             {
-              "name": "Olmeca Altos",
+              "name": {
+                "en": "Olmeca Altos",
+                "ko": "올메카 알토스"
+              },
               "prices": [
                 6,
                 120
               ],
-              "note": "Blanco"
+              "note": {
+                "en": "Blanco",
+                "ko": "블랑코"
+              }
             },
             {
-              "name": "Herradura",
+              "name": {
+                "en": "Herradura",
+                "ko": "에라두라"
+              },
               "prices": [
                 8,
                 180
               ],
-              "note": "Blanco"
+              "note": {
+                "en": "Blanco",
+                "ko": "블랑코"
+              }
             },
             {
-              "name": "Herradura",
+              "name": {
+                "en": "Herradura",
+                "ko": "에라두라"
+              },
               "prices": [
                 9,
                 200
               ],
-              "note": "Reposado"
+              "note": {
+                "en": "Reposado",
+                "ko": "레포사도"
+              }
             },
             {
-              "name": "1800",
+              "name": {
+                "en": "1800",
+                "ko": "1800"
+              },
               "prices": [
                 12,
                 250
               ],
-              "note": "Blanco"
+              "note": {
+                "en": "Blanco",
+                "ko": "블랑코"
+              }
             },
             {
-              "name": "1800",
+              "name": {
+                "en": "1800",
+                "ko": "1800"
+              },
               "prices": [
                 12,
                 250
               ],
-              "note": "Reposado"
+              "note": {
+                "en": "Reposado",
+                "ko": "레포사도"
+              }
             },
             {
-              "name": "Don Julio",
+              "name": {
+                "en": "Don Julio",
+                "ko": "훌리오"
+              },
               "prices": [
                 14,
                 350
               ],
-              "note": "Añejo"
+              "note": {
+                "en": "Añejo",
+                "ko": "아네호"
+              }
             },
             {
-              "name": "Cenote",
+              "name": {
+                "en": "Cenote",
+                "ko": "세노테"
+              },
               "prices": [
                 15,
                 350
               ],
-              "note": "Blanco"
+              "note": {
+                "en": "Blanco",
+                "ko": "블랑코"
+              }
             },
             {
-              "name": "Cenote",
+              "name": {
+                "en": "Cenote",
+                "ko": "세노테"
+              },
               "prices": [
                 16,
                 370
               ],
-              "note": "Reposado"
+              "note": {
+                "en": "Reposado",
+                "ko": "레포사도"
+              }
             },
             {
-              "name": "Patrón",
+              "name": {
+                "en": "Patrón",
+                "ko": "패트론"
+              },
               "prices": [
                 15,
                 370
               ],
-              "note": "Blanco"
+              "note": {
+                "en": "Blanco",
+                "ko": "블랑코"
+              }
             },
             {
-              "name": "Patrón",
+              "name": {
+                "en": "Patrón",
+                "ko": "패트론"
+              },
               "prices": [
                 16,
                 370
               ],
-              "note": "Reposado"
+              "note": {
+                "en": "Reposado",
+                "ko": "레포사도"
+              }
             }
           ]
         },
@@ -1050,11 +1876,17 @@
           "title": "Mezcal",
           "rows": [
             {
-              "name": "Madre Mezcal",
+              "name": {
+                "en": "Madre Mezcal",
+                "ko": "마드레 메즈칼"
+              },
               "price": 11
             },
             {
-              "name": "Durambes Mezcal",
+              "name": {
+                "en": "Durambes Mezcal",
+                "ko": "두람베스 메즈칼"
+              },
               "price": 11
             }
           ]
@@ -1062,72 +1894,134 @@
       ]
     },
     {
-      "name": "Non-alcoholic",
+      "name": {
+        "en": "Non-alcoholic",
+        "ko": "무알코올"
+      },
       "sections": [
         {
-          "title": "Mocktails",
+          "title": {
+            "en": "Mocktails",
+            "ko": "모알콜 칵테일"
+          },
           "noteBelow": true,
+          "centreRow": true,
           "rows": [
             {
               "name": "Blue Lemonade",
               "price": 8.5,
-              "note": "Blue curaçao syrup, lemon, sparkling water"
+              "note": {
+                "en": "Blue curaçao syrup, lemon, sparkling water",
+                "ko": "블루 큐라소 시럽, 레몬, 탄산수"
+              }
             },
             {
               "name": "Virgin Piña Colada",
               "price": 8.5,
-              "note": "Coconut cream, pineapple, orange, lime"
+              "note": {
+                "en": "Coconut cream, pineapple, orange, lime",
+                "ko": "코코넛 크림, 파인애플, 오렌지, 라임"
+              }
             },
             {
               "name": "Virgin Paloma",
               "price": 8.5,
-              "note": "Grapefruit, passion fruit, lemon, sparkling water"
+              "note": {
+                "en": "Grapefruit, passion fruit, lemon, sparkling water",
+                "ko": "자몽, 패션후르츠, 레몬, 탄산수"
+              }
             },
             {
               "name": "Virgin Spiced Mule",
               "price": 8.5,
-              "note": "0% ginger beer, lime, cinnamon, vanilla"
+              "note": {
+                "en": "0% ginger beer, lime, cinnamon, vanilla",
+                "ko": "무알콜 진저 비어, 라임, 시나몬 & 바닐라"
+              }
             },
             {
               "name": "Virgin Spiced Daiquiri",
               "price": 8.5,
-              "note": "Pineapple, lime, cinnamon, vanilla"
+              "note": {
+                "en": "Pineapple, lime, cinnamon, vanilla",
+                "ko": "파인애플, 라임, 시나몬 & 바닐라"
+              }
             }
           ]
         },
         {
-          "title": "Coffee Corner",
+          "title": {
+            "en": "Coffee Corner",
+            "ko": "커피"
+          },
           "noteBelow": true,
+          "centreRow": true,
           "rows": [
             {
-              "name": "Americano",
+              "name": {
+                "en": "Americano",
+                "ko": "아메리카노"
+              },
               "price": 5,
-              "note": "Espresso"
+              "note": {
+                "en": "Espresso",
+                "ko": "에스프레소"
+              }
             },
             {
-              "name": "Cafe Latte",
+              "name": {
+                "en": "Cafe Latte",
+                "ko": "카페 라떼"
+              },
               "price": 6,
-              "note": "Espresso, milk"
+              "note": {
+                "en": "Espresso, milk",
+                "ko": "에스프레소, 우유"
+              }
             },
             {
-              "name": "Cappuccino",
+              "name": {
+                "en": "Cappuccino",
+                "ko": "카푸치노"
+              },
               "price": 6,
-              "note": "Espresso, milk"
+              "note": {
+                "en": "Espresso, milk",
+                "ko": "에스프레소, 우유"
+              }
             },
             {
-              "name": "Coconut Latte",
+              "name": {
+                "en": "Coconut Latte",
+                "ko": "코코넛 라떼"
+              },
               "price": 6,
-              "note": "Espresso, milk, coconut cream"
+              "note": {
+                "en": "Espresso, milk, coconut cream",
+                "ko": "에스프레소, 우유, 코코넛 크림"
+              }
             },
             {
-              "name": "Cinnamon Vanilla Latte",
+              "name": {
+                "en": "Cinnamon Vanilla Latte",
+                "ko": "시나몬 바닐라 라떼"
+              },
               "price": 6,
-              "note": "Espresso, milk, cinnamon, vanilla"
+              "note": {
+                "en": "Espresso, milk, cinnamon, vanilla",
+                "ko": "에스프레소, 우유, 시나몬, 바닐라"
+              }
             },
             {
-              "name": "Hot Chocolate",
+              "name": {
+                "en": "Hot Chocolate",
+                "ko": "핫 초콜릿"
+              },
               "price": 6,
-              "note": "Cacao, milk, Hershey's, heavy cream"
+              "note": {
+                "en": "Cacao, milk, Hershey's, heavy cream",
+                "ko": "카카오, 우유, 허쉬, 생크림"
+              }
             }
           ]
         }
