@@ -7,7 +7,7 @@
 <title>HIDEOUT — look test v2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ===========================================================
    TYPE SCALE — one knob. Ratios locked to your mockup:
@@ -49,10 +49,20 @@
   /* type: 1x scales with the screen, clamped so it stays readable
      on a 320px phone and doesn't bloat on a 430px one */
   --x:clamp(2.15px, calc(var(--railw) * .00636), 2.95px);
-  --t-nav:calc(var(--x)*6);
-  --t-head:calc(var(--x)*8);
-  --t-item:calc(var(--x)*5);
-  --t-ing:calc(var(--x)*3);
+  /* Hangul has no ascenders or descenders and fills more of its box, so at
+     an identical pixel size it reads smaller than Jost beside it. --tscale
+     lifts type only — not padding, not card widths — so the layout holds
+     while the Korean stops looking undersized. Latin inside a Korean menu
+     ("IPA", "No. 1") grows with it, which keeps a mixed line even. */
+  --tscale:1;          /* tabs, section headings, item names and prices */
+  --sscale:1;          /* descriptions, notes, subtitles — the small stuff */
+  --tr:var(--en-track);  /* letter-spacing nudge, set per language below */
+  --lead:var(--en-lead); /* line spacing for body copy, likewise */
+  --fscale:var(--en-foot); /* the footnote only, independent of --sscale */
+  --t-nav:calc(var(--x)*6*var(--tscale));
+  --t-head:calc(var(--x)*8*var(--tscale));
+  --t-item:calc(var(--x)*5*var(--tscale));
+  --t-ing:calc(var(--x)*3*var(--sscale));
 
   --paper:#fff;     /* page background */
   --ink:#131313;       /* body text, headings, order bar */
@@ -61,6 +71,7 @@
   --magenta:#e6155a;   /* prices, cart badge, non-alcoholic tag */
   --heat-mid:#f2679a;  /* second flame from the right */
   --heat-soft:#f9b4cd; /* third — each step left is lighter */
+  --magenta-dim:#f2679a; /* an add-on's price: a real charge, quieter */
 
   /* ---------------------------------------------------------
      TWEAK BLOCK — the numbers you will actually want to nudge
@@ -68,42 +79,189 @@
      units of --x, so it scales with the screen: bump the
      multiplier, not the unit.
      --------------------------------------------------------- */
+  --mode-icon-h:9.5;      /* HEIGHT of the light/dark icon. Sized by height,
+                           not width, because the sun and the speech-bubble
+                           have different proportions — matching their widths
+                           leaves them looking unequal. */
+  --mode-icon-y:-1.5;      /* optical nudge, same idea as the language one */
+
+  --lang-icon:10;       /* width of the language icon in the masthead */
+  --lang-icon-y:-1.4;    /* optical centring: negative lifts it, positive
+                           drops it. The glyph's visual weight sits low, so
+                           geometric centre reads as too far down. */
+
   --heat-inset-x:4;   /* flame's gap from the LEFT edge of the photo */
   --heat-inset-y:3;     /* and from the BOTTOM edge */
   --heat-size:4;        /* width of one flame */
   --heat-overlap:.8;   /* how far each flame sits over the one to its left */
 
+  --addon-indent:6;     /* how far an add-on line is inset from its dish.
+                           Size no longer signals that it is subordinate, so
+                           position has to. 0 lines them up flush. */
+
+  --clear-share:1;      /* how the two buttons under an order split the row */
+  --waiter-share:3;     /* 1 and 3 = Clear takes a quarter of the width */
+
+  --set-gap:20;         /* space between one set card and the next — the end
+                           of a blurb to the top of the following photo */
+  --set-step-gap:5;     /* space above and below the +/- on a set card, i.e.
+                           how far it sits from the price and the blurb */
+
   --note-gap:1;       /* gap between an item name and its note, where the
                            note is on its own line (Shots, Non-alcoholic) */
   --note-lead:1.4;      /* line spacing WITHIN a note that wraps */
+  --en-foot:1;          /* footnote size, Latin. Its own knob because the
+                           footnote is the one piece of small text that is
+                           always on screen — it wants to be quieter than a
+                           description, not the same size. */
+  --en-lead:1.6;       /* line spacing inside a description or ingredient
+                           list. Korean has its own below — Hangul sets a
+                           taller line at the same value, so the two need
+                           different numbers to look the same. */
+  --en-track:0em;       /* letter-spacing nudge for Latin. Negative tightens
+                           every tracked element at once while keeping their
+                           relative differences — tabs stay looser than body
+                           text. 0em is the original spacing. */
+
+  /* --- Korean only. Latin is never touched by these three. --- */
+  --ko-type:1.12;          /* tabs, headings, item names — you judged these fine,
+                           so this starts at 1. Raise if that changes. */
+  --ko-small:1.5;      /* descriptions, ingredient lines, notes, subtitles,
+                           the order-sheet second line. This is the one that
+                           reads too small in Hangul. */
+  --ko-foot:1.15;      /* footnote size, Korean. Deliberately well below
+                           --ko-small: at 1.5 the footnote was setting two
+                           big lines and sitting there permanently. */
+  --ko-lead:1.55;      /* line spacing for Korean descriptions and ingredient
+                           lists. Lower tightens the gap between wrapped
+                           lines; --en-lead is the Latin equivalent. */
+  --ko-track:-.1em;    /* Hangul needs less letter-spacing than uppercase
+                           Jost — the tracking that opens up Latin scatters
+                           Korean. Negative tightens; 0em leaves it alone. */
   --step-squeeze:3;     /* how much of the +/- buttons' height is allowed to
                            overhang its row instead of pushing the note down.
                            Raise it if --note-gap still bottoms out; lower it
                            toward 0 to put the old spacing back. */
+
+  /* The panel at the foot of an order. In light mode it is simply the page;
+     in dark it inverts to paper, which is where the one bright thing on
+     screen lives. Named separately because it does NOT follow --ink /
+     --paper: "Show to waiter" must stay dark on light in both modes. */
+  /* The order bar is the inverse of the page, so in light mode it is a dark
+     block against white and needs no edge. In dark it becomes a pale block,
+     and the cocktail shots above it are pale too — without a line they run
+     into each other. Transparent here keeps the geometry identical. */
+  --obar-rule:transparent;
+
+  --foot-bg:var(--paper);
+  --foot-ink:var(--ink);
+  --foot-dim:var(--dim);
+  --foot-rule:var(--rule);
+
+  /* The lettered tile behind a card with no photo. Two of them, because it
+     has to sit against the photography either side of it: cocktail shots are
+     on white, food shots on black slate. Nothing to do with the theme. */
+  --tile-food:#28282a;
+  --tile-food-ink:#808080;
 
   --tile:#f6f4f1;      /* empty photo slot, before an image loads */
   --tile-fill:#f6f4f1; /* fill behind the name on a photoless card */
   --tile-ink:#b4ada0;  /* that card's lettering */
   --on-magenta:#fff;   /* text sitting on a magenta background */
 
-  font-family:'Jost',system-ui,sans-serif;
+  /* Jost carries no Hangul, so Korean would otherwise drop to whatever the
+     device happens to have. Noto Sans KR picks up only the characters Jost
+     cannot draw — Latin text is unaffected in any language. */
+  font-family:'Jost','Noto Sans KR',system-ui,sans-serif;
 }
+/* ============================================================
+   DARK MODE — one attribute on <html>, set by applyTheme().
+
+   Asphalt rather than true black: on #000 the magenta goes muddy
+   and the photographs float. Everything below is a value swap;
+   no layout, no type, no geometry changes with the theme.
+
+   Two things deliberately do NOT invert. The flame tints step
+   DARKER to the left here, not lighter, so the right-hand flame
+   stays the strongest one on a dark ground. And the foot of an
+   order inverts to paper, so the button a customer holds up to
+   a waiter is the brightest thing on the screen.
+   ============================================================ */
+html[data-theme="dark"]{
+  --paper:#1b1b1e;
+  --ink:#f2f0eb;
+  --dim:#8a8a94;
+  --rule:#3f3f45;
+
+  --magenta:#dd5880;
+  --magenta-dim:#9f556c;
+  --heat-mid:#a33a58;
+  --heat-soft:#6e2a3e;
+  --on-magenta:#fff;
+
+  --tile:#2b2b2b;
+  --tile-fill:#f6f5f1;   /* drinks are shot on white, so this stays light */
+  --tile-ink:#b6b4ac;
+
+  --obar-rule:#3f3f45;
+
+  --foot-bg:#f2f0eb;
+  --foot-ink:#131313;
+  --foot-dim:#807f8b;
+  --foot-rule:#3f3f45;
+}
+
+/* the whole switch — one attribute, set by paintChrome() */
+html[lang="ko"]{--tscale:var(--ko-type);--sscale:var(--ko-small);
+  --tr:var(--ko-track);--lead:var(--ko-lead);--fscale:var(--ko-foot)}
+
 body{background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:40px}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 img{display:block;width:100%;height:100%;object-fit:cover}
 
 /* ---------- masthead ---------- */
-.mast{position:sticky;top:0;z-index:30;background:var(--paper);
+/* Masthead and tabs stick as ONE element. They used to stick separately,
+   with the nav pinned at top:57px — a hardcoded guess at the masthead's
+   height. Any change to it (the language icon, --ko-type raising the
+   wordmark) made that number wrong and the tabs slid under. Nothing here
+   measures anything now. */
+.topbar{position:sticky;top:0;z-index:30;background:var(--paper)}
+.mast{position:relative;background:var(--paper);
   display:flex;align-items:center;justify-content:space-between;padding:18px var(--gut) 13px}
 .wordmark{font-weight:700;font-size:26px;letter-spacing:.01em;text-transform:uppercase;line-height:1}
-.burger{display:flex;flex-direction:column;gap:5px;padding:6px 2px}
-.burger i{width:25px;height:2.5px;background:var(--ink)}
+/* The burger opens a short list of languages. The masthead is sticky, which
+   makes it a containing block, so the panel hangs off its bottom edge. */
+.drawer{position:absolute;right:var(--gut);top:100%;z-index:31;
+  min-width:calc(var(--x)*46);background:var(--paper);border:1px solid var(--rule);
+  padding:calc(var(--x)*1.5) 0;display:none}
+.drawer.open{display:block}
+.drawer button{display:flex;align-items:center;gap:calc(var(--x)*3);
+  width:100%;text-align:left;color:var(--ink);
+  padding:calc(var(--x)*3) calc(var(--x)*5);
+  font-size:var(--t-item);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase}
+.drawer button.on{font-weight:600}
+/* a language that exists but has no words yet */
+.drawer button.soon{color:var(--rule);cursor:default}
+.drawer .flag{font-size:calc(var(--x)*7);line-height:1}
+/* the two masthead controls sit as one group on the right */
+.mast-r{display:flex;align-items:center;gap:calc(var(--x)*4)}
+.mode{display:flex;align-items:center;padding:6px 2px;color:var(--ink)}
+.mode svg{display:block;height:calc(var(--x) * var(--mode-icon-h));width:auto;
+  position:relative;top:calc(var(--x) * var(--mode-icon-y))}
+
+/* ---------------------------------------------------------------
+   THE LANGUAGE ICON. Same rule as the flame: to change it, replace the
+   d="..." strings and the viewBox, nothing else. Colour comes from
+   currentColor so it follows --ink. */
+.burger{display:flex;align-items:center;padding:6px 2px;color:var(--ink)}
+.burger svg{display:block;width:calc(var(--x) * var(--lang-icon));height:auto;
+  position:relative;top:calc(var(--x) * var(--lang-icon-y))}
 
 /* ---------- nav ---------- */
-.nav{position:sticky;top:57px;z-index:29;background:var(--paper);display:flex;align-items:center;
+.nav{background:var(--paper);display:flex;align-items:center;
   overflow-x:auto;padding:0 var(--gut) 12px;scrollbar-width:none;border-bottom:1px solid var(--rule)}
 .nav::-webkit-scrollbar{display:none}
-.nav button{flex:0 0 auto;font-size:var(--t-nav);letter-spacing:.05em;text-transform:uppercase;
+.nav button{flex:0 0 auto;font-size:var(--t-nav);letter-spacing:calc(.05em + var(--tr));text-transform:uppercase;
   white-space:nowrap;padding:2px 0;color:var(--ink);font-weight:400}
 .nav .bar{flex:0 0 auto;width:1px;height:calc(var(--t-nav)*.95);background:var(--rule);margin:0 10px}
 .nav button.on{font-weight:600;box-shadow:0 2px 0 var(--ink)}
@@ -111,7 +269,7 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 /* ---------- section ---------- */
 .sec{padding:30px 0 2px}
 .sec-head{display:flex;align-items:center;gap:15px;padding:0 var(--gut);margin-bottom:16px}
-.sec-head h2{font-weight:600;font-size:var(--t-head);letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.sec-head h2{font-weight:600;font-size:var(--t-head);letter-spacing:calc(.03em + var(--tr));text-transform:uppercase;white-space:nowrap}
 .sec-head .rule{flex:1;height:1px;background:var(--ink);opacity:.8}
 
 /* ---------- carousel ---------- */
@@ -132,9 +290,14 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 /* photo width is frozen — it never re-scales, so nothing repaints on open */
 .shot{position:relative;flex:0 0 var(--w-card);width:var(--w-card);aspect-ratio:var(--ar);overflow:hidden;
   border:1px solid var(--rule);background:var(--tile)}
+/* Food is photographed on black slate, so a white tile between two of those
+   reads as a hole. Drinks are shot on white and keep the light tile. */
+.rail.food .shot,.setshot{background:var(--tile-food)}
+.rail.food .ph,.setshot .ph{background:var(--tile-food)}
+.rail.food .ph span,.setshot .ph span{color:var(--tile-food-ink)}
 .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
   padding:12px;text-align:center;background:var(--tile-fill)}
-.ph span{font-weight:500;font-size:var(--t-item);line-height:1.25;letter-spacing:.06em;
+.ph span{font-weight:500;font-size:var(--t-item);line-height:1.25;letter-spacing:calc(.06em + var(--tr));
   text-transform:uppercase;color:var(--tile-ink)}
 
 /* the panel that unfurls — same hairline, shares the photo's edge */
@@ -144,9 +307,9 @@ img{display:block;width:100%;height:100%;object-fit:cover}
   transition:opacity .18s .08s}
 .item.open .panel{flex:1 1 auto;width:auto;height:var(--shot-h);opacity:1;
   border:1px solid var(--rule);border-left:0;padding:9px 11px 8px}
-.desc{font-size:var(--t-ing);letter-spacing:.08em;text-transform:uppercase;line-height:1.85}
+.desc{font-size:var(--t-ing);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;line-height:var(--lead)}
 .ing{list-style:none}
-.ing li{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;line-height:1.85}
+.ing li{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;line-height:var(--lead)}
 .step{display:flex;align-items:center;justify-content:space-between;padding-top:8px}
 .step button{font-size:calc(var(--x)*10);line-height:1;font-weight:300;padding:0 4px}
 .step .q{font-size:calc(var(--x)*9);font-weight:400;min-width:22px;text-align:center}
@@ -164,7 +327,7 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .addrow{display:flex;align-items:center;justify-content:space-between;
   gap:calc(var(--x)*2);border-top:1px solid var(--rule);
   margin-top:calc(var(--x)*3);padding-top:calc(var(--x)*2.5)}
-.addlbl{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;
+.addlbl{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;
   color:var(--dim);line-height:1.3}
 .addpr{color:var(--magenta)}
 .step.addon{padding-top:0;flex:0 0 auto}
@@ -180,26 +343,34 @@ img{display:block;width:100%;height:100%;object-fit:cover}
    shows about two cards at a time, so they are never compared side by
    side, and padding every name up to the tallest one left a visible hole
    under the short ones. */
-.cap .nm{font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase;
+.cap .nm{font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;
   line-height:1.3}
-.cap .pr{font-size:var(--t-item);color:var(--magenta);letter-spacing:.03em;margin-top:1px}
+.cap .pr{font-size:var(--t-item);color:var(--magenta);letter-spacing:calc(.03em + var(--tr));margin-top:1px}
 
 /* ---------- plain list tabs (mixers / beer / shots / bottles / non-alc) ---------- */
 .list{padding:0 var(--gut)}
-.listnote{font-size:var(--t-ing);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);
+.listnote{font-size:var(--t-ing);letter-spacing:calc(.1em + var(--tr));text-transform:uppercase;color:var(--dim);
   padding:0 var(--gut) 12px;margin-top:-6px}
 
 /* ---------- sets: static, full width, no expansion ---------- */
 .stack{padding:0 var(--gut)}
-.setcard+.setcard{margin-top:calc(var(--x)*11)}
+.setcard+.setcard{margin-top:calc(var(--x) * var(--set-gap))}
 .setshot{position:relative;width:100%;overflow:hidden;border:1px solid var(--rule);background:var(--tile)}
 .setmeta{padding-top:calc(var(--x)*4)}
-.settop{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-.setnm{font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase}
-.setpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:.03em;white-space:nowrap}
-.setdesc{font-size:var(--t-ing);letter-spacing:.08em;text-transform:uppercase;
-  line-height:1.85;margin-top:calc(var(--x)*2)}
-.setmeta .step{padding-top:calc(var(--x)*2);justify-content:flex-end;gap:calc(var(--x)*2)}
+/* Two columns, same idea as the two-price rows: the blurb belongs under the
+   name it describes, and the price with the control that buys it. */
+.setsplit{display:flex;align-items:flex-start;gap:calc(var(--x)*5)}
+.setleft{flex:1 1 auto;min-width:0}
+.setright{flex:0 0 auto;text-align:right}
+.setnm{font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;
+  line-height:1.3}
+.setpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:calc(.03em + var(--tr));white-space:nowrap}
+.setdesc{font-size:var(--t-ing);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;
+  line-height:var(--lead);margin-top:calc(var(--x)*2)}
+/* Under the price, in its own column, so the length of the blurb beside it
+   changes nothing. */
+.setmeta .step{justify-content:flex-end;gap:calc(var(--x)*2);
+  padding-top:calc(var(--x) * var(--set-step-gap))}
 
 /* ---------- non-alcoholic marker ---------- */
 .star{position:absolute;left:0;top:0;z-index:2;
@@ -220,22 +391,23 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 
 .tag{display:inline-block;margin-bottom:calc(var(--x)*3);
   padding:calc(var(--x)*1.2) calc(var(--x)*2.4);
-  background:var(--magenta);color:var(--on-magenta);font-size:calc(var(--x)*3);
-  letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+  background:var(--magenta);color:var(--on-magenta);
+  font-size:calc(var(--x)*3*var(--sscale));
+  letter-spacing:calc(.12em + var(--tr));text-transform:uppercase;font-weight:500}
 
 /* ---------- cart badge on the photo card ---------- */
 .badge{position:absolute;right:0;bottom:0;display:none;
   min-width:calc(var(--x)*8);height:calc(var(--x)*8);padding:0 calc(var(--x)*1.6);
   background:var(--magenta);color:var(--on-magenta);font-size:calc(var(--x)*4.4);font-weight:500;
-  letter-spacing:.02em;align-items:center;justify-content:center}
+  letter-spacing:calc(.02em + var(--tr));align-items:center;justify-content:center}
 .badge.on{display:flex}
 
 /* ---------- list rows ---------- */
 .row{border-bottom:1px solid var(--rule);padding:calc(var(--x)*4) 0}
 .row:first-child{border-top:1px solid var(--rule)}
-.rowname{font-size:var(--t-item);letter-spacing:.07em;text-transform:uppercase;line-height:1.3}
+.rowname{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));text-transform:uppercase;line-height:1.3}
 .rowname .sub{margin-left:calc(var(--x)*2.4);font-size:var(--t-ing);
-  letter-spacing:.09em;color:var(--dim)}
+  letter-spacing:calc(.09em + var(--tr));color:var(--dim)}
 /* The +/- buttons are set about twice the height of the item name beside
    them, and a centred flex row takes its height from the tallest child. So
    the name sat in the middle of a stepper-height row, with dead space under
@@ -245,17 +417,25 @@ img{display:block;width:100%;height:100%;object-fit:cover}
    all the way down to 0. Only on note-below rows — Beer and Bottles keep
    the roomier row they already had. */
 .nbrow .vrow .step{margin-block:calc(var(--x) * var(--step-squeeze) * -1)}
+/* Note-below rows are two lines tall, so the stepper centres against the
+   pair instead of sitting on the name's line. The price stays up with the
+   name — unless the section asks for "centreRow", which sends the price
+   down to the middle with the stepper. */
+.nbtext{flex:1;min-width:0}
+.nbtop{display:flex;align-items:baseline;gap:calc(var(--x)*3)}
+.nbtop .rowname{flex:1;min-width:0}
+.nbrow .subline{margin-top:calc(var(--x) * var(--note-gap))}
 
 /* set by "noteBelow": true on a section — the note drops under the name
    instead of trailing it, for sections whose notes are ingredient lists.
    Price and stepper stay on the name's line, not centred on the pair. */
-.subline{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;
+.subline{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;
   color:var(--dim);line-height:var(--note-lead);
   margin-top:calc(var(--x) * var(--note-gap))}
 .vrow{display:flex;align-items:center;gap:calc(var(--x)*4);padding:calc(var(--x)*1.5) 0}
 .vrow.single{padding:0}
 .vrow .rowname{flex:1;min-width:0}
-.vname{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.vname{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;color:var(--dim)}
 /* ---------- two-price rows (Mixers, Bottles) ----------
    Left column names the thing, right column stacks its sizes. Side by side
    the two steppers sat next to the wrong prices, and the variety line
@@ -267,20 +447,19 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .vsplit{display:flex;align-items:flex-start;gap:calc(var(--x)*5)}
 .vleft{flex:1 1 0;min-width:0}
 .vright{flex:1 1 0;min-width:0}
+/* The size label and its price stack; the stepper sits beside the pair and
+   centres against both, rather than riding the price's line. */
+.vline{display:flex;align-items:center;gap:calc(var(--x)*2)}
 .vline+.vline{border-top:1px solid var(--rule);
   margin-top:calc(var(--x)*2.5);padding-top:calc(var(--x)*2.5)}
-/* An empty string in "variants" means the default size, which is left
-   unlabelled — a mixer is either nothing or a Double. The blank still holds
-   its line so the two sizes stay level with each other. */
-.vline .vname{display:block;min-height:calc(var(--t-ing) * 1.3)}
-.vfoot{display:flex;align-items:center;justify-content:space-between;
-  gap:calc(var(--x)*2);margin-top:calc(var(--x)*.5)}
-.vfoot .vpr{text-align:left}
+.vtext{flex:1;min-width:0}
+.vline .vname{display:block}
+.vline .vpr{display:block;text-align:left;margin-top:calc(var(--x)*.5)}
 /* same trick as the note-below rows: let the buttons overhang rather than
    inflate the line they sit on */
-.vfoot .step{padding-top:0;gap:calc(var(--x)*1);
+.vline .step{padding-top:0;gap:calc(var(--x)*1);flex:0 0 auto;
   margin-block:calc(var(--x) * var(--step-squeeze) * -1)}
-.vpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:.03em;
+.vpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:calc(.03em + var(--tr));
   white-space:nowrap;text-align:right}
 .vrow .step{padding-top:0;gap:calc(var(--x)*1);flex:0 0 auto;
   min-width:calc(var(--x)*22);justify-content:flex-end}
@@ -289,14 +468,15 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 /* ---------- order bar ---------- */
 body.hasbar{padding-bottom:calc(var(--x)*30)}
 .obar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--ink);color:var(--paper);
+  border-top:1px solid var(--obar-rule);
   display:flex;align-items:center;justify-content:space-between;
   padding:calc(var(--x)*4) var(--gut) calc(var(--x)*4 + env(safe-area-inset-bottom));
   transform:translateY(110%);transition:transform .24s cubic-bezier(.3,.85,.35,1)}
 .obar.show{transform:none}
-.ob-l{font-size:var(--t-item);letter-spacing:.07em;text-transform:uppercase}
+.ob-l{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));text-transform:uppercase}
 .ob-l .dot{margin:0 7px;opacity:.5}
 .ob-go{border:1px solid var(--paper);padding:calc(var(--x)*3) calc(var(--x)*7);
-  font-size:var(--t-item);letter-spacing:.12em;text-transform:uppercase}
+  font-size:var(--t-item);letter-spacing:calc(.12em + var(--tr));text-transform:uppercase}
 
 /* ---------- order page ---------- */
 .sheet,.waiter{position:fixed;inset:0;z-index:50;background:var(--paper);
@@ -306,7 +486,7 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 .waiter{z-index:60}
 .sheet-top,.wtop{display:flex;align-items:center;justify-content:space-between;
   padding:calc(var(--x)*7) var(--gut) calc(var(--x)*5);border-bottom:1px solid var(--rule)}
-.sheet-top h2,.wtop h2{font-size:var(--t-head);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.sheet-top h2,.wtop h2{font-size:var(--t-head);font-weight:600;letter-spacing:calc(.06em + var(--tr));text-transform:uppercase}
 .x{font-size:calc(var(--x)*11);line-height:1;padding:0 4px;color:var(--dim)}
 .sheet-body{flex:1;overflow-y:auto;padding:0 var(--gut)}
 /* An item and its add-ons are one block with one divider around them.
@@ -316,44 +496,74 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 .ogroup{border-bottom:1px solid var(--rule)}
 .oline{display:flex;align-items:center;gap:calc(var(--x)*4);padding:calc(var(--x)*5) 0}
 .oline.ohas{padding-bottom:calc(var(--x)*1.5)}
-.oline.oadd{padding:calc(var(--x)*1.5) 0 calc(var(--x)*4)}
-.oaddnm{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
-.oadd .ostep{gap:calc(var(--x)*1.5)}
-.oadd .ostep button{font-size:calc(var(--x)*6);color:var(--dim)}
-.oadd .ostep .q{font-size:var(--t-ing);color:var(--dim);min-width:calc(var(--x)*7)}
+/* An add-on is a line the customer will be charged for, so on the order it
+   is set like one: same type size, same stepper, same price column. Grey
+   text and a softer magenta keep it subordinate to its dish, and the indent
+   does the work the smaller size used to. */
+.oline.oadd{padding:calc(var(--x)*2.5) 0 calc(var(--x)*4)}
+.oadd .ol{padding-left:calc(var(--x) * var(--addon-indent))}
+.oaddnm{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));
+  text-transform:uppercase;color:var(--dim);line-height:1.3}
+.oadd .ostep button{color:var(--dim)}
+.oadd .ostep .q{color:var(--dim)}
 .oadd .ostep .q.off,.oadd .ostep [data-o="-1"].off{opacity:0;pointer-events:none}
 .oadd .ostep [data-o="1"]{color:var(--rule)}
 .oadd .ostep [data-o="1"].can{color:var(--magenta)}
-.oadd .opr{font-size:var(--t-ing)}
+.oadd .opr{color:var(--magenta-dim)}
 .oadd .opr.zero{color:var(--dim)}
 /* keeps the add-on's price in the same column as the item's, where the
    parent row has a × button and the add-on row does not */
 .oxs{flex:0 0 calc(var(--x)*9)}
 .ol{flex:1;min-width:0}
-.onm{font-size:var(--t-item);letter-spacing:.07em;text-transform:uppercase;line-height:1.3}
-.osub{font-size:var(--t-ing);letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.onm{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));text-transform:uppercase;line-height:1.3}
+.osub{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;color:var(--dim);margin-top:3px}
 .ostep{display:flex;align-items:center;gap:calc(var(--x)*2)}
 .ostep button{font-size:calc(var(--x)*8);line-height:1;font-weight:300;padding:0 calc(var(--x)*1.5)}
 .ostep .q{font-size:var(--t-item);min-width:calc(var(--x)*7);text-align:center}
 .opr{font-size:var(--t-item);color:var(--magenta);min-width:calc(var(--x)*13);text-align:right}
 .ox{flex:0 0 calc(var(--x)*9);font-size:calc(var(--x)*7);line-height:1;
   color:var(--dim);padding:0;text-align:right}
-.sheet-foot{border-top:1px solid var(--ink);padding:calc(var(--x)*5) var(--gut)
+.sheet-foot{background:var(--foot-bg);border-top:1px solid var(--foot-ink);
+  padding:calc(var(--x)*5) var(--gut)
   calc(var(--x)*6 + env(safe-area-inset-bottom))}
 .sheet-foot.hide{display:none}
 .totrow{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:calc(var(--x)*5)}
-.totlbl{font-size:var(--t-item);letter-spacing:.14em;text-transform:uppercase}
-.totval{font-size:calc(var(--x)*10);font-weight:600}
+.totlbl{font-size:var(--t-item);letter-spacing:calc(.14em + var(--tr));
+  text-transform:uppercase;color:var(--foot-ink)}
+.totval{font-size:calc(var(--x)*10);font-weight:600;color:var(--foot-ink)}
+/* Clear is a rare bulk action — every line already has its own × — and it
+   sat the same size as the primary button, right next to it. Same height and
+   the same row, a quarter of the width: still there, no longer a mis-tap
+   waiting to happen at 1am. */
 .acts{display:flex;gap:calc(var(--x)*3)}
-.btn{flex:1;padding:calc(var(--x)*5);font-size:var(--t-item);letter-spacing:.12em;text-transform:uppercase}
-.ghost{border:1px solid var(--rule);color:var(--dim)}
-.solid{background:var(--ink);color:var(--paper)}
+.btn{padding:calc(var(--x)*5);font-size:var(--t-item);letter-spacing:calc(.12em + var(--tr));text-transform:uppercase}
+.ghost{flex:var(--clear-share);border:1px solid var(--foot-rule);color:var(--foot-dim)}
+.solid{flex:var(--waiter-share);background:var(--foot-ink);color:var(--foot-bg)}
+
+/* ---------- undo ----------
+   Clearing happens immediately and is then recoverable, rather than being
+   guarded by a confirm. One tap either way, and it rescues the accident
+   instead of taxing everyone who meant it. */
+.undo{display:none;align-items:center;gap:calc(var(--x)*3);
+  background:var(--ink);color:var(--paper);
+  padding:calc(var(--x)*4) var(--gut)}
+.undo.show{display:flex}
+.undo-l{flex:1;min-width:0;font-size:var(--t-ing);
+  letter-spacing:calc(.08em + var(--tr));text-transform:uppercase}
+.undo-go{font-size:var(--t-ing);letter-spacing:calc(.12em + var(--tr));
+  text-transform:uppercase;font-weight:600;color:var(--paper);
+  border-bottom:1px solid var(--paper);padding-bottom:1px}
+.undo-x{font-size:calc(var(--x)*7);line-height:1;color:var(--paper);opacity:.6;padding:0 calc(var(--x)*1)}
 .mt{padding:calc(var(--x)*24) 0;text-align:center;color:var(--dim);
-  font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase}
+  font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase}
 
 /* ---------- waiter view — no prices, big enough to read across a bar ---------- */
+/* Locked to WAITER_LANG, so it must not inherit the customer's type scale —
+   an English staff screen sized for Hangul would be oversized. */
+.waiter{--tscale:1;--sscale:1;--tr:var(--en-track);--lead:var(--en-lead);
+  --fscale:var(--en-foot)}
 .wbody{flex:1;overflow-y:auto;padding:calc(var(--x)*3) var(--gut) calc(var(--x)*10)}
-.wbody h3{font-size:var(--t-item);letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+.wbody h3{font-size:var(--t-item);letter-spacing:calc(.18em + var(--tr));text-transform:uppercase;color:var(--dim);
   padding:calc(var(--x)*8) 0 calc(var(--x)*2);border-bottom:1px solid var(--rule)}
 .wline{display:flex;align-items:baseline;gap:calc(var(--x)*4);padding:calc(var(--x)*4) 0}
 .wq{flex:0 0 calc(var(--x)*13);text-align:right;white-space:nowrap;
@@ -361,13 +571,13 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 /* flex, not inline text: the add-on note sits on the vertical centre of the
    dish name rather than dropping to its baseline, which reads as a footnote */
 .wn{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;
-  gap:calc(var(--x)*2.5);font-size:calc(var(--x)*7);letter-spacing:.04em;
+  gap:calc(var(--x)*2.5);font-size:calc(var(--x)*7);letter-spacing:calc(.04em + var(--tr));
   text-transform:uppercase;line-height:1.25}
 .wn em{font-style:normal;color:var(--dim);font-size:calc(var(--x)*5);line-height:1.25}
 
 /* staff notice when running from cache */
 .stale{position:fixed;left:0;right:0;top:0;z-index:99;background:var(--magenta);color:var(--on-magenta);
-  padding:calc(var(--x)*3) var(--gut);font-size:var(--t-ing);letter-spacing:.06em;
+  padding:calc(var(--x)*3) var(--gut);font-size:var(--t-ing);letter-spacing:calc(.06em + var(--tr));
   text-transform:uppercase;line-height:1.5;text-align:center}
 
 /* ---------- event poster ---------- */
@@ -377,9 +587,10 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 .poster .ph span{font-size:calc(var(--x)*9)}
 
 .stub{padding:60px var(--gut);text-align:center;color:var(--dim);
-  font-size:var(--t-item);letter-spacing:.08em;text-transform:uppercase}
+  font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase}
 .foot{padding:36px var(--gut) 8px;margin-top:30px;border-top:1px solid var(--rule);
-  font-size:calc(var(--x)*4);line-height:1.8;color:var(--dim);letter-spacing:.02em}
+  font-size:calc(var(--x)*4*var(--fscale));line-height:1.8;color:var(--dim);
+  letter-spacing:calc(.02em + var(--tr))}
 
 @media(min-width:560px){
   body{max-width:430px;margin:0 auto;border-left:1px solid var(--rule);border-right:1px solid var(--rule);min-height:100vh}
@@ -388,35 +599,53 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 </head>
 <body>
 
+<div class="topbar">
 <header class="mast">
   <div class="wordmark">Hideout</div>
-  <button class="burger" aria-label="Menu"><i></i><i></i><i></i></button>
+  <div class="mast-r">
+  <button class="mode" id="mode" aria-label="Theme"></button>
+  <button class="burger" id="burger" aria-label="Language"
+    aria-expanded="false" aria-controls="drawer">
+    <svg viewBox="0 0 30 28.988" fill="currentColor" aria-hidden="true">
+      <polygon points="20.08 16 21.93 16.01 21 13.69 20.08 16"/>
+      <path d="M29.12,6.88c-.56-.56-1.32-.88-2.12-.88h-7v-3c0-.8-.32-1.56-.88-2.12-.56-.56-1.32-.88-2.12-.88H3c-.8,0-1.56.32-2.12.88s-.88,1.32-.88,2.12v14c0,.8.32,1.56.88,2.12s1.32.88,2.12.88h1v2c0,.4.24.77.62.92.37.16.8.07,1.09-.21l2.7-2.71h1.59v3c0,.8.32,1.56.88,2.12s1.32.88,2.12.88h8.59l2.7,2.71c.29.28.72.37,1.09.21.37-.15.62-.51.62-.91l.01-2.01h.99c.8,0,1.56-.32,2.12-.88.56-.56.88-1.32.88-2.12v-14c0-.8-.32-1.56-.88-2.12ZM3.29,5.93c0-.39.31-.7.7-.7h2.05v-.42c0-.49.39-.88.88-.88s.88.39.88.88v.42h2.05c.39,0,.7.31.7.7,0,.38-.31.69-.7.69H3.99c-.39,0-.7-.31-.7-.69ZM4.27,10.68c-.26-.36-.39-.78-.39-1.25,0-.46.13-.87.39-1.23.25-.36.61-.64,1.08-.84.46-.2.99-.3,1.58-.3s1.11.1,1.57.3c.46.2.82.48,1.07.84.26.36.39.77.39,1.23,0,.47-.13.89-.39,1.25-.25.36-.61.64-1.07.84-.46.2-.98.3-1.57.3s-1.12-.1-1.58-.3c-.47-.2-.83-.48-1.08-.84ZM12.73,16.07h-6.98c-.39,0-.71-.31-.71-.71v-1.99c0-.5.4-.9.89-.9.5,0,.9.4.9.9v1.28h5.9c.39,0,.71.32.71.71,0,.4-.32.71-.71.71ZM13.91,9.17h-.91v3.11c0,.49-.4.89-.89.89s-.88-.4-.88-.89v-7.45c0-.49.39-.89.88-.89s.89.4.89.89v2.87h.91c.4,0,.73.33.73.73,0,.41-.33.74-.73.74ZM25.37,21.93c-.51.2-1.09-.05-1.3-.56l-1.34-3.36-3.45-.01-1.35,3.37c-.21.51-.79.76-1.3.56-.51-.21-.76-.79-.56-1.3l4-10c.15-.38.52-.63.93-.63s.78.25.93.63l4,10c.2.51-.05,1.09-.56,1.3Z"/>
+      <path d="M6.92,10.47c.4,0,.72-.09.97-.26.24-.18.36-.43.36-.76,0-.34-.12-.6-.36-.78-.25-.18-.57-.26-.97-.26-.39,0-.71.08-.96.26s-.37.44-.37.78c0,.33.12.58.37.76.25.17.57.26.96.26Z"/>
+    </svg>
+  </button>
+  </div>
+  <nav class="drawer" id="drawer"></nav>
 </header>
 <nav class="nav" id="nav"></nav>
+</div>
 <main id="main"></main>
 
 <div class="obar" id="obar">
   <div class="ob-l"><span id="ocount">0 items</span><span class="dot">·</span><span id="ototal">₩0</span></div>
-  <button class="ob-go" id="oopen">Order</button>
+  <button class="ob-go" id="oopen" data-ui="order">Order</button>
 </div>
 
 <section class="sheet" id="sheet" aria-hidden="true">
   <div class="sheet-top">
-    <h2>Your order</h2>
+    <h2 data-ui="yourOrder">Your order</h2>
     <button class="x" id="sheetclose" aria-label="Close">&times;</button>
   </div>
   <div class="sheet-body" id="sheetbody"></div>
+  <div class="undo" id="undo">
+    <span class="undo-l" data-ui="cleared">Order cleared</span>
+    <button class="undo-go" id="undogo" data-ui="undo">Undo</button>
+    <button class="undo-x" id="undox" aria-label="Dismiss">&times;</button>
+  </div>
   <div class="sheet-foot" id="sheetfoot">
-    <div class="totrow"><span class="totlbl">Total</span><span class="totval" id="ototal2">₩0</span></div>
+    <div class="totrow"><span class="totlbl" data-ui="total">Total</span><span class="totval" id="ototal2">₩0</span></div>
     <div class="acts">
-      <button class="btn ghost" id="clearorder">Clear</button>
-      <button class="btn solid" id="showwaiter">Show to waiter</button>
+      <button class="btn ghost" id="clearorder" data-ui="clear">Clear</button>
+      <button class="btn solid" id="showwaiter" data-ui="showWaiter">Show to waiter</button>
     </div>
   </div>
 </section>
 
 <section class="waiter" id="waiter" aria-hidden="true">
-  <div class="wtop"><h2>Order</h2><button class="x" id="waiterclose" aria-label="Close">&times;</button></div>
+  <div class="wtop"><h2 data-uiw="order">Order</h2><button class="x" id="waiterclose" aria-label="Close">&times;</button></div>
   <div class="wbody" id="waiterbody"></div>
 </section>
 
@@ -510,6 +739,178 @@ const IMG = JSON.parse(document.getElementById('imgdata').textContent);
 const pic = id => IMG[id] || null;
 
 /* ============================================================
+   LANGUAGES
+
+   Every visible string in the JSON files may be either a plain
+   string or an object keyed by language:
+
+       "name": "Birria Tacos"
+       "name": { "en": "Birria Tacos", "ko": "비리아 타코" }
+
+   A plain string is treated as English, so a half-translated
+   file works: untranslated entries simply stay in English
+   rather than going blank.
+
+   ENGLISH IS LOAD-BEARING and cannot be dropped. It generates
+   the cart ids and the photo filenames, which is what lets a
+   customer switch language mid-order without losing their
+   basket — the ids never move because they are built from a
+   string that never changes.
+
+   Adding Spanish is this list plus a label, and nothing else.
+   ============================================================ */
+const LANGS = ['en', 'ko'];
+/* Listed in the drawer but not selectable — the words do not exist yet.
+   Moving 'es' from here into LANGS above is the whole of switching it on. */
+const LANG_SOON  = ['es'];
+const LANG_LABEL = {en:'EN',   ko:'KOR',  es:'ESP'};
+const LANG_FLAG  = {en:'🇬🇧', ko:'🇰🇷', es:'🇪🇸'};
+
+/* The staff screen. Locked to one language regardless of what the customer
+   is browsing in, so the bar reads the same order every time. Change this
+   one string to hand the waiter view to Korean instead. */
+const WAITER_LANG = 'en';
+
+const LANG_KEY = 'hideout.lang';
+
+/* ============================================================
+   THEME
+
+   The device decides, because a customer who has set their
+   phone to dark at 11pm has already told us what they want.
+   Only when the device will not say — an old browser, a
+   webview that answers neither query — do we fall back to the
+   clock, and to Seoul's clock rather than the phone's, since
+   the thing that is actually dark is this bar.
+
+   A manual choice outranks both and is remembered.
+   ============================================================ */
+const THEME_KEY = 'hideout.theme';
+const THEMES = ['light', 'dark'];
+
+/* Material Symbols, one path each. Replace the d="..." to change them. */
+const THEME_ICON = {
+  dark: 'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z',
+  light: 'M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z'
+};
+
+/* The icon shows what you will GET, not what you are in — a moon while the
+   menu is light. Swap the two lines in themeIcon() for the other convention. */
+const DARK_FROM = 18 * 60;      // 18:00 Seoul
+const DARK_UNTIL = 8 * 60;      // until 08:00
+
+function darkByClock(){
+  const min = seoulNow().min;
+  return min >= DARK_FROM || min < DARK_UNTIL;
+}
+
+function firstTheme(){
+  try{
+    const saved = localStorage.getItem(THEME_KEY);
+    if(saved && THEMES.includes(saved)) return saved;
+  }catch(e){}
+  try{
+    if(window.matchMedia){
+      if(matchMedia('(prefers-color-scheme: dark)').matches)  return 'dark';
+      if(matchMedia('(prefers-color-scheme: light)').matches) return 'light';
+    }
+  }catch(e){}
+  return darkByClock() ? 'dark' : 'light';   // the device would not say
+}
+
+let THEME = 'light';            // real value set in start(), once seoulNow exists
+
+function firstLang(){
+  try{
+    const saved = localStorage.getItem(LANG_KEY);
+    if(saved && LANGS.includes(saved)) return saved;
+  }catch(e){}
+  /* No choice made yet — follow the phone, since a customer who has set
+     their device to Korean almost certainly wants the Korean menu. */
+  try{
+    const want = [navigator.language, ...(navigator.languages || [])];
+    for(const w of want){
+      const base = String(w || '').toLowerCase().split('-')[0];
+      if(LANGS.includes(base)) return base;
+    }
+  }catch(e){}
+  return 'en';
+}
+
+let LANG = firstLang();
+
+/* loc() — what to show the customer. can() — the English underneath, for
+   ids, filenames and the waiter. Both take a string or a language object. */
+function pick(v, lang){
+  if(v == null) return '';
+  if(typeof v !== 'object') return String(v);
+  if(Array.isArray(v)) return '';
+  return v[lang] !== undefined ? String(v[lang])
+       : v.en !== undefined ? String(v.en)
+       : String(Object.values(v)[0] ?? '');
+}
+const loc = v => pick(v, LANG);
+const can = v => pick(v, 'en');
+
+/* A description may be one string or a list of lines. A list puts each entry
+   on its own line; a plain string can do the same with \n inside it. Both
+   work per language, so English can be split and Korean not, or the reverse.
+   Escaped line by line — the <br> is ours, nothing from the file is markup. */
+function locLines(v){
+  let raw = v;
+  if(v && typeof v === 'object' && !Array.isArray(v)){
+    raw = v[LANG] !== undefined ? v[LANG] : (v.en !== undefined ? v.en : Object.values(v)[0]);
+  }
+  const lines = Array.isArray(raw) ? raw.map(loc) : String(raw == null ? '' : raw).split('\n');
+  return lines.map(x => x.trim()).filter(Boolean).map(esc).join('<br>');
+}
+
+/* Ingredient lists translate as a whole list, not entry by entry:
+   "ingredients": { "en": ["Gin","Lime"], "ko": ["진","라임"] } */
+function locArr(v){
+  if(!v) return [];
+  if(Array.isArray(v)) return v.map(loc);
+  const a = v[LANG] !== undefined ? v[LANG] : (v.en !== undefined ? v.en : Object.values(v)[0]);
+  return Array.isArray(a) ? a.map(loc) : [];
+}
+
+/* The site's own wording. Not in the JSON files — the owners have no
+   business editing it, and it changes only when the code does. */
+const UI = {
+  order:        {en:'Order',            ko:'주문'},
+  yourOrder:    {en:'Your order',       ko:'주문 내역'},
+  total:        {en:'Total',            ko:'합계'},
+  clear:        {en:'Clear',            ko:'비우기'},
+  showWaiter:   {en:'Show to waiter',   ko:'직원에게 보여주기'},
+  emptyOrder:   {en:'Nothing here yet', ko:'아직 담긴 것이 없음'},
+  nothingShow:  {en:'Nothing to show',  ko:'표시할 것이 없음'},
+  cleared:      {en:'Order cleared',    ko:'주문 내역을 비웠음'},
+  undo:         {en:'Undo',             ko:'되돌리기'},
+  mocktail:     {en:'Non-alcoholic!',   ko:'무알코올!'},
+  spicy:        {en:'Spicy!',           ko:'매운맛!'},
+  noSpecials:   {en:'Nothing on special right now', ko:'현재 스페셜 메뉴가 없음'},
+  specialsBad:  {en:'Specials unavailable',         ko:'스페셜 메뉴를 불러올 수 없음'},
+  menuBad:      {en:'Menu unavailable. Please ask at the bar.',
+                 ko:'메뉴를 불러올 수 없습니다. 바에 문의해 주세요.'},
+  needServer:   {en:'This page needs to be opened through a local server, not by opening the file directly.',
+                 ko:'이 페이지는 파일을 직접 열지 말고 로컬 서버를 통해 열어야 합니다.'},
+  drinks:       {en:'Drinks',           ko:'음료'},
+  food:         {en:'Food',             ko:'음식'},
+  /* one sentence per line — locLines() gives each entry its own line */
+  footNote:     {en:['Tap any item to open it. Your order is kept on this device.'],
+                 ko:['항목을 누르면 자세히 볼 수 있음. 주문 내역은 이 기기에 저장됨.']}
+};
+const u = k => loc(UI[k]);
+const w = k => pick(UI[k], WAITER_LANG);   // staff wording, never the customer's
+
+/* "1 item" / "2 items" in English; Korean counts with a unit noun and does
+   not inflect, so this cannot be a format string with a plural rule. */
+function itemCount(k){
+  if(LANG === 'ko') return k + '개';
+  return k + (k === 1 ? ' item' : ' items');
+}
+
+/* ============================================================
    MENU DATA — lives in menu.json, not in this file.
 
    Single source of truth. There is deliberately no duplicate copy
@@ -529,48 +930,67 @@ function buildTabs(json){
   const built = {}, order = [];
   for(const t of tabs){
     if(!t || !t.name) continue;
-    order.push(t.name);
+    /* The key is the English name and never changes; label is the raw value,
+       resolved to the reader's language at paint time. Keying on the display
+       string would rename every tab — and every cart id under it — the
+       moment someone switched language. */
+    const key = can(t.name);
+    order.push(key);
 
     if(t.source === 'specials.json'){          // filled in by applySpecials
-      built[t.name] = {stub:'Nothing on special right now'};
+      built[key] = {stub:'noSpecials', label:t.name};
       continue;
     }
     const secs = (t.sections||[]).map(s=>{
       if(s.rows){
         return {
-          t: String(s.title||''),
+          t: s.title || '',
           vl: Array.isArray(s.variants) ? s.variants : null,
+          /* Optional parallel list used ONLY on the order and waiter screens.
+             Choosing wants the full label — "Standard", "Double shot" —
+             while a summary wants it short, or gone. An empty string here
+             means no label at all. Falls back to the full label when absent,
+             so a section that needs no shortening says nothing. */
+          vs: Array.isArray(s.variantsShort) ? s.variantsShort : null,
           nb: s.noteBelow === true,
+          /* "titleOnOrder": true sends the section heading along as the row's
+             qualifier — a beer needs "Bottled" or "On Tap" beside it once it
+             is off the menu page and sitting in a list. Off by default: most
+             headings ("Bartender's Choice") are shelf labels, not facts about
+             the drink. */
+          tl: s.titleOnOrder === true ? (s.title || '') : null,
+          ctr: s.centreRow === true,
           rows: (s.rows||[]).map(r => Array.isArray(r.prices)
-            ? {n:String(r.name||''), sub:r.note||'', v:r.prices.map(Number)}
-            : {n:String(r.name||''), sub:r.note||'', p:Number(r.price)||0})
+            ? {n:r.name||'', sub:r.note||'', v:r.prices.map(Number)}
+            : {n:r.name||'', sub:r.note||'', p:Number(r.price)||0})
         };
       }
       return {
-        t: String(s.title||''),
+        t: s.title || '',
         layout: s.layout || null,
         items: (s.items||[]).map(it=>({
-          n   : String(it.name||'Untitled'),
+          n   : it.name || 'Untitled',
           p   : Number(it.price)||0,
-          ing : Array.isArray(it.ingredients) ? it.ingredients.map(String) : [],
-          desc: it.description ? String(it.description) : '',
+          ing : it.ingredients || [],
+          desc: it.description || '',
           ar  : it.ratio || null,
           mocktail: it.mocktail === true,
           heat: Math.max(0, Math.min(3, Number(it.heat) || 0)),
           add : Array.isArray(it.addons)
-                ? it.addons.map(a => ({n:String(a.name||''), p:Number(a.price)||0}))
+                ? it.addons.map(a => ({n:a.name||'', p:Number(a.price)||0}))
                 : [],
           /* No "photo" field needed: the filename is derived from the item
              name, so dropping baby-turtle.jpg into img/cocktails/ is all it
              takes. A file that isn't there falls back to the lettered tile.
              Set "photo" explicitly only for a different name or a .png. */
           img : (t.kind==='food' ? 'img/food/' : 'img/cocktails/') +
-                (it.photo || slug(String(it.name||'')) + '.jpg')
+                (it.photo || slug(can(it.name)) + '.jpg')
         }))
       };
     });
     const isList = (t.sections||[]).some(s => s.rows);
-    built[t.name] = isList ? {list:secs} : {kind:t.kind||'drink', secs};
+    built[key] = isList ? {list:secs, label:t.name}
+                        : {kind:t.kind||'drink', secs, label:t.name};
   }
   if(!order.length) throw new Error('no usable tabs');
   return {built, order};
@@ -587,7 +1007,7 @@ function applyMenu(raw, where){
 /* tab order is the order of the tabs array in menu.json */
 function paintNav(){
   document.getElementById('nav').innerHTML = TAB_ORDER.filter(n=>TABS[n]).map((n,i)=>
-    `${i?'<span class="bar"></span>':''}<button data-tab="${esc(n)}">${esc(n)}</button>`).join('');
+    `${i?'<span class="bar"></span>':''}<button data-tab="${esc(n)}">${esc(loc(TABS[n].label || n))}</button>`).join('');
 }
 
 /* ---------- flat index of every orderable line ----------
@@ -608,16 +1028,25 @@ const INDEX = {};
 function indexAll(){
   Object.keys(INDEX).forEach(k => delete INDEX[k]);
   for(const [tabName,T] of Object.entries(TABS)){
-    const group = tabName === 'Food' ? 'food' : 'drink';
-    const add = (name, sub, price, variant) => {
-      const id = [slug(tabName), slug(name + ' ' + (sub||'')), variant?slug(variant):''].filter(Boolean).join('/');
-      INDEX[id] = {id, name, sub:sub||'', variant:variant||'', price, group, tab:tabName};
+    const group = tabName === 'Food' ? 'food' : 'drink';   // tabName is the English key
+    const add = (name, sub, price, variant, vshort) => {
+      /* Ids are built from the English only. Switching language must not
+         move a single one of them, or the customer's basket empties. */
+      const id = [slug(tabName),
+                  slug(can(name) + ' ' + can(sub)),
+                  variant ? slug(can(variant)) : ''].filter(Boolean).join('/');
+      INDEX[id] = {id, name, sub:sub||'', variant:variant||'',
+                   vshort: vshort === undefined ? (variant||'') : vshort,
+                   price, group, tab:tabName};
       return id;
     };
     if(T.secs) T.secs.forEach(s => s.items.forEach(it => {
       it.id = add(it.n, '', it.p);
       (it.add||[]).forEach(a => {
-        a.id = add(it.n + ' ' + a.n, '', a.p);
+        /* can() first: these are language objects, and concatenating one
+           straight into a string yields "[object Object]" — which every
+           add-on on the menu would then share as its id. */
+        a.id = add(can(it.n) + ' ' + can(a.n), '', a.p);
         /* name stays the parent's, so the order sheet and the waiter view
            both read "Birria tacos / add fries" rather than a loose line */
         INDEX[a.id].name   = it.n;
@@ -625,16 +1054,30 @@ function indexAll(){
         INDEX[a.id].parent = it.id;
       });
     }));
-    if(T.list) T.list.forEach(s => s.rows.forEach(r => {
-      /* On a two-price row the note is a variety, and two rows sharing a
-         name are told apart by it alone — so it joins the name on an order
-         rather than trailing it as a qualifier: "Wild Turkey — Rye", then
-         "bottle" in grey. Single-price notes (a country, an ingredient
-         list) are not varieties and stay where they are. */
-      if(r.v) r.ids = r.v.map((p,i) =>
-        add(r.sub ? r.n + ' — ' + r.sub : r.n, '', p, s.vl[i]));
-      else    r.id  = add(r.n, r.sub, r.p);
-    }));
+    if(T.list) T.list.forEach(s => {
+      /* A note earns its place on an order only when it is doing work: two
+         rows sharing a name are told apart by their notes alone, so the bar
+         must see it. A note on a row with no twin — a country, a gin, an
+         ingredient list — is information for someone choosing, and only
+         clutters a summary. The id still uses the note either way, so
+         nothing can collide. */
+      const twins = {};
+      s.rows.forEach(r => { twins[can(r.n)] = (twins[can(r.n)] || 0) + 1; });
+      s.rows.forEach(r => {
+        const tells = twins[can(r.n)] > 1 ? (r.sub || '') : '';
+        const short = i => s.vs && s.vs[i] !== undefined ? s.vs[i] : s.vl[i];
+        if(r.v) r.ids = r.v.map((p,i) => {
+          const id = add(r.n, r.sub, p, s.vl[i], short(i));
+          INDEX[id].sub = tells;
+          return id;
+        });
+        else {
+          /* no variants here, so the qualifier slot is free for the heading */
+          r.id = add(r.n, r.sub, r.p, '', s.tl || '');
+          INDEX[r.id].sub = tells;
+        }
+      });
+    });
   }
 }
 
@@ -652,22 +1095,25 @@ function applySpecials(raw, where){
     json = typeof raw === 'string' ? JSON.parse(raw) : raw;
   }catch(err){
     console.warn('specials: could not read ' + where, err);
-    if(TAB_ORDER.includes('Specials')){ TABS.Specials = {stub:'Specials unavailable'}; indexAll(); }
+    if(TAB_ORDER.includes('Specials')){
+      TABS.Specials = {stub:'specialsBad', label:(TABS.Specials||{}).label}; indexAll(); }
     return false;
   }
   const secs = ((json && json.sections) || []).map(s => ({
-    t: String(s.title || 'Specials'),
+    t: s.title || 'Specials',
     items: ((s.items) || []).map(it => ({
-      n  : String(it.name || 'Untitled'),
+      n  : it.name || 'Untitled',
       p  : Number(it.price) || 0,
-      ing: Array.isArray(it.ingredients) ? it.ingredients.map(String) : [],
+      ing: it.ingredients || [],
       mocktail: it.mocktail === true,
-      img: 'img/specials/' + (it.photo || slug(String(it.name||'')) + '.jpg')
+      heat: Math.max(0, Math.min(3, Number(it.heat) || 0)),
+      img: 'img/specials/' + (it.photo || slug(can(it.name)) + '.jpg')
     }))
   })).filter(s => s.items.length);
 
   if(!TAB_ORDER.includes('Specials')) return true;   // menu.json didn't ask for it
-  TABS.Specials = secs.length ? {kind:'drink', secs} : {stub:'Nothing on special right now'};
+  const label = (TABS.Specials || {}).label;
+  TABS.Specials = secs.length ? {kind:'drink', secs, label} : {stub:'noSpecials', label};
   indexAll();
   return true;
 }
@@ -681,7 +1127,14 @@ function refreshSpecials(){
       .then(r => r.ok ? r.text() : Promise.reject(r.status))
       .then(txt => {
         if(!applySpecials(txt, 'specials.json')) return;
+        /* The basket was checked against the placeholder specials baked into
+           this file, so anything ordered from the real list looked unknown
+           and was dropped. Now that the actual specials are indexed, read it
+           again — localStorage still holds the full saved basket. */
+        cart = loadCart();
         pruneCart();
+        paintAllQty();
+        paintBar();
         if(tab === 'Specials'){ render(); sizeRails(); requestAnimationFrame(parkRails); }
       })
       .catch(()=>{});
@@ -767,8 +1220,8 @@ function activeEvent(){
 
 function posterHTML(ev){
   const art = ev.poster
-    ? `<img src="img/events/${esc(ev.poster)}" alt="${esc(ev.name||'')}">`
-    : `<div class="ph"><span>${esc(ev.name||'Event')}</span></div>`;
+    ? `<img src="img/events/${esc(ev.poster)}" alt="${esc(loc(ev.name))}">`
+    : `<div class="ph"><span>${esc(loc(ev.name) || 'Event')}</span></div>`;
   return `<section class="sec poster-sec"><div class="poster">${art}</div></section>`;
 }
 
@@ -801,14 +1254,23 @@ function landingTab(){
 }
 
 let tab = 'Food';
-let cart = loadCart();
+/* Empty for now. A saved basket cannot be validated until the menu has
+   arrived and INDEX exists, so it is restored in start() instead — reading
+   it here would check every saved id against an empty index, find none of
+   them, and throw the whole basket away on every page load. */
+let cart = {};
 
 function loadCart(){
   try{ const c = JSON.parse(localStorage.getItem('hideout.cart')||'{}');
        Object.keys(c).forEach(k=>{ if(!INDEX[k] || !(c[k]>0)) delete c[k]; });
+       /* An add-on cannot outlive its parent, and cannot outnumber it —
+          the same rule setQty() enforces, applied to whatever was saved. */
        Object.keys(c).forEach(k=>{
          const r = INDEX[k];
-         if(r && r.parent && !(c[r.parent] > 0)) delete c[k];
+         if(!r || !r.parent) return;
+         const cap = c[r.parent] || 0;
+         if(!cap) delete c[k];
+         else if(c[k] > cap) c[k] = cap;
        });
        return c; }
   catch(e){ return {}; }
@@ -842,6 +1304,9 @@ function clampAddons(){
 }
 
 function setQty(id, n){
+  /* Restoring the old basket over a new one would be worse than the mistake
+     it undoes, so the first thing added afterwards cancels the offer. */
+  if(cleared) hideUndo();
   const rec = INDEX[id];
   n = Math.max(0, Math.min(99, n));
   if(rec && rec.parent) n = Math.min(n, cart[rec.parent] || 0);
@@ -888,8 +1353,8 @@ const SPICY_TAG_AT = 3;
 /* The loud labels at the top of an open panel. Nothing is ever both, but
    the code does not need to care. */
 function panelTags(it){
-  return (it.mocktail ? '<span class="tag">Non-alcoholic!</span>' : '') +
-         (it.heat >= SPICY_TAG_AT ? '<span class="tag">Spicy!</span>' : '');
+  return (it.mocktail ? `<span class="tag">${esc(u('mocktail'))}</span>` : '') +
+         (it.heat >= SPICY_TAG_AT ? `<span class="tag">${esc(u('spicy'))}</span>` : '');
 }
 
 /* Level 1 is one flame; each extra level adds another to the LEFT and one
@@ -906,7 +1371,7 @@ function heatMark(level){
 
 function addonRows(it){
   return (it.add||[]).map(a => `<div class="addrow">
-    <span class="addlbl">${esc(a.n)} <span class="addpr">+${money(a.p)}</span></span>
+    <span class="addlbl">${esc(loc(a.n))} <span class="addpr">+${money(a.p)}</span></span>
     ${stepper(a.id, 'addon')}
   </div>`).join('');
 }
@@ -915,32 +1380,39 @@ function addonRows(it){
    Full content width, photo keeps its own printed proportion. */
 function setCard(it){
   const art = it.img
-    ? `<img loading="lazy" src="${it.img}" alt="" data-fallback="${esc(it.n)}">`
-    : `<div class="ph"><span>${esc(it.n)}</span></div>`;
+    ? `<img loading="lazy" src="${it.img}" alt="" data-fallback="${esc(loc(it.n))}">`
+    : `<div class="ph"><span>${esc(loc(it.n))}</span></div>`;
   return `<article class="setcard">
     <div class="setshot" style="aspect-ratio:${it.ar||'1/1'}">${art}${heatMark(it.heat)}</div>
     <div class="setmeta">
-      <div class="settop"><span class="setnm">${esc(it.n)}</span><span class="setpr">${money(it.p)}</span></div>
-      <p class="setdesc">${esc(it.desc)}</p>
+      <div class="setsplit">
+        <div class="setleft">
+          <div class="setnm">${esc(loc(it.n))}</div>
+          <p class="setdesc">${locLines(it.desc)}</p>
+        </div>
+        <div class="setright">
+          <div class="setpr">${money(it.p)}</div>
+          ${stepper(it.id)}
+        </div>
+      </div>
       ${addonRows(it)}
-      ${stepper(it.id)}
     </div>
   </article>`;
 }
 
 function card(it, kind, key){
   const inner = kind==='food'
-    ? `<p class="desc">${esc(it.desc)}</p>`
-    : `<ul class="ing">${it.ing.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
+    ? `<p class="desc">${locLines(it.desc)}</p>`
+    : `<ul class="ing">${locArr(it.ing).map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
   const art = it.img
-    ? `<img loading="lazy" src="${it.img}" alt="" data-fallback="${esc(it.n)}">`
-    : `<div class="ph"><span>${esc(it.n)}</span></div>`;
+    ? `<img loading="lazy" src="${it.img}" alt="" data-fallback="${esc(loc(it.n))}">`
+    : `<div class="ph"><span>${esc(loc(it.n))}</span></div>`;
   return `<article class="item" data-key="${key}">
     <div class="frame">
       <div class="shot" data-tap="${key}">${art}${it.mocktail?'<span class="star">&lowast;</span>':''}${heatMark(it.heat)}<span class="badge" data-b="${it.id}"></span></div>
       <div class="panel"><div>${panelTags(it)}${inner}</div><div>${addonRows(it)}${stepper(it.id)}</div></div>
     </div>
-    <div class="cap"><div class="nm">${esc(it.n)}</div><div class="pr">${money(it.p)}</div></div>
+    <div class="cap"><div class="nm">${esc(loc(it.n))}</div><div class="pr">${money(it.p)}</div></div>
   </article>`;
 }
 
@@ -950,9 +1422,12 @@ function listRow(r, s, ri){
   /* "noteBelow": true on the section drops the note to its own line. Used
      where the note is an ingredient list rather than a country or an age —
      those overrun the name's line on a narrow phone and break the column. */
-  const inline = s.nb ? '' : (r.sub ? `<span class="sub">${esc(r.sub)}</span>` : '');
-  const below  = (s.nb && r.sub) ? `<div class="subline">${esc(r.sub)}</div>` : '';
-  const rc = below ? 'row nbrow' : 'row';
+  const inline = s.nb ? '' : (r.sub ? `<span class="sub">${esc(loc(r.sub))}</span>` : '');
+  const below  = (s.nb && r.sub) ? `<div class="subline">${esc(loc(r.sub))}</div>` : '';
+  /* "centreRow": true on the section drops the price to the vertical middle
+     alongside the stepper. Without it the price stays on the name's line and
+     only the stepper centres. */
+  const rc = below ? (s.ctr ? 'row nbrow ctr' : 'row nbrow') : 'row';
   /* On a two-price row the note is ALWAYS under the name — it is the
      variety, and it belongs beside the thing it names rather than above a
      list of sizes. The section's noteBelow flag does not apply here. */
@@ -960,23 +1435,44 @@ function listRow(r, s, ri){
     return `<div class="row" data-row="${ri}">
       <div class="vsplit">
         <div class="vleft">
-          <div class="rowname">${esc(r.n)}</div>
-          ${r.sub ? `<div class="subline">${esc(r.sub)}</div>` : ''}
+          <div class="rowname">${esc(loc(r.n))}</div>
+          ${r.sub ? `<div class="subline">${esc(loc(r.sub))}</div>` : ''}
         </div>
         <div class="vright">${r.ids.map((id,i)=>`<div class="vline">
-          <span class="vname">${esc(s.vl[i] || '')}</span>
-          <div class="vfoot"><span class="vpr">${money(r.v[i])}</span>${stepper(id)}</div>
+          <div class="vtext">
+            <span class="vname">${esc(loc(s.vl[i]))}</span>
+            <span class="vpr">${money(r.v[i])}</span>
+          </div>
+          ${stepper(id)}
         </div>`).join('')}</div>
       </div>
     </div>`;
   }
-  return `<div class="${rc}" data-row="${ri}">
+  /* Three shapes: a plain row, a note-below row with the price up top, and
+     a note-below row with the price centred beside the stepper. */
+  if(below && s.ctr) return `<div class="${rc}" data-row="${ri}">
     <div class="vrow single">
-      <span class="rowname">${esc(r.n)}${inline}</span>
+      <div class="nbtext"><span class="rowname">${esc(loc(r.n))}</span>${below}</div>
       <span class="vpr">${money(r.p)}</span>
       ${stepper(r.id)}
     </div>
-    ${below}
+  </div>`;
+  if(below) return `<div class="${rc}" data-row="${ri}">
+    <div class="vrow single">
+      <div class="nbtext">
+        <div class="nbtop"><span class="rowname">${esc(loc(r.n))}</span>
+          <span class="vpr">${money(r.p)}</span></div>
+        ${below}
+      </div>
+      ${stepper(r.id)}
+    </div>
+  </div>`;
+  return `<div class="${rc}" data-row="${ri}">
+    <div class="vrow single">
+      <span class="rowname">${esc(loc(r.n))}${inline}</span>
+      <span class="vpr">${money(r.p)}</span>
+      ${stepper(r.id)}
+    </div>
   </div>`;
 }
 
@@ -986,18 +1482,18 @@ function render(){
   const ev = tab === 'Specials' ? activeEvent() : null;
   if(ev) html += posterHTML(ev);
   /* a poster plus "nothing on special" reads as a contradiction */
-  if(T.stub) html += ev ? '' : `<p class="stub">${esc(T.stub)}</p>`;
+  if(T.stub) html += ev ? '' : `<p class="stub">${esc(u(T.stub))}</p>`;
   else if(T.secs) html += T.secs.map((s,si)=>`
-    <section class="sec"><div class="sec-head"><h2>${esc(s.t)}</h2><span class="rule"></span></div>
+    <section class="sec"><div class="sec-head"><h2>${esc(loc(s.t))}</h2><span class="rule"></span></div>
       ${s.layout === 'stack'
         ? `<div class="stack">${s.items.map(setCard).join('')}</div>`
         : `<div class="rail ${T.kind}">${s.items.map((it,i)=>card(it,T.kind,si+'-'+i)).join('')}</div>`}
     </section>`).join('');
   else html += T.list.map((s,si)=>`
-    <section class="sec"><div class="sec-head"><h2>${esc(s.t)}</h2><span class="rule"></span></div>
+    <section class="sec"><div class="sec-head"><h2>${esc(loc(s.t))}</h2><span class="rule"></span></div>
       <div class="list">${s.rows.map((r,ri)=>listRow(r,s,si+'-'+ri)).join('')}</div>
     </section>`).join('');
-  main.innerHTML = html + `<p class="foot">Look test · tap any item to open it. Order is kept on this device.</p>`;
+  main.innerHTML = html + `<p class="foot">${locLines(UI.footNote)}</p>`;
   paintAllQty();
 }
 
@@ -1135,7 +1631,7 @@ const waiter = document.getElementById('waiter');
 
 function paintBar(){
   const n = cartCount();
-  document.getElementById('ocount').textContent = n + (n===1?' item':' items');
+  document.getElementById('ocount').textContent = itemCount(n);
   document.getElementById('ototal').textContent = won(cartTotal());
   obar.classList.toggle('show', n>0);
   document.body.classList.toggle('hasbar', n>0);
@@ -1146,7 +1642,7 @@ function paintSheet(){
   const ls = lines();
   const body = document.getElementById('sheetbody');
   if(!ls.some(l => !l.parent)){
-    body.innerHTML = `<p class="mt">Nothing here yet</p>`;
+    body.innerHTML = `<p class="mt">${esc(u('emptyOrder'))}</p>`;
     document.getElementById('sheetfoot').classList.add('hide');
     return;
   }
@@ -1158,7 +1654,7 @@ function paintSheet(){
       const q = cart[k.id] || 0;
       const off = q ? '' : ' off';
       return `<div class="oline oadd">
-      <div class="ol"><div class="oaddnm">${esc(k.sub)}</div></div>
+      <div class="ol"><div class="oaddnm">${esc(loc(k.sub))}</div></div>
       <div class="ostep">
         <button data-o="-1" data-id="${k.id}" class="${off.trim()}">−</button>
         <span class="q${off}">${q}</span>
@@ -1170,8 +1666,8 @@ function paintSheet(){
     return `<div class="ogroup">
     <div class="oline${kids ? ' ohas' : ''}">
       <div class="ol">
-        <div class="onm">${esc(l.name)}</div>
-        ${(l.sub||l.variant)?`<div class="osub">${esc([l.sub,l.variant].filter(Boolean).join(' · '))}</div>`:''}
+        <div class="onm">${esc(loc(l.name))}</div>
+        ${(l.sub||l.vshort)?`<div class="osub">${esc([loc(l.sub),loc(l.vshort)].filter(Boolean).join(' · '))}</div>`:''}
       </div>
       <div class="ostep">
         <button data-o="-1" data-id="${l.id}">−</button>
@@ -1189,32 +1685,108 @@ function paintWaiter(){
   const block = (label, g) => {
     const rows = ls.filter(l => l.group === g && !l.parent);
     if(!rows.length) return '';
-    return `<h3>${label}</h3>` + rows.map(l=>{
+    return `<h3>${esc(label)}</h3>` + rows.map(l=>{
       /* an add-on is a modification of a dish, not a dish — it reads on the
          parent's line so the bar counts plates, not lines */
       const extras = ls.filter(x => x.parent === l.id)
-                       .map(x => `+${x.qty} ${x.sub}`).join(', ');
-      const note = [l.sub, l.variant, extras].filter(Boolean).join(' ');
+                       .map(x => `+${x.qty} ${pick(x.sub, WAITER_LANG)}`).join(', ');
+      /* One line only, so a disambiguating note joins the name rather than
+         trailing it in grey with the size. */
+      const nm   = l.sub ? pick(l.name, WAITER_LANG) + ' — ' + pick(l.sub, WAITER_LANG)
+                         : pick(l.name, WAITER_LANG);
+      const note = [pick(l.vshort, WAITER_LANG), extras].filter(Boolean).join(' ');
       return `<div class="wline"><span class="wq">${l.qty} &times;</span>
-      <span class="wn"><span>${esc(l.name)}</span>${note?`<em>${esc(note)}</em>`:''}</span></div>`;
+      <span class="wn"><span>${esc(nm)}</span>${note?`<em>${esc(note)}</em>`:''}</span></div>`;
     }).join('');
   };
   document.getElementById('waiterbody').innerHTML =
-    (block('Drinks','drink') + block('Food','food')) || `<p class="mt">Nothing to show</p>`;
+    (block(w('drinks'),'drink') + block(w('food'),'food'))
+    || `<p class="mt">${esc(w('nothingShow'))}</p>`;
 }
 
-const openSheet  = () => { paintSheet();  sheet.classList.add('show');  document.body.style.overflow='hidden'; };
-const closeSheet = () => { sheet.classList.remove('show');  document.body.style.overflow=''; };
-const openWaiter = () => { paintWaiter(); waiter.classList.add('show'); };
-const closeWaiter= () => waiter.classList.remove('show');
+/* ============================================================
+   BACK / SWIPE
 
-document.getElementById('oopen').addEventListener('click', openSheet);
-document.getElementById('sheetclose').addEventListener('click', closeSheet);
-document.getElementById('waiterclose').addEventListener('click', closeWaiter);
-document.getElementById('showwaiter').addEventListener('click', openWaiter);
-document.getElementById('clearorder').addEventListener('click', ()=>{
-  cart = {}; saveCart(); paintAllQty(); paintBar(); paintSheet();
+   The order sheet and the waiter view cover the whole screen, so
+   every phone user reads them as pages and reaches for back to
+   leave one. Without this, back leaves the SITE — the worst
+   failure we have, because it looks like the order was thrown
+   away.
+
+   Each panel pushes one history entry as it opens. Back — or an
+   edge swipe on iOS, which is the same event — pops it, and the
+   handler closes whatever is on top. The × buttons deliberately
+   go through history.back() as well rather than hiding the panel
+   directly: if they didn't, the pushed entry would still be
+   sitting there and a later back press would reopen a panel the
+   customer had already dismissed.
+
+   The URL never changes, so nothing here needs anything of the
+   server, and ?when= survives untouched.
+   ============================================================ */
+let depth = 0;                  // history entries we are responsible for
+
+const showSheet  = () => { hideUndo(); paintSheet(); sheet.classList.add('show'); document.body.style.overflow='hidden'; };
+const hideSheet  = () => { hideUndo(); sheet.classList.remove('show'); document.body.style.overflow=''; };
+const showWaiter = () => { paintWaiter(); waiter.classList.add('show'); };
+const hideWaiter = () => waiter.classList.remove('show');
+
+function openPanel(kind){
+  try{ history.pushState({hideout:kind}, ''); depth++; }catch(e){}
+  (kind === 'waiter' ? showWaiter : showSheet)();
+}
+
+/* One way out, whichever control the customer used. */
+function closePanel(){
+  if(depth > 0){ history.back(); return; }   // popstate does the closing
+  hideWaiter(); hideSheet();                 // no entry to pop: close directly
+}
+
+addEventListener('popstate', () => {
+  /* Topmost first: the waiter view opens on top of the order sheet, so one
+     back press should reveal the sheet rather than dismiss both. */
+  if(waiter.classList.contains('show')){ hideWaiter(); depth = Math.max(0, depth-1); return; }
+  if(sheet.classList.contains('show')){  hideSheet();  depth = Math.max(0, depth-1); return; }
+  depth = 0;                                  // nothing of ours was open
 });
+
+document.getElementById('oopen').addEventListener('click', () => openPanel('sheet'));
+document.getElementById('showwaiter').addEventListener('click', () => openPanel('waiter'));
+document.getElementById('sheetclose').addEventListener('click', closePanel);
+document.getElementById('waiterclose').addEventListener('click', closePanel);
+/* ---------- clear, and the way back ---------- */
+const undoBar = document.getElementById('undo');
+const UNDO_MS = 8000;
+let cleared = null, undoTimer = null;
+
+function hideUndo(){
+  undoBar.classList.remove('show');
+  clearTimeout(undoTimer);
+  cleared = null;
+}
+
+function showUndo(){
+  undoBar.classList.add('show');
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(hideUndo, UNDO_MS);
+}
+
+document.getElementById('clearorder').addEventListener('click', ()=>{
+  if(!cartCount()) return;
+  cleared = Object.assign({}, cart);       // held only while the offer stands
+  cart = {}; saveCart(); paintAllQty(); paintBar(); paintSheet();
+  showUndo();
+});
+
+document.getElementById('undogo').addEventListener('click', ()=>{
+  if(cleared){
+    cart = cleared;
+    saveCart(); paintAllQty(); paintBar(); paintSheet();
+  }
+  hideUndo();
+});
+
+document.getElementById('undox').addEventListener('click', hideUndo);
 
 document.getElementById('sheetbody').addEventListener('click', e=>{
   const del = e.target.closest('[data-del]');
@@ -1238,6 +1810,104 @@ function showTab(name){
   requestAnimationFrame(parkRails);
 }
 
+/* ============================================================
+   LANGUAGE SWITCHING
+
+   Nothing is re-fetched and nothing is re-indexed: the cart ids
+   are built from English, so they are identical in every
+   language and the basket rides through a switch untouched.
+   ============================================================ */
+function paintLangs(){
+  document.getElementById('drawer').innerHTML =
+    LANGS.concat(LANG_SOON).map(l => {
+      const soon = !LANGS.includes(l);
+      return `<button data-lang="${l}" lang="${l}"
+        class="${soon ? 'soon' : ''}${l === LANG ? ' on' : ''}"
+        ${soon ? 'disabled aria-disabled="true"' : ''}
+        aria-current="${l === LANG ? 'true' : 'false'}"
+      ><span class="flag" aria-hidden="true">${LANG_FLAG[l] || ''}</span>${esc(LANG_LABEL[l] || l.toUpperCase())}</button>`;
+    }).join('');
+}
+
+const drawer = document.getElementById('drawer');
+const burger = document.getElementById('burger');
+
+function openDrawer(on){
+  drawer.classList.toggle('open', on);
+  burger.setAttribute('aria-expanded', on ? 'true' : 'false');
+}
+
+burger.addEventListener('click', e => {
+  e.stopPropagation();
+  openDrawer(!drawer.classList.contains('open'));
+});
+/* anywhere else on the page closes it */
+document.addEventListener('click', e => {
+  if(!drawer.contains(e.target)) openDrawer(false);
+});
+addEventListener('keydown', e => { if(e.key === 'Escape') openDrawer(false); });
+
+/* Static markup carries its English in the HTML so the page reads correctly
+   before any script runs; this replaces it once a language is known. */
+function paintChrome(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-ui]').forEach(el => { el.textContent = u(el.dataset.ui); });
+  document.querySelectorAll('[data-uiw]').forEach(el => { el.textContent = w(el.dataset.uiw); });
+}
+
+function setLang(next){
+  if(!LANGS.includes(next) || next === LANG) return;
+  LANG = next;
+  try{ localStorage.setItem(LANG_KEY, LANG); }catch(e){}
+  paintLangs();
+  paintChrome();
+  paintNav();
+  document.querySelectorAll('[data-tab]').forEach(x => x.classList.toggle('on', x.dataset.tab === tab));
+  render();
+  sizeRails();
+  requestAnimationFrame(parkRails);
+  paintBar();
+  if(sheet.classList.contains('show'))  paintSheet();
+  if(waiter.classList.contains('show')) paintWaiter();
+}
+
+drawer.addEventListener('click', e => {
+  const b = e.target.closest('[data-lang]');
+  if(!b || b.disabled) return;
+  setLang(b.dataset.lang);
+  openDrawer(false);
+});
+
+/* ---------- theme switching ---------- */
+function themeIcon(){
+  const next = THEME === 'dark' ? 'light' : 'dark';
+  const btn = document.getElementById('mode');
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">` +
+                  `<path d="${THEME_ICON[next]}"/></svg>`;
+  btn.setAttribute('aria-label', next === 'dark' ? 'Dark mode' : 'Light mode');
+}
+
+function applyTheme(){
+  document.documentElement.dataset.theme = THEME;
+  themeIcon();
+  /* the phone paints its own chrome from this, so it has to keep up */
+  /* Must match --paper for the theme, or the phone paints a strip of the
+     wrong colour above the menu. There is a test tying these to the CSS. */
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.setAttribute('content', THEME === 'dark' ? '#1b1b1e' : '#fff');
+}
+
+function setTheme(next){
+  if(!THEMES.includes(next) || next === THEME) return;
+  THEME = next;
+  try{ localStorage.setItem(THEME_KEY, THEME); }catch(e){}
+  applyTheme();
+}
+
+document.getElementById('mode').addEventListener('click', () => {
+  setTheme(THEME === 'dark' ? 'light' : 'dark');
+});
+
 /* ---------- boot ---------- */
 function fatal(msg){
   document.getElementById('main').innerHTML =
@@ -1256,8 +1926,13 @@ function staleWarning(){
 }
 
 function start(){
+  THEME = firstTheme();
+  applyTheme();
+  paintLangs();
+  paintChrome();
   paintNav();
   applySpecials(document.getElementById('specials-data').textContent, 'the built-in block');
+  cart = loadCart();          // INDEX is populated by now, so ids can be checked
   showTab(landingTab());
   paintBar();
   refreshSpecials();
@@ -1276,9 +1951,7 @@ function loadMenu(){
     if(cached){
       try{ applyMenu(cached, 'device cache'); start(); staleWarning(); return; }catch(e){}
     }
-    fatal(location.protocol === 'file:'
-      ? 'This page needs to be opened through a local server, not by opening the file directly.'
-      : 'Menu unavailable. Please ask at the bar.');
+    fatal(location.protocol === 'file:' ? u('needServer') : u('menuBad'));
   };
 
   if(typeof fetch !== 'function'){ useCached('no fetch available'); return; }
