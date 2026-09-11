@@ -81,12 +81,17 @@
   --mode-icon-h:9.5;    /* HEIGHT of the light/dark icon. Sized by height, not
                            width: the sun and the speech-bubble have different
                            proportions, so matching widths reads as unequal. */
-  --mode-icon-y:-1.5;   /* optical nudge, same idea as the language one */
+  --mode-icon-y:-0.5;   /* optical nudge, same idea as the language one */
   --lang-icon:10;       /* width of the language icon in the masthead */
-  --lang-icon-y:-1.4;   /* optical centring: negative lifts, positive drops.
+  --lang-icon-y:0;   /* optical centring: negative lifts, positive drops.
                            The glyph's weight sits low, so the geometric
                            centre reads as too far down. */
   --flag-w:7;           /* flag width in the language drawer */
+  --logo-h:21px;        /* VISIBLE height of the wordmark. Not an --x multiple:
+                           the masthead has always been fixed px, and the logo
+                           has to hold still while the type around it scales. */
+  --logo-ar:8.6;        /* the logo file's width divided by its height. Change
+                           this and the width follows; never set a width. */
 
 
   /* ---------- CARDS ---------------------------------------------------------------------------------------------------- */
@@ -110,7 +115,7 @@
 
 
   /* ---------- ORDER SHEET ---------------------------------------------------------------------------------------------------- */
-  --addon-indent:6;     /* how far an add-on line is inset from its dish. Size
+  --addon-indent:8;     /* how far an add-on line is inset from its dish. Size
                            no longer signals that it is subordinate, so
                            position has to. 0 lines them up flush. */
   --pick-gap: 0;         /* set name -> its choice lines */
@@ -129,8 +134,9 @@
      Pinned to Latin no matter what the customer was reading, so none of these
      move when the language does. That is why they need their own numbers
      rather than sharing the order sheet's. */
+  --whead-gap:2;        /* "Drinks" / "Food" heading -> the first line under it */
   --wline-gap:2;        /* space above and below an ordinary waiter line */
-  --wset-gap:4;         /* and above and below a set line */
+  --wset-gap:2;         /* and above and below a set line */
   --wpick-gap: -3;        /* set name -> its choice lines */
   --wpick-indent:13;     /* how far those lines are inset */
   --wpick-type:1.4;     /* choice line size, off the waiter's own scale */
@@ -288,9 +294,18 @@ main{display:flex;flex-direction:column;flex:1}
 .topbar{position:sticky;top:0;z-index:30;background:var(--paper)}
 .mast{position:relative;background:var(--paper);
   display:flex;align-items:center;justify-content:space-between;padding:18px var(--gut) 13px}
-.wordmark{font-family:inherit;font-weight:700;font-size:26px;letter-spacing:.01em;
-  text-transform:uppercase;line-height:1;color:var(--ink);background:none;border:0;
-  text-align:left;cursor:pointer}
+.wordmark{color:var(--ink);background:none;border:0;padding:0;
+  display:flex;align-items:center;cursor:pointer}
+/* The logo is one file, not two. It is monochrome distressed type, so all of
+   it lives in the alpha channel: the mask supplies the shape and currentColor
+   supplies the colour, which means it follows --ink into dark mode and into
+   any theme added later. A pair of coloured PNGs would have to be re-exported
+   every time a theme colour moved. */
+.wordmark .mark{display:block;
+  height:var(--logo-h);width:calc(var(--logo-h) * var(--logo-ar));
+  background:currentColor;
+  -webkit-mask:url(img/logo.png) left center/contain no-repeat;
+          mask:url(img/logo.png) left center/contain no-repeat}
 /* The burger opens a short list of languages. The masthead is sticky, which
    makes it a containing block, so the panel hangs off its bottom edge. */
 .drawer{position:absolute;right:var(--gut);top:100%;z-index:31;
@@ -629,7 +644,10 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
   --fscale:var(--en-foot)}
 .wbody{flex:1;overflow-y:auto;padding:calc(var(--x)*3) var(--gut) calc(var(--x)*10)}
 .wbody h3{font-size:var(--t-item);letter-spacing:calc(.18em + var(--tr));text-transform:uppercase;color:var(--dim);
-  padding:calc(var(--x)*8) 0 calc(var(--x)*2);border-bottom:1px solid var(--rule)}
+  padding:calc(var(--x)*8) 0 calc(var(--x)*2);border-bottom:1px solid var(--rule);
+  /* below the rule, so it pushes the first line down without moving the
+     heading itself off its own top spacing */
+  margin-bottom:calc(var(--x) * var(--whead-gap))}
 .wline{display:flex;align-items:baseline;gap:calc(var(--x)*4);
   padding:calc(var(--x) * var(--wline-gap)) 0}
 /* A set carries its choice lines underneath, so it wants its own rhythm. */
