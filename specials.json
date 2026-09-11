@@ -1,52 +1,125 @@
 {
   "sections": [
     {
-      "title": "Cocktails of the Month",
+      "title": {
+        "en": "Cocktails of the Month",
+        "ko": "이달의 스페셜",
+        "es": "Cócteles del Mes"
+      },
       "items": [
         {
-          "name": "Pear Me Up",
+          "name": {
+            "en": "Pear Me Up",
+            "ko": "페어 미 업"
+          },
           "price": 13,
           "photo": "0926-pear-me-up.jpg",
-          "ingredients": [
-            "Gin",
-            "Korean pear cordial",
-            "Sauvignon Blanc",
-            "Lemon",
-            "Sparkling water"
-          ]
+          "ingredients": {
+            "en": [
+              "Gin",
+              "Kor. pear cordial",
+              "Sauvignon Blanc",
+              "Sparkling water",
+              "Lemon juice"
+            ],
+            "ko": [
+              "진",
+              "배 코디얼",
+              "소비뇽 블랑",
+              "레몬 주스",
+              "탄산수"
+            ],
+            "es": [
+              "Ginebra",
+              "Cordial de pera coreana",
+              "Sauvignon Blanc",
+              "Agua con gas",
+              "Zumo de limón"
+            ]
+          }
         },
         {
-          "name": "Is It Pink?",
+          "name": {
+            "en": "Is It Pink?",
+            "ko": "이거 핑크야?",
+            "es": "¿Es Rosa?"
+          },
           "price": 13,
           "photo": "0926-is-it-pink.jpg",
-          "ingredients": [
-            "Tequila blanco",
-            "Orange liqueur",
-            "Omija cordial",
-            "Sparkling water"
-          ]
+          "ingredients": {
+            "en": [
+              "Tequila blanco",
+              "Orange liqueur",
+              "Omija cordial",
+              "Sparkling water"
+            ],
+            "ko": [
+              "테킬라 블랑코",
+              "오렌지 리큐어",
+              "오미자 코디얼",
+              "탄산수"
+            ],
+            "es": [
+              "Tequila blanco",
+              "Licor de naranja",
+              "Cordial de omija",
+              "Agua con gas"
+            ]
+          }
         },
         {
-          "name": "Storm Chaser",
+          "name": {
+            "en": "Storm Chaser",
+            "ko": "스톰 체이서"
+          },
           "price": 13,
           "photo": "0926-storm-chaser.jpg",
-          "ingredients": [
-            "Plantation dark rum",
-            "Captain Morgan",
-            "Ginger soda"
-          ]
+          "ingredients": {
+            "en": [
+              "Plant. dark rum",
+              "Captain Morgan",
+              "Ginger soda"
+            ],
+            "ko": [
+              "플랜테이션 다크 럼",
+              "캡틴 모건 럼",
+              "진저 소다"
+            ],
+            "es": [
+              "Ron oscuro Plantation",
+              "Captain Morgan",
+              "Soda de jengibre"
+            ]
+          }
         },
         {
-          "name": "Pinky Promise",
+          "name": {
+            "en": "Pinky Promise",
+            "ko": "핑키 프로미스"
+          },
           "price": 9,
           "photo": "0926-pinky-promise.jpg",
           "mocktail": true,
-          "ingredients": [
-            "Korean pear cordial",
-            "Omija cordial",
-            "Sugar syrup",
-            "Sparkling water"
-          ]
+          "ingredients": {
+            "en": [
+              "Kor. pear cordial",
+              "Omija cordial",
+              "Sugar syrup",
+              "Sparkling water"
+            ],
+            "ko": [
+              "배 코디얼",
+              "오미자 코디얼",
+              "탄산수",
+              "시럽"
+            ],
+            "es": [
+              "Cordial de pera coreana",
+              "Cordial de omija",
+              "Jarabe de azúcar",
+              "Agua con gas"
+            ]
+          }
         }
       ]
     }
