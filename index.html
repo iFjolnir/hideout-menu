@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f7f5f0"><!-- match --paper -->
-<title>HIDEOUT — look test v2</title>
+<title>HIDEOUT—look_test-v4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -99,6 +99,11 @@
                            Size no longer signals that it is subordinate, so
                            position has to. 0 lines them up flush. */
 
+  --foot-align:center;  /* footer block: left | center | right */
+  --follow-align:left;  /* the Instagram line under an event poster */
+  --soc-icon:7;         /* social icon size in the footer */
+  --soc-gap:5;          /* gap between the social icons */
+  --flag-w:7;           /* flag width in the language drawer */
   --clear-share:1;      /* how the two buttons under an order split the row */
   --waiter-share:3;     /* 1 and 3 = Clear takes a quarter of the width */
 
@@ -153,6 +158,7 @@
      into each other. Transparent here keeps the geometry identical. */
   --obar-rule:transparent;
 
+  --soc-ink:var(--dim);  /* the social icons and the address line */
   --foot-bg:var(--paper);
   --foot-ink:var(--ink);
   --foot-dim:var(--dim);
@@ -200,11 +206,12 @@ html[data-theme="dark"]{
   --on-magenta:#fff;
 
   --tile:#2b2b2b;
-  --tile-fill:#f6f5f1;   /* drinks are shot on white, so this stays light */
-  --tile-ink:#b6b4ac;
+  --tile-fill:#2b2b2b;   /* drinks are shot on white, so this stays light */
+  --tile-ink:#696969;
 
   --obar-rule:#3f3f45;
 
+  --soc-ink:var(--dim);
   --foot-bg:#f2f0eb;
   --foot-ink:#131313;
   --foot-dim:#807f8b;
@@ -225,10 +232,23 @@ img{display:block;width:100%;height:100%;object-fit:cover}
    height. Any change to it (the language icon, --ko-type raising the
    wordmark) made that number wrong and the tabs slid under. Nothing here
    measures anything now. */
+/* The footnote belongs at the foot of the SCREEN, not at the end of the
+   content: on a short tab (Specials, Shots) it used to float wherever the
+   sections happened to stop. body and main are flex columns and .flow takes
+   the slack, so the footer is pushed down when content is short and behaves
+   as an ordinary block when it is long. min-height is dvh, not vh, or the
+   collapsing Chrome address bar leaves it a header's height too low.
+   body.hasbar's padding-bottom is inside the min-height (border-box), so the
+   footer clears the order bar without reserving a dead strip when it's absent. */
+body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+main{display:flex;flex-direction:column;flex:1}
+.flow{flex:1 0 auto}
 .topbar{position:sticky;top:0;z-index:30;background:var(--paper)}
 .mast{position:relative;background:var(--paper);
   display:flex;align-items:center;justify-content:space-between;padding:18px var(--gut) 13px}
-.wordmark{font-weight:700;font-size:26px;letter-spacing:.01em;text-transform:uppercase;line-height:1}
+.wordmark{font-family:inherit;font-weight:700;font-size:26px;letter-spacing:.01em;
+  text-transform:uppercase;line-height:1;color:var(--ink);background:none;border:0;
+  text-align:left;cursor:pointer}
 /* The burger opens a short list of languages. The masthead is sticky, which
    makes it a containing block, so the panel hangs off its bottom edge. */
 .drawer{position:absolute;right:var(--gut);top:100%;z-index:31;
@@ -242,7 +262,10 @@ img{display:block;width:100%;height:100%;object-fit:cover}
 .drawer button.on{font-weight:600}
 /* a language that exists but has no words yet */
 .drawer button.soon{color:var(--rule);cursor:default}
-.drawer .flag{font-size:calc(var(--x)*7);line-height:1}
+/* A hairline, because both the Korean and the English flag carry white to
+   their edges and would otherwise bleed into the paper. */
+.drawer .flag{width:calc(var(--x) * var(--flag-w));height:auto;display:block;
+  border:1px solid var(--rule)}
 /* the two masthead controls sit as one group on the right */
 .mast-r{display:flex;align-items:center;gap:calc(var(--x)*4)}
 .mode{display:flex;align-items:center;padding:6px 2px;color:var(--ink)}
@@ -589,8 +612,26 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 .stub{padding:60px var(--gut);text-align:center;color:var(--dim);
   font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase}
 .foot{padding:36px var(--gut) 8px;margin-top:30px;border-top:1px solid var(--rule);
+  text-align:var(--foot-align);
   font-size:calc(var(--x)*4*var(--fscale));line-height:1.8;color:var(--dim);
   letter-spacing:calc(.02em + var(--tr))}
+/* The address is text, not a link — it is there to be read aloud to a taxi
+   driver or long-pressed and copied. The map pins are the links. */
+.faddr{color:var(--soc-ink);-webkit-user-select:text;user-select:text}
+/* Alignment is one text-align on .foot, inherited by everything inside. The
+   icon row is therefore an inline-flex in a block, not a flex row — flex
+   would need justify-content and a second value to keep in step. */
+.fsocwrap{margin-top:calc(var(--x)*5);padding-bottom:calc(var(--x)*4)}
+.fsoc{display:inline-flex;align-items:center;gap:calc(var(--x) * var(--soc-gap))}
+.fsoc a{display:block;color:var(--soc-ink)}
+.fsoc svg{display:block;width:calc(var(--x) * var(--soc-icon));height:auto}
+/* Only ever under a poster. Whole row is the target, not the icon alone. */
+.evwrap{text-align:var(--follow-align);margin:calc(var(--x)*4) var(--gut) 0}
+/* The icon carries the affordance; an underline on top of it is belt and braces. */
+.evfollow{display:inline-flex;align-items:center;gap:calc(var(--x)*3);
+  color:var(--dim);text-decoration:none;
+  font-size:calc(var(--x)*4*var(--fscale));letter-spacing:calc(.02em + var(--tr))}
+.evfollow svg{display:block;width:calc(var(--x) * var(--soc-icon));height:auto;flex:none}
 
 @media(min-width:560px){
   body{max-width:430px;margin:0 auto;border-left:1px solid var(--rule);border-right:1px solid var(--rule);min-height:100vh}
@@ -601,7 +642,7 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 
 <div class="topbar">
 <header class="mast">
-  <div class="wordmark">Hideout</div>
+  <button class="wordmark" id="home" aria-label="Hideout — back to Specials">Hideout</button>
   <div class="mast-r">
   <button class="mode" id="mode" aria-label="Theme"></button>
   <button class="burger" id="burger" aria-label="Language"
@@ -764,12 +805,36 @@ const LANGS = ['en', 'ko', 'es'];
    Moving 'es' from here into LANGS above is the whole of switching it on. */
 const LANG_SOON  = [];
 const LANG_LABEL = {en:'EN',   ko:'KOR',  es:'ESP'};
-const LANG_FLAG  = {en:'🇬🇧', ko:'🇰🇷', es:'🇪🇸'};
+/* Files, not emoji: Android font coverage for flag emoji is inconsistent and
+   some builds render them as bare letter pairs. These live in img/flags/ rather
+   than inline because the Spanish arms alone are 80KB of vector, and the drawer
+   is opened rarely enough that a lazy fetch is the right trade. */
+const LANG_FLAG  = {en:'img/flags/gb.svg', ko:'img/flags/kr.svg', es:'img/flags/es.svg'};
 
 /* The staff screen. Locked to one language regardless of what the customer
    is browsing in, so the bar reads the same order every time. Change this
    one string to hand the waiter view to Korean instead. */
 const WAITER_LANG = 'en';
+
+/* ============================================================
+   CONTACT — edit these four. Nothing else in the file needs touching.
+
+   The address is a language block like everything else: Korean puts the
+   district before the street, and a Korean-speaking customer wants that
+   order. English stays as the structural fallback.
+   ============================================================ */
+const CONTACT = {
+  instagram: 'https://www.instagram.com/hideoutbusan',
+  naver:     'https://naver.me/FYrPnmwP',
+  gmaps:     'https://maps.app.goo.gl/iMR9D4oESefvn5qc7',
+  address:   {en:'2F, 9, Busandaehak-ro 38beon-gil, Geumjeong-gu, Busan, South Korea', ko:'부산광역시 금정구 부산대학로38번길 9, 2층'}
+};
+
+const ICON = {
+  insta: `<svg fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.55 96.491"><path d="M48.5,31.171c-13.7-2.12-25.39,9.57-23.27,23.26,1.33,8.61,8.22,15.5,16.83,16.83,13.69,2.12,25.38-9.57,23.26-23.26-1.33-8.61-8.22-15.5-16.82-16.83Z"/><path d="M87.15,5.941H3.4C1.52,5.941,0,7.461,0,9.341v83.76c0,1.88,1.52,3.39,3.4,3.39h83.75c1.88,0,3.4-1.51,3.4-3.39V9.341c0-1.88-1.52-3.4-3.4-3.4ZM71.73,53.381c-1.02,12.85-11.44,23.27-24.29,24.29-16.34,1.3-29.92-12.28-28.62-28.62,1.03-12.85,11.44-23.27,24.29-24.29,16.34-1.3,29.92,12.28,28.62,28.62ZM76.41,24.031c-.07.3-.15.6-.27.88-.13.28-.27.54-.44.81-.17.25-.36.48-.58.7-.87.88-2.07,1.38-3.3,1.38-.3,0-.61-.03-.93-.1-.29-.06-.59-.14-.87-.26-.28-.11-.55-.27-.8-.44-.26-.16-.5-.36-.71-.58-.22-.22-.41-.45-.58-.7-.17-.27-.31-.53-.44-.81-.12-.28-.2-.58-.26-.88-.07-.31-.1-.61-.1-.92s.03-.61.1-.92c.06-.3.14-.59.26-.87.13-.28.27-.55.44-.8.17-.26.36-.5.58-.72.21-.22.45-.4.71-.57.25-.18.52-.32.8-.44.28-.11.58-.2.87-.27,1.53-.31,3.16.19,4.23,1.28.22.22.41.46.58.72.17.25.31.52.44.8.12.28.2.57.27.87.06.31.09.61.09.92s-.03.61-.09.92Z"/></svg>`,
+  naver: `<svg fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.55 96.491"><path d="M87.15,5.941H3.4c-1.88,0-3.4,1.52-3.4,3.4v83.76c0,1.88,1.52,3.39,3.4,3.39h83.75c1.88,0,3.4-1.51,3.4-3.39V9.341c0-1.88-1.52-3.4-3.4-3.4ZM70.29,73.851h-17.44l-15.16-22.63v22.63h-17.42V28.591h17.42l15.16,22.63v-22.63h17.44v45.26Z"/></svg>`,
+  gmaps: `<svg fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 103.098 96.491"><path d="M3.618,5.944h45.464c-5.99,5.758-9.591,13.813-10.241,22.996-.116,1.667-.106,3.335.03,4.992.922,11.596,7.642,22.256,15.097,30.839.408.458.811.927,1.224,1.385l-1.844,1.844L3.159,17.807v14.643l14.367,14.367-14.367,14.373v14.643l21.691-21.691,21.178,21.183-17.999,18.004h14.643l19.793-19.798c1.874,1.758,3.798,3.456,5.753,5.108,2.514,2.126,6.156,2.126,8.67,0,4.529-3.829,9.304-8.277,13.657-13.208v27.434c0,1.995-1.632,3.627-3.617,3.627l-83.311-.005c-1.985,0-3.617-1.632-3.617-3.627V9.565c0-1.995,1.632-3.622,3.617-3.622h0ZM72.545,0C57.958,0,43.373,9.717,41.994,29.166c-1.28,18.07,14.362,35.318,28.255,47.06,1.34,1.128,3.254,1.128,4.594,0,13.889-11.742,29.534-28.986,28.255-47.06C101.723,9.716,87.129,0,72.546,0h0ZM72.545,9.46c-11.652,0-21.091,9.44-21.091,21.091s9.44,21.091,21.091,21.091,21.091-9.44,21.091-21.091c.005-11.652-9.44-21.091-21.091-21.091Z" fill-rule="evenodd"/></svg>`
+};
 
 const LANG_KEY = 'hideout.lang';
 
@@ -899,6 +964,9 @@ const UI = {
   drinks:       {en:'Drinks',           ko:'음료',            es:'Bebidas'},
   food:         {en:'Food',             ko:'음식',            es:'Comida'},
   /* one sentence per line — locLines() gives each entry its own line */
+  followEvents: {en:'Follow us on Instagram for more events!',
+                 ko:'더 많은 이벤트는 인스타그램에서 확인하세요!',
+                 es:'¡Síguenos en Instagram para más eventos!'},
   footNote:     {en:['Tap any item to open it. Your order is kept on this device.'],
                  ko:['항목을 누르면 자세히 볼 수 있음. 주문 내역은 이 기기에 저장됨.'],
                  es:['Toca cualquier elemento para abrirlo. Tu pedido se guarda en este dispositivo.']}
@@ -1226,7 +1294,12 @@ function posterHTML(ev){
   const art = ev.poster
     ? `<img src="img/events/${esc(ev.poster)}" alt="${esc(loc(ev.name))}">`
     : `<div class="ph"><span>${esc(loc(ev.name) || 'Event')}</span></div>`;
-  return `<section class="sec poster-sec"><div class="poster">${art}</div></section>`;
+  /* Only while a poster is up: the line argues "there will be more of these",
+     which is nonsense with nothing on show. */
+  const follow = wired(CONTACT.instagram)
+    ? `<div class="evwrap"><a class="evfollow" href="${CONTACT.instagram}" target="_blank" rel="noopener"
+         >${ICON.insta}<span>${esc(u('followEvents'))}</span></a></div>` : '';
+  return `<section class="sec poster-sec"><div class="poster">${art}</div>${follow}</section>`;
 }
 
 applyEvents(document.getElementById('events-data').textContent, 'the built-in block');
@@ -1510,8 +1583,32 @@ function render(){
     <section class="sec"><div class="sec-head"><h2>${esc(loc(s.t))}</h2><span class="rule"></span></div>
       <div class="list">${s.rows.map((r,ri)=>listRow(r,s,si+'-'+ri)).join('')}</div>
     </section>`).join('');
-  main.innerHTML = html + `<p class="foot">${locLines(UI.footNote)}</p>`;
+  main.innerHTML = `<div class="flow">${html}</div>` + footHTML();
   paintAllQty();
+}
+
+/* A link only earns its place if it points somewhere. An unedited CHANGE_ME
+   is dropped rather than shipped as a dead tap. */
+const wired = s => Boolean(s) && !String(s).includes('CHANGE_ME');
+
+/* UI.footNote is deliberately not printed here any more — the tap-to-open and
+   saved-on-this-device lines were written for a menu with nobody attached to
+   it, and there are waiters. The string is kept so it can be put back in one
+   line if that ever changes. */
+function footHTML(){
+  const map = (href, key, label) => wired(href)
+    ? `<a href="${href}" target="_blank" rel="noopener" aria-label="${esc(label)}">${ICON[key]}</a>` : '';
+  const addr  = loc(CONTACT.address);
+  const icons = map(CONTACT.instagram, 'insta', 'Instagram')
+              + map(CONTACT.naver,     'naver', 'Naver Map')
+              + map(CONTACT.gmaps,     'gmaps', 'Google Maps');
+  /* Nothing wired means no footer at all, rather than a bare rule across an
+     empty block. */
+  if(!wired(addr) && !icons) return '';
+  return `<footer class="foot">
+    ${wired(addr) ? `<p class="faddr">${esc(addr)}</p>` : ''}
+    ${icons ? `<div class="fsocwrap"><div class="fsoc">${icons}</div></div>` : ''}
+  </footer>`;
 }
 
 /* ---------- quantity painting (targeted, never a full re-render) ---------- */
@@ -1817,6 +1914,16 @@ document.getElementById('sheetbody').addEventListener('click', e=>{
 });
 
 
+/* Web convention: the wordmark is home, and home is Specials. Guarded because
+   Specials is not guaranteed to exist — a failed specials.json leaves a stub,
+   and menu.json need never have asked for the tab at all. */
+document.getElementById('home').addEventListener('click', () => {
+  const home = TAB_ORDER.includes('Specials') ? 'Specials' : TAB_ORDER[0];
+  if(!home) return;
+  showTab(home);
+  scrollTo({top:0});
+});
+
 document.getElementById('nav').addEventListener('click', e=>{
   const b = e.target.closest('[data-tab]'); if(!b) return;
   showTab(b.dataset.tab);
@@ -1846,7 +1953,7 @@ function paintLangs(){
         class="${soon ? 'soon' : ''}${l === LANG ? ' on' : ''}"
         ${soon ? 'disabled aria-disabled="true"' : ''}
         aria-current="${l === LANG ? 'true' : 'false'}"
-      ><span class="flag" aria-hidden="true">${LANG_FLAG[l] || ''}</span>${esc(LANG_LABEL[l] || l.toUpperCase())}</button>`;
+      >${LANG_FLAG[l] ? `<img class="flag" src="${LANG_FLAG[l]}" alt="" loading="lazy">` : ''}${esc(LANG_LABEL[l] || l.toUpperCase())}</button>`;
     }).join('');
 }
 
