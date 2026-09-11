@@ -8,344 +8,398 @@
       },
       "source": "specials.json"
     },
-{
-  "name": {
-    "en": "Food",
-    "ko": "음식",
-    "es": "Comida"
-  },
-  "kind": "food",
-  "sections": [
     {
-      "title": {
-        "en": "Sets",
-        "ko": "세트",
-        "es": "Menús"
-      },
-      "layout": "stack",
-      "items": [
-        {
-          "name": {
-            "en": "Monthly Special Set",
-            "ko": "이달의 스페셜 세트",
-            "es": "Menú Especial del Mes"
-          },
-          "price": 50,
-          "description": {
-            "en": "2 cocktails of the month\n+ 3 chili beef tacos\n+ cheese quesadilla\n+ dessert of choice",
-            "ko": "이달의 칵테일 2잔\n+ 칠리 비프 타코 3개\n+ 치즈 퀘사디야\n+ 디저트 선택",
-            "es": "2 cócteles del mes\n+ 3 tacos de carne picante\n+ quesadilla de queso\n+ postre a elegir"
-          },
-          "photo": "monthly-special-set.jpg",
-          "ratio": "1008/932"
-        },
-        {
-          "name": {
-            "en": "Mexican Set",
-            "ko": "멕시칸 세트",
-            "es": "Menú Mexicano"
-          },
-          "price": 25,
-          "description": {
-            "en": "Mexican karaage\n+ Mexican pizza\n+ dessert of choice",
-            "ko": "멕시칸 가라아게\n+ 멕시칸 피자\n+ 디저트 선택",
-            "es": "Karaage mexicano\n+ pizza mexicana\n+ postre a elegir"
-          },
-          "photo": "mexican-set.jpg",
-          "ratio": "1526/672"
-        },
-        {
-          "name": {
-            "en": "Fajita Set",
-            "ko": "파히타 세트",
-            "es": "Menú Fajita"
-          },
-          "price": 25,
-          "description": {
-            "en": "Chicken al pastor fajita\n+ nachos or fries\n+ homemade brownie",
-            "ko": "알 파스토르 치킨 파히타\n+ 나초 또는 감자튀김\n+ 자체 제작 브라우니",
-            "es": "Fajita de pollo al pastor\n+ nachos o papas fritas\n+ brownie casero"
-          },
-          "photo": "fajita-set.jpg",
-          "ratio": "1526/672"
-        }
-      ]
-    },
-    {
-      "title": {
+      "name": {
         "en": "Food",
         "ko": "음식",
-        "es": "Platos"
+        "es": "Comida"
       },
-      "items": [
+      "kind": "food",
+      "sections": [
         {
-          "name": {
-            "en": "Birria Tacos",
-            "ko": "비리아 타코",
-            "es": "Tacos de Birria"
+          "title": {
+            "en": "Sets",
+            "ko": "세트",
+            "es": "Menús"
           },
-          "heat": 1,
-          "price": 13,
-          "description": {
-            "en": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip\nand pickled onions.",
-            "ko": "천천히 저온 조리한\n비리아 돼지고기, 모짜렐라.\n비리아 디핑 소스, 피클 곁들임.",
-            "es": "Cerdo desmenuzado cocido lentamente, mozzarella, pepinillos. Servido con consomé de birria."
-          },
-          "photo": "birria-tacos.jpg",
-          "addons": [
+          "layout": "stack",
+          "items": [
             {
               "name": {
-                "en": "Add fries",
-                "ko": "감자튀김 추가",
-                "es": "Añadir papas fritas"
+                "en": "Monthly Special Set",
+                "ko": "이달의 스페셜 세트",
+                "es": "Menú Especial del Mes"
               },
-              "price": 2
+              "price": 50,
+              "description": {
+                "en": "2 cocktails of the month\n+ 3 chili beef tacos\n+ cheese quesadilla\n+ dessert of choice",
+                "ko": "이달의 칵테일 2잔\n+ 칠리 비프 타코 3개\n+ 치즈 퀘사디야\n+ 디저트 선택",
+                "es": "2 cócteles del mes\n+ 3 tacos de carne picante\n+ quesadilla de queso\n+ postre a elegir"
+              },
+              "photo": "monthly-special-set.jpg",
+              "ratio": "1008/932",
+              "choices": [
+                {
+                  "key": "cocktails",
+                  "name": {
+                    "en": "Cocktails of the month",
+                    "ko": "이달의 칵테일",
+                    "es": "Cócteles del mes"
+                  },
+                  "from": "Specials",
+                  "pick": 2
+                },
+                {
+                  "key": "dessert",
+                  "name": {
+                    "en": "Dessert",
+                    "ko": "디저트",
+                    "es": "Postre"
+                  },
+                  "from": "Dessert"
+                }
+              ]
+            },
+            {
+              "name": {
+                "en": "Mexican Set",
+                "ko": "멕시칸 세트",
+                "es": "Menú Mexicano"
+              },
+              "price": 25,
+              "description": {
+                "en": "Mexican karaage\n+ Mexican pizza\n+ dessert of choice",
+                "ko": "멕시칸 가라아게\n+ 멕시칸 피자\n+ 디저트 선택",
+                "es": "Karaage mexicano\n+ pizza mexicana\n+ postre a elegir"
+              },
+              "photo": "mexican-set.jpg",
+              "ratio": "1526/672",
+              "choices": [
+                {
+                  "key": "dessert",
+                  "name": {
+                    "en": "Dessert",
+                    "ko": "디저트",
+                    "es": "Postre"
+                  },
+                  "from": "Dessert"
+                }
+              ]
+            },
+            {
+              "name": {
+                "en": "Fajita Set",
+                "ko": "파히타 세트",
+                "es": "Menú Fajita"
+              },
+              "price": 25,
+              "description": {
+                "en": "Chicken al pastor fajita\n+ nachos or fries\n+ homemade brownie",
+                "ko": "알 파스토르 치킨 파히타\n+ 나초 또는 감자튀김\n+ 자체 제작 브라우니",
+                "es": "Fajita de pollo al pastor\n+ nachos o papas fritas\n+ brownie casero"
+              },
+              "photo": "fajita-set.jpg",
+              "ratio": "1526/672",
+              "choices": [
+                {
+                  "key": "side",
+                  "name": {
+                    "en": "Side",
+                    "ko": "사이드",
+                    "es": "Guarnición"
+                  },
+                  "options": [
+                    {
+                      "ref": "Nachos"
+                    },
+                    {
+                      "name": {
+                        "en": "Fries",
+                        "ko": "감자튀김",
+                        "es": "Papas fritas"
+                      }
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
         {
-          "name": {
-            "en": "Chili Beef Tacos",
-            "ko": "칠리 비프 타코",
-            "es": "Tacos de Carne Picante"
+          "title": {
+            "en": "Food",
+            "ko": "음식",
+            "es": "Platos"
           },
-          "heat": 1,
-          "price": 15,
-          "description": {
-            "en": "Spiced ground beef, lettuce\nand melted cheese. Served\nwith pickled onions and lime.",
-            "ko": "양념 소고기, 양상추, 녹인 치즈.\n피클 어니언, 라임 곁들임.",
-            "es": "Carne molida especiada, lechuga y queso derretido. Servido con cebolla encurtida y lima."
-          },
-          "photo": "chili-beef-tacos.jpg",
-          "addons": [
+          "items": [
             {
               "name": {
-                "en": "Add fries",
-                "ko": "감자튀김 추가",
-                "es": "Añadir papas fritas"
+                "en": "Birria Tacos",
+                "ko": "비리아 타코",
+                "es": "Tacos de Birria"
               },
-              "price": 2
+              "heat": 1,
+              "price": 13,
+              "description": {
+                "en": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip\nand pickled onions.",
+                "ko": "천천히 저온 조리한\n비리아 돼지고기, 모짜렐라.\n비리아 디핑 소스, 피클 곁들임.",
+                "es": "Cerdo desmenuzado cocido lentamente, mozzarella, pepinillos. Servido con\nconsomé de birria."
+              },
+              "photo": "birria-tacos.jpg",
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add fries",
+                    "ko": "감자튀김 추가",
+                    "es": "Añadir papas fritas"
+                  },
+                  "price": 2
+                }
+              ]
+            },
+            {
+              "name": {
+                "en": "Chili Beef Tacos",
+                "ko": "칠리 비프 타코",
+                "es": "Tacos de Carne Picante"
+              },
+              "heat": 1,
+              "price": 15,
+              "description": {
+                "en": "Spiced ground beef, lettuce\nand melted cheese. Served\nwith pickled onions and lime.",
+                "ko": "양념 소고기, 양상추, 녹인 치즈.\n피클 어니언, 라임 곁들임.",
+                "es": "Carne molida especiada, lechuga y queso derretido. Servido con cebolla encurtida y lima."
+              },
+              "photo": "chili-beef-tacos.jpg",
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add fries",
+                    "ko": "감자튀김 추가",
+                    "es": "Añadir papas fritas"
+                  },
+                  "price": 2
+                }
+              ]
+            },
+            {
+              "name": {
+                "en": "Cheese Quesadilla",
+                "ko": "치즈 퀘사디야",
+                "es": "Quesadilla de Queso"
+              },
+              "price": 8,
+              "description": {
+                "en": "Tortilla with cheddar cheese, mozzarella. Served with salsa and pickled onions.",
+                "ko": "체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공.",
+                "es": "Tortilla con queso cheddar, mozzarella. Servida con salsa\ny cebolla encurtida."
+              },
+              "photo": "cheese-quesadilla.jpg"
+            },
+            {
+              "name": {
+                "en": "Spicy Chicken Quesadilla",
+                "ko": "매운 치킨 퀘사디야",
+                "es": "Quesadilla de\nPollo Picante"
+              },
+              "heat": 3,
+              "price": 14,
+              "description": {
+                "en": "Tortilla with chicken thigh meat, spicy jalapeños, curry seasoning, cheddar cheese, and mozzarella. Served with salsa and pickled onions.",
+                "ko": "닭다리살, 할라피뇨, 커리 양념,\n체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공.",
+                "es": "Tortilla con muslo de pollo, jalapeños picantes, sazonado\nal curry, queso cheddar\ny mozzarella. Servida con\nsalsa y cebolla encurtida."
+              },
+              "photo": "spicy-chicken-quesadilla.jpg"
+            },
+            {
+              "name": {
+                "en": "Al Pastor Chicken Fajita",
+                "ko": "알 파스토르 치킨 파히타",
+                "es": "Fajita de Pollo\nAl Pastor"
+              },
+              "price": 14,
+              "description": {
+                "en": "Spice-marinated chicken, grilled pineapple, broccoli, and onions. Served with warm tortillas, salsa roja and salsa verde.",
+                "ko": "향신료 마리네이드 치킨,\n구운 파인애플, 브로콜리,\n양파, 따뜻한 또르띠야.\n살사 로하, 살사 베르데 제공.",
+                "es": "Pollo marinado con especias, piña a la parrilla, brócoli\ny cebollas. Servido con\ntortillas calientes, salsa\nroja y salsa verde."
+              },
+              "photo": "al-pastor-fajita.jpg"
+            },
+            {
+              "name": {
+                "en": "Gambas al Ajillo",
+                "ko": "감바스 알 아히요",
+                "es": "Gambas al Ajillo"
+              },
+              "heat": 1,
+              "price": 14,
+              "description": {
+                "en": "Shrimp sautéed with garlic, onion, olive oil, and chili. Served with toasted bread.",
+                "ko": "마늘, 양파, 올리브 오일,\n고추로 볶은 새우.\n토스트한 바게트 곁들임.",
+                "es": "Camarones salteados con ajo, cebolla, aceite de oliva y chile. Servidos con pan tostado."
+              },
+              "photo": "gambas-al-ajillo.jpg"
+            },
+            {
+              "name": {
+                "en": "Mexican Karaage & Fries",
+                "ko": "멕시칸 가라아게 & 감자튀김",
+                "es": "Karaage Mexicano\n& Papas Fritas"
+              },
+              "price": 13,
+              "description": {
+                "en": "Crispy karaage chicken in sweet and spicy honey chipotle sauce. Served with fries, pickled onions, and ketchup.",
+                "ko": "달콤하고 매콤한 허니 치폴레 소스를 입힌 바삭한 가라아게와 감자튀김. 피클 어니언, 케첩 제공.",
+                "es": "Pollo karaage crujiente\nen salsa de chipotle miel\ndulce y picante. Servido\non papas fritas, cebolla\nencurtida y ketchup."
+              },
+              "photo": "mexican-karaage.jpg"
+            },
+            {
+              "name": {
+                "en": "Birria Ramen",
+                "ko": "비리아 라멘",
+                "es": "Ramen de Birria"
+              },
+              "heat": 1,
+              "price": 9,
+              "description": {
+                "en": "Ramen cooked in birria broth, topped with shredded birria pork, cheddar cheese, and pickled onions.",
+                "ko": "비리아 육수로 끓인 라멘.\n비리아 돼지고기, 체다 치즈,\n피클 양파 토핑.",
+                "es": "Ramen cocido en caldo de birria, cubierto con cerdo desmenuzado, queso cheddar\ny cebolla encurtida."
+              },
+              "photo": "birria-ramen.jpg",
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add spicy",
+                    "ko": "매운맛 추가",
+                    "es": "Añadir picante"
+                  },
+                  "price": 0.5
+                }
+              ]
+            },
+            {
+              "name": {
+                "en": "Fondue",
+                "ko": "퐁듀",
+                "es": "Fondue"
+              },
+              "price": 20,
+              "description": {
+                "en": "Melted Italian provolone cheese with white wine and cream.\nServed hot over flame with\ntoasted bread for dipping.",
+                "ko": "화이트 와인과 크림에 녹인\n이탈리아 프로볼로네 치즈.\n토스트한 빵 제공.",
+                "es": "Queso provolone italiano derretido con vino blanco\ny crema. Servido caliente\nsobre llama con pan tostado para mojar."
+              },
+              "photo": "fondue.jpg"
+            },
+            {
+              "name": {
+                "en": "Mexican Pizza",
+                "ko": "멕시칸 피자",
+                "es": "Pizza Mexicana"
+              },
+              "heat": 2,
+              "price": 11,
+              "description": {
+                "en": "Homemade dough, salsa,\nmozzarella, jalapeño,\navocado, crispy bacon.",
+                "ko": "살사, 모짜렐라, 할라피뇨,\n아보카도, 바삭한 베이컨을\n올린 수제 피자.",
+                "es": "Masa casera, salsa,\nmozzarella, jalapeño,\naguacate, tocino crujiente."
+              },
+              "photo": "mexican-pizza.jpg"
+            },
+            {
+              "name": {
+                "en": "Pesto Pizza",
+                "ko": "페스토 피자",
+                "es": "Pizza de Pesto"
+              },
+              "price": 11,
+              "description": {
+                "en": "Homemade dough, pesto,\ncream cheese, mozzarella,\nalmonds, olive oil.",
+                "ko": "페스토, 크림 치즈, 모짜렐라,\n아몬드, 올리브 오일을\n올린 수제 피자.",
+                "es": "Masa casera, pesto,\nqueso crema, mozzarella,\nalmendras, aceite de oliva."
+              },
+              "photo": "pesto-pizza.jpg"
+            },
+            {
+              "name": {
+                "en": "Seasoned French Fries",
+                "ko": "양념 감자튀김",
+                "es": "Papas Fritas\nSazonadas"
+              },
+              "price": 8,
+              "description": {
+                "en": "Served with classic ketchup.",
+                "ko": "클래식 케첩 제공.",
+                "es": "Servidas con ketchup clásico."
+              },
+              "addons": [
+                {
+                  "name": {
+                    "en": "Add cheese",
+                    "ko": "치즈 추가",
+                    "es": "Añadir queso"
+                  },
+                  "price": 2
+                }
+              ]
+            },
+            {
+              "name": {
+                "en": "Nachos",
+                "ko": "나초",
+                "es": "Nachos"
+              },
+              "price": 8,
+              "description": {
+                "en": "Served with salsa and cheese.",
+                "ko": "살사와 치즈 곁들임.",
+                "es": "Servidos con salsa y queso."
+              }
             }
           ]
         },
         {
-          "name": {
-            "en": "Cheese Quesadilla",
-            "ko": "치즈 퀘사디야",
-            "es": "Quesadilla de Queso"
+          "title": {
+            "en": "Dessert",
+            "ko": "디저트",
+            "es": "Postres"
           },
-          "price": 8,
-          "description": {
-            "en": "Tortilla with cheddar cheese, mozzarella. Served with salsa and pickled onions.",
-            "ko": "체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공.",
-            "es": "Tortilla con queso cheddar, mozzarella. Servida con salsa y cebolla encurtida."
-          },
-          "photo": "cheese-quesadilla.jpg"
-        },
-        {
-          "name": {
-            "en": "Spicy Chicken Quesadilla",
-            "ko": "매운 치킨 퀘사디야",
-            "es": "Quesadilla de Pollo Picante"
-          },
-          "heat": 3,
-          "price": 14,
-          "description": {
-            "en": "Tortilla with chicken thigh meat, spicy jalapeños, curry seasoning, cheddar cheese, and mozzarella. Served with salsa and pickled onions.",
-            "ko": "닭다리살, 할라피뇨, 커리 양념,\n체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공.",
-            "es": "Tortilla con muslo de pollo, jalapeños picantes, sazonado al curry, queso cheddar y mozzarella. Servida con salsa y cebolla encurtida."
-          },
-          "photo": "spicy-chicken-quesadilla.jpg"
-        },
-        {
-          "name": {
-            "en": "Al Pastor Chicken Fajita",
-            "ko": "알 파스토르 치킨 파히타",
-            "es": "Fajita de Pollo Al Pastor"
-          },
-          "price": 14,
-          "description": {
-            "en": "Spice-marinated chicken, grilled pineapple, broccoli, and onions. Served with warm tortillas, salsa roja and salsa verde.",
-            "ko": "향신료 마리네이드 치킨,\n구운 파인애플, 브로콜리,\n양파, 따뜻한 또르띠야.\n살사 로하, 살사 베르데 제공.",
-            "es": "Pollo marinado con especias, piña a la parrilla, brócoli y cebollas. Servido con tortillas calientes, salsa roja y salsa verde."
-          },
-          "photo": "al-pastor-fajita.jpg"
-        },
-        {
-          "name": {
-            "en": "Gambas al Ajillo",
-            "ko": "감바스 알 아히요",
-            "es": "Gambas al Ajillo"
-          },
-          "heat": 1,
-          "price": 14,
-          "description": {
-            "en": "Shrimp sautéed with garlic, onion, olive oil, and chili. Served with toasted bread.",
-            "ko": "마늘, 양파, 올리브 오일,\n고추로 볶은 새우.\n토스트한 바게트 곁들임.",
-            "es": "Camarones salteados con ajo, cebolla, aceite de oliva y chile. Servidos con pan tostado."
-          },
-          "photo": "gambas-al-ajillo.jpg"
-        },
-        {
-          "name": {
-            "en": "Mexican Karaage & Fries",
-            "ko": "멕시칸 가라아게 & 감자튀김",
-            "es": "Karaage Mexicano y Papas Fritas"
-          },
-          "price": 13,
-          "description": {
-            "en": "Crispy karaage chicken in sweet and spicy honey chipotle sauce. Served with fries, pickled onions, and ketchup.",
-            "ko": "달콤하고 매콤한 허니 치폴레 소스를 입힌 바삭한 가라아게와 감자튀김. 피클 어니언, 케첩 제공.",
-            "es": "Pollo karaage crujiente en salsa de chipotle miel dulce y picante. Servido con papas fritas, cebolla encurtida y ketchup."
-          },
-          "photo": "mexican-karaage.jpg"
-        },
-        {
-          "name": {
-            "en": "Birria Ramen",
-            "ko": "비리아 라멘",
-            "es": "Ramen de Birria"
-          },
-          "heat": 1,
-          "price": 9,
-          "description": {
-            "en": "Ramen cooked in birria broth, topped with shredded birria pork, cheddar cheese, and pickled onions.",
-            "ko": "비리아 육수로 끓인 라멘.\n비리아 돼지고기, 체다 치즈,\n피클 양파 토핑.",
-            "es": "Ramen cocido en caldo de birria, cubierto con cerdo desmenuzado, queso cheddar y cebolla encurtida."
-          },
-          "photo": "birria-ramen.jpg",
-          "addons": [
+          "items": [
             {
               "name": {
-                "en": "Add spicy",
-                "ko": "매운맛 추가",
-                "es": "Añadir picante"
+                "en": "Brownie",
+                "ko": "브라우니",
+                "es": "Brownie"
               },
-              "price": 0.5
-            }
-          ]
-        },
-        {
-          "name": {
-            "en": "Fondue",
-            "ko": "퐁듀",
-            "es": "Fondue"
-          },
-          "price": 20,
-          "description": {
-            "en": "Melted Italian provolone cheese with white wine and cream.\nServed hot over flame with\ntoasted bread for dipping.",
-            "ko": "화이트 와인과 크림에 녹인\n이탈리아 프로볼로네 치즈.\n토스트한 빵 제공.",
-            "es": "Queso provolone italiano derretido con vino blanco y crema. Servido caliente sobre llama con pan tostado para mojar."
-          },
-          "photo": "fondue.jpg"
-        },
-        {
-          "name": {
-            "en": "Mexican Pizza",
-            "ko": "멕시칸 피자",
-            "es": "Pizza Mexicana"
-          },
-          "heat": 2,
-          "price": 11,
-          "description": {
-            "en": "Homemade dough, salsa,\nmozzarella, jalapeño,\navocado, crispy bacon.",
-            "ko": "살사, 모짜렐라, 할라피뇨,\n아보카도, 바삭한 베이컨을\n올린 수제 피자.",
-            "es": "Masa casera, salsa, mozzarella, jalapeño, aguacate, tocino crujiente."
-          },
-          "photo": "mexican-pizza.jpg"
-        },
-        {
-          "name": {
-            "en": "Pesto Pizza",
-            "ko": "페스토 피자",
-            "es": "Pizza de Pesto"
-          },
-          "price": 11,
-          "description": {
-            "en": "Homemade dough, pesto,\ncream cheese, mozzarella,\nalmonds, olive oil.",
-            "ko": "페스토, 크림 치즈, 모짜렐라,\n아몬드, 올리브 오일을\n올린 수제 피자.",
-            "es": "Masa casera, pesto, queso crema, mozzarella, almendras, aceite de oliva."
-          },
-          "photo": "pesto-pizza.jpg"
-        },
-        {
-          "name": {
-            "en": "Seasoned French Fries",
-            "ko": "양념 감자튀김",
-            "es": "Papas Fritas Sazonadas"
-          },
-          "price": 8,
-          "description": {
-            "en": "Served with classic ketchup.",
-            "ko": "클래식 케첩 제공.",
-            "es": "Servidas con ketchup clásico."
-          },
-          "addons": [
+              "price": 6.5,
+              "description": {
+                "en": "In-house chocolate brownie served with vanilla ice cream, drizzled in chocolate sauce.",
+                "ko": "홈메이드 초콜릿 브라우니,\n바닐라 아이스크림, 초콜릿 소스.",
+                "es": "Brownie de chocolate casero servido con helado de vainilla, bañado en salsa de chocolate."
+              },
+              "photo": "brownie.jpg"
+            },
             {
               "name": {
-                "en": "Add cheese",
-                "ko": "치즈 추가",
-                "es": "Añadir queso"
+                "en": "Tiramisu",
+                "ko": "티라미수",
+                "es": "Tiramisú"
               },
-              "price": 2
+              "price": 6.5,
+              "description": {
+                "en": "Creamy mascarpone, coffee-soaked biscuits and cocoa.",
+                "ko": "크리미한 마스카르포네,\n커피에 적신 비스킷, 코코아.",
+                "es": "Mascarpone cremoso, bizcochos empapados en café y cacao."
+              },
+              "photo": "tiramisu.jpg"
             }
           ]
-        },
-        {
-          "name": {
-            "en": "Nachos",
-            "ko": "나초",
-            "es": "Nachos"
-          },
-          "price": 8,
-          "description": {
-            "en": "Served with salsa and cheese.",
-            "ko": "살사와 치즈 곁들임.",
-            "es": "Servidos con salsa y queso."
-          }
         }
       ]
     },
     {
-      "title": {
-        "en": "Dessert",
-        "ko": "디저트",
-        "es": "Postres"
-      },
-      "items": [
-        {
-          "name": {
-            "en": "Brownie",
-            "ko": "브라우니",
-            "es": "Brownie"
-          },
-          "price": 6.5,
-          "description": {
-            "en": "In-house chocolate brownie served with vanilla ice cream, drizzled in chocolate sauce.",
-            "ko": "홈메이드 초콜릿 브라우니,\n바닐라 아이스크림, 초콜릿 소스.",
-            "es": "Brownie de chocolate casero servido con helado de vainilla, bañado en salsa de chocolate."
-          },
-          "photo": "brownie.jpg"
-        },
-        {
-          "name": {
-            "en": "Tiramisu",
-            "ko": "티라미수",
-            "es": "Tiramisú"
-          },
-          "price": 6.5,
-          "description": {
-            "en": "Creamy mascarpone, coffee-soaked biscuits and cocoa.",
-            "ko": "크리미한 마스카르포네,\n커피에 적신 비스킷, 코코아.",
-            "es": "Mascarpone cremoso, bizcochos empapados en café y cacao."
-          },
-          "photo": "tiramisu.jpg"
-        }
-      ]
-    }
-  ]
-},
-{
       "name": {
         "en": "Cocktails",
         "ko": "칵테일",
@@ -1235,7 +1289,7 @@
                 "en": [
                   "Altos tequila blanco",
                   "Triple sec",
-                  "Lime", 
+                  "Lime",
                   "agave"
                 ],
                 "ko": [
@@ -1504,7 +1558,7 @@
                 "ko": "진 토닉",
                 "es": "Gin Tonic"
               },
-              "note":"Beefeater gin",
+              "note": "Beefeater gin",
               "prices": [
                 6,
                 9
@@ -1617,7 +1671,7 @@
               "name": {
                 "en": "Budweiser",
                 "ko": "버드와이저"
-            },
+              },
               "price": 5,
               "note": {
                 "en": "USA",
@@ -1629,7 +1683,7 @@
               "name": {
                 "en": "Cafri",
                 "ko": "카프리"
-            },
+              },
               "price": 6,
               "note": {
                 "en": "South Korea",
@@ -1641,7 +1695,7 @@
               "name": {
                 "en": "Cass 0%",
                 "ko": "카스 0%"
-            },
+              },
               "price": 6,
               "note": {
                 "en": "South Korea",
@@ -1653,7 +1707,7 @@
               "name": {
                 "en": "Somersby",
                 "ko": "서머스비"
-            },
+              },
               "price": 7.5,
               "note": {
                 "en": "Denmark",
@@ -1665,7 +1719,7 @@
               "name": {
                 "en": "Corona",
                 "ko": "코로나"
-            },
+              },
               "price": 7.5,
               "note": {
                 "en": "Mexico",
@@ -1677,7 +1731,7 @@
               "name": {
                 "en": "Tiger",
                 "ko": "타이거"
-            },
+              },
               "price": 7.5,
               "note": {
                 "en": "Singapore",
@@ -1689,7 +1743,7 @@
               "name": {
                 "en": "Asahi",
                 "ko": "아사히"
-            },
+              },
               "price": 9,
               "note": {
                 "en": "Japan",
@@ -1701,7 +1755,7 @@
               "name": {
                 "en": "Paulaner",
                 "ko": "파울라너"
-            },
+              },
               "price": 9,
               "note": {
                 "en": "Germany",
@@ -1713,7 +1767,7 @@
               "name": {
                 "en": "Big Wave",
                 "ko": "빅 웨이브"
-            },
+              },
               "price": 10,
               "note": {
                 "en": "USA",
@@ -1725,7 +1779,7 @@
               "name": {
                 "en": "Guinness",
                 "ko": "기네스"
-            },
+              },
               "price": 10,
               "note": {
                 "en": "Ireland",
@@ -1756,14 +1810,14 @@
               "name": {
                 "en": "Cass",
                 "ko": "카스"
-            },
+              },
               "price": 6
             },
             {
               "name": {
                 "en": "Stella",
                 "ko": "스텔라"
-            },
+              },
               "price": 8
             },
             {
