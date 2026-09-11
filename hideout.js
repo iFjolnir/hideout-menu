@@ -1170,7 +1170,9 @@ function paintSheet(){
     return;
   }
   document.getElementById('sheetfoot').classList.remove('hide');
-  body.innerHTML = ls.filter(l => !l.parent).map(l=>{
+  /* One renderer each, so the order they are composed in below is the only
+     thing that decides the sequence on screen. */
+  const lineHTML = l => {
     /* every add-on of this dish, whether or not any have been ordered — a
        zero row is an offer, not a leftover */
     const kids = kidsOf(l.id).map(k=>{
@@ -1199,11 +1201,8 @@ function paintSheet(){
       </div>
       <div class="opr">${money(l.price*l.qty)}</div>
       <button class="ox" data-del="${l.id}" aria-label="Remove">×</button>
-    </div>${kids}</div>`;}).join('')
-  /* Sets sit after the a la carte lines rather than interleaved: cart is a
-     map and sets are a list, so there is no shared order to preserve, and a
-     predictable block beats a guessed one. */
-  + sets.map(s=>{
+    </div>${kids}</div>`;};
+  const setHTML = s => {
     const rec = setRec(s);
     if(!rec) return '';
     const picks = setPicks(s).map(p => `<div class="opick">- ${esc(p)}</div>`).join('');
@@ -1218,7 +1217,19 @@ function paintSheet(){
         <div class="ol">${picks}</div>
         <span class="oxs"></span>
       </div>
-    </div>`;}).join('');
+    </div>`;};
+  /* Drinks first, then food — the same split the waiter view uses, so the
+     customer and the bar read the order in the same sequence. No headings
+     here: an order is short, and the customer knows what they ordered.
+     Sets fall into their own group's block rather than trailing the whole
+     list, which is where they used to sit. */
+  const GROUPS = ['drink','food'];
+  body.innerHTML = GROUPS.map(g =>
+      ls.filter(l => !l.parent && l.group === g).map(lineHTML).join('')
+    + sets.filter(s => (setRec(s)||{}).group === g).map(setHTML).join('')
+  ).join('')
+  /* anything with an unexpected group still has to appear somewhere */
+  + ls.filter(l => !l.parent && !GROUPS.includes(l.group)).map(lineHTML).join('');
   document.getElementById('ototal2').textContent = won(cartTotal());
 }
 
@@ -1235,7 +1246,7 @@ function paintWaiter(){
       <span class="wn"><span>${esc(setName(s, WAITER_LANG))}</span></span></div>` +
       setPicks(s, WAITER_LANG).map(p => `<div class="wpick">- ${esc(p)}</div>`).join('')
     ).join('');
-    return `<h3>${esc(label)}</h3>` + setRows + rows.map(l=>{
+    return `<h3>${esc(label)}</h3>` + rows.map(l=>{
       /* an add-on is a modification of a dish, not a dish — it reads on the
          parent's line so the bar counts plates, not lines */
       const extras = ls.filter(x => x.parent === l.id)
@@ -1247,7 +1258,10 @@ function paintWaiter(){
       const note = [pick(l.vshort, WAITER_LANG), extras].filter(Boolean).join(' ');
       return `<div class="wline"><span class="wq">${l.qty} &times;</span>
       <span class="wn"><span>${esc(nm)}</span>${note?`<em>${esc(note)}</em>`:''}</span></div>`;
-    }).join('');
+    }).join('')
+    /* Sets last within their group, matching the order sheet: a line with a
+       list hanging off it reads better at the end than buried in the middle. */
+    + setRows;
   };
   document.getElementById('waiterbody').innerHTML =
     (block(w('drinks'),'drink') + block(w('food'),'food'))
