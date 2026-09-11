@@ -1,16 +1,16 @@
 {
   "events": [
     {
-      "date": "2026-09-12",
+      "date": "2026-09-11",
       "name": "Caipirinha Festival",
       "poster": "caipirinha-festival.jpg",
-      "from": "18:00",
+      "from": "16:00",
       "to": "02:00"
     },
     {
       "date": "2026-09-14",
       "name": "Industry Night",
-      "poster": "industry-night.jpg",
+      "poster": "0914-industry-night.jpg",
       "from": "18:00",
       "to": "02:00"
     },
@@ -38,7 +38,7 @@
     {
       "date": "2026-09-19",
       "name": "Cocktail World Tour",
-      "poster": "cocktail-world-tour.jpg",
+      "poster": "0919-cwt.jpg",
       "from": "18:00",
       "to": "02:00"
     },
