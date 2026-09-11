@@ -87,7 +87,7 @@
           "heat": 1,
           "price": 13,
           "description": {
-            "en": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip.",
+            "en": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip\nand pickled onions.",
             "ko": "천천히 저온 조리한\n비리아 돼지고기, 모짜렐라.\n비리아 디핑 소스, 피클 곁들임.",
             "es": "Cerdo desmenuzado cocido lentamente, mozzarella, pepinillos. Servido con consomé de birria."
           },
@@ -832,7 +832,8 @@
                   "Melon liqueur",
                   "Banana liqueur",
                   "Malibu",
-                  "Lime, pineapple"
+                  "Lime",
+                  "pineapple"
                 ],
                 "ko": [
                   "멜론 리큐르",
@@ -919,7 +920,8 @@
                   "Vodka",
                   "Lime",
                   "Ginger beer",
-                  "Cinnamon, vanilla"
+                  "Cinnamon",
+                  "vanilla"
                 ],
                 "ko": [
                   "보드카",
@@ -1233,7 +1235,8 @@
                 "en": [
                   "Altos tequila blanco",
                   "Triple sec",
-                  "Lime, agave"
+                  "Lime", 
+                  "agave"
                 ],
                 "ko": [
                   "알토스 블랑코 데킬라",
