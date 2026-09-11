@@ -1,0 +1,748 @@
+/* ===========================================================
+   TYPE SCALE — one knob. Ratios locked to your mockup:
+   nav 6x · section head 8x · item name+price 5x · ingredients 3x
+   =========================================================== */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  /* ---------------------------------------------------------
+     Everything below is a proportion of screen width, taken
+     from the 1179px draft. Change --railw and the whole grid
+     rescales; nothing here is a magic pixel.
+
+       card width  523.5179 / 1179 = .4440   (both tabs)
+       ckt photo   650.0545 / 1179 = .5514   → 4:5
+       ckt panel   342.0555 / 1179 = .2901   → .653 × card
+       ckt open    865.5734 / 1179 = .7342
+       food panel  523.5179 / 1179 = .4440   → 1.00 × card
+       food open  1047.0358 / 1179 = .8881
+       type unit        7.5 / 1179 = .00636
+     --------------------------------------------------------- */
+  --railw:393px;                     /* set by JS to the live width */
+
+  --f-card:.4440;
+  --f-open-drink:.7342;
+  --f-open-food:.8881;
+  --f-gut:.0509;
+  --f-gap:.0305;
+  --f-lead:.10;                      /* invisible card at the head of each rail */
+  --f-trail:.16;                     /* and at the tail — gives the ends room to centre */
+
+  --w-card:calc(var(--railw) * var(--f-card));
+  --w-open-drink:calc(var(--railw) * var(--f-open-drink));
+  --w-open-food:calc(var(--railw) * var(--f-open-food));
+  --gut:calc(var(--railw) * var(--f-gut));
+  --gap:calc(var(--railw) * var(--f-gap));
+  --lead:calc(var(--railw) * var(--f-lead));
+  --trail:calc(var(--railw) * var(--f-trail));
+
+  /* type: 1x scales with the screen, clamped so it stays readable
+     on a 320px phone and doesn't bloat on a 430px one */
+  --x:clamp(2.15px, calc(var(--railw) * .00636), 2.95px);
+  /* Hangul has no ascenders or descenders and fills more of its box, so at
+     an identical pixel size it reads smaller than Jost beside it. --tscale
+     lifts type only — not padding, not card widths — so the layout holds
+     while the Korean stops looking undersized. Latin inside a Korean menu
+     ("IPA", "No. 1") grows with it, which keeps a mixed line even. */
+  --tscale:1;          /* tabs, section headings, item names and prices */
+  --sscale:1;          /* descriptions, notes, subtitles — the small stuff */
+  --tr:var(--en-track);  /* letter-spacing nudge, set per language below */
+  --lead:var(--en-lead); /* line spacing for body copy, likewise */
+  --fscale:var(--en-foot); /* the footnote only, independent of --sscale */
+  --t-nav:calc(var(--x)*6*var(--tscale));
+  --t-head:calc(var(--x)*8*var(--tscale));
+  --t-item:calc(var(--x)*5*var(--tscale));
+  --t-ing:calc(var(--x)*3*var(--sscale));
+
+  --paper:#fff;     /* page background */
+  --ink:#131313;       /* body text, headings, order bar */
+  --dim:#8b877f;       /* secondary text: notes, variant labels, descriptions */
+  --rule:#b3b0a8;      /* hairlines: card borders, row dividers */
+  --magenta:#e6155a;   /* prices, cart badge, non-alcoholic tag */
+  --heat-mid:#f2679a;  /* second flame from the right */
+  --heat-soft:#f9b4cd; /* third — each step left is lighter */
+  --magenta-dim:#f2679a; /* an add-on's price: a real charge, quieter */
+/*
+
+
+
+
+
+
+
+- playground -*/
+  /* -------------------------------------------------------------------------------------------------------------------------------------------------
+     TWEAK BLOCK — the numbers you will actually want to nudge
+     while looking at the thing on a phone. Everything is in
+     units of --x, so it scales with the screen: bump the
+     multiplier, not the unit.
+     ------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+  /* ---------- MASTHEAD ---------------------------------------------------------------------------------------------------- */
+  --mode-icon-h:9.5;    /* HEIGHT of the light/dark icon. Sized by height, not
+                           width: the sun and the speech-bubble have different
+                           proportions, so matching widths reads as unequal. */
+  --mode-icon-y:-1.5;   /* optical nudge, same idea as the language one */
+  --lang-icon:10;       /* width of the language icon in the masthead */
+  --lang-icon-y:-1.4;   /* optical centring: negative lifts, positive drops.
+                           The glyph's weight sits low, so the geometric
+                           centre reads as too far down. */
+  --flag-w:7;           /* flag width in the language drawer */
+
+
+  /* ---------- CARDS ---------------------------------------------------------------------------------------------------- */
+  --heat-inset-x:4;     /* flame's gap from the LEFT edge of the photo */
+  --heat-inset-y:3;     /* and from the BOTTOM edge */
+  --heat-size:4;        /* width of one flame */
+  --heat-overlap:.8;    /* how far each flame sits over the one to its left */
+  --note-gap:1;         /* item name -> its note, where the note is on its own
+                           line (Shots, Non-alcoholic) */
+  --note-lead:1.4;      /* line spacing WITHIN a note that wraps */
+  --step-squeeze:3;     /* how much of the +/- buttons' height may overhang its
+                           row instead of pushing the note down. Raise if
+                           --note-gap bottoms out; 0 restores the old spacing. */
+
+
+  /* ---------- SET CARDS ---------------------------------------------------------------------------------------------------- */
+  --set-gap:20;         /* one set card to the next — end of a blurb to the top
+                           of the following photo */
+  --set-step-gap:5;     /* space above and below the +/- on a set card */
+  --add-gap:3;          /* set card: price -> Add button */
+
+
+  /* ---------- ORDER SHEET ---------------------------------------------------------------------------------------------------- */
+  --addon-indent:6;     /* how far an add-on line is inset from its dish. Size
+                           no longer signals that it is subordinate, so
+                           position has to. 0 lines them up flush. */
+  --pick-gap: 0;         /* set name -> its choice lines */
+  --pick-scale:1;       /* plumbing: 1 for Latin, --ko-pick for Korean. Not a
+                           knob — set the two above instead. */
+  --pick-type:1.6;      /* choice line size in LATIN. Off its own base, not
+                           the add-on line, so --ko-small cannot compound. */
+  --edit-shift:0;       /* pushes Edit left of the price. 0 lines its right
+                           edge up with the steppers on the rows above. */
+  --undo-type:1.6;        /* the whole "order cleared" bar: label, Undo, and × */
+  --clear-share:1;      /* how the two buttons under an order split the row */
+  --waiter-share:3;     /* 1 and 3 = Clear takes a quarter of the width */
+
+
+  /* ---------- WAITER VIEW ----------------------------------------------------------------------------------------------------
+     Pinned to Latin no matter what the customer was reading, so none of these
+     move when the language does. That is why they need their own numbers
+     rather than sharing the order sheet's. */
+  --wline-gap:2;        /* space above and below an ordinary waiter line */
+  --wset-gap:4;         /* and above and below a set line */
+  --wpick-gap: -3;        /* set name -> its choice lines */
+  --wpick-indent:13;     /* how far those lines are inset */
+  --wpick-type:1.4;     /* choice line size, off the waiter's own scale */
+
+
+  /* ---------- FOOTER ---------------------------------------------------------------------------------------------------- */
+  --foot-clear:15;      /* content ends -> footer rule */
+  --foot-top:5;         /* footer rule -> address */
+  --foot-bottom:0;      /* icons -> bottom of the screen */
+  --foot-align:center;  /* footer block: left | center | right */
+  --follow-align:left;  /* the Instagram line under an event poster */
+  --soc-icon:7;         /* social icon size in the footer */
+  --soc-gap:5;          /* gap between the social icons */
+
+
+  /* ---------- TYPE: LATIN ---------------------------------------------------------------------------------------------------- */
+  --en-foot:1;          /* footnote size. Its own knob because the footnote is
+                           the one piece of small text always on screen — it
+                           wants to be quieter than a description. */
+  --en-lead:1.6;        /* line spacing inside a description or ingredient
+                           list. Hangul sets a taller line at the same value,
+                           so Korean needs a different number below. */
+  --en-track:0em;       /* letter-spacing nudge for Latin. Negative tightens
+                           every tracked element at once while keeping their
+                           relative differences. 0em is the original. */
+
+
+  /* ---------- TYPE: KOREAN ----------------------------------------------------------------------------------------------------
+     Latin is never touched by these. */
+  --ko-type:1.12;       /* tabs, headings, item names */
+  --ko-small:1.5;       /* descriptions, ingredient lines, notes, subtitles,
+                           the order-sheet second line. The one that reads too
+                           small in Hangul. */
+  --ko-foot:1.15;       /* footnote size. Deliberately well below --ko-small:
+                           at 1.5 the footnote set two big lines and sat there
+                           permanently. */
+  --ko-pick:1.2;        /* choice line size in Korean, the partner to
+                           --pick-type. Separate because Hangul wants a
+                           different number there than in a description,
+                           which is what --ko-small kept forcing. */
+  --ko-lead:1.55;       /* line spacing for Korean descriptions and lists */
+  --ko-track:-.1em;     /* Hangul needs less letter-spacing than uppercase
+                           Jost — tracking that opens Latin scatters Korean. */
+
+
+  /* ---------- COLOURS ----------------------------------------------------------------------------------------------------
+     Not really tweaks; they are here because they are the other thing you
+     reach for. The order bar is the inverse of the page: in light mode a dark
+     block against white, needing no edge; in dark a pale block above pale
+     cocktail shots, which without a line run into each other. Transparent
+     keeps the geometry identical either way. */
+  --obar-rule:transparent;
+  --soc-ink:var(--dim); /* the social icons and the address line */
+
+  /* The panel at the foot of an order. In light mode it is simply the page;
+     in dark it inverts to paper, which is where the one bright thing on
+     screen lives. Named separately because it does NOT follow --ink/--paper:
+     "Show to waiter" must stay dark on light in both modes. */
+  --foot-bg:var(--paper);
+  --foot-ink:var(--ink);
+  --foot-dim:var(--dim);
+  --foot-rule:var(--rule);
+
+  /* The lettered tile behind a card with no photo. Two of them, because it
+     sits against the photography either side: cocktails on white, food on
+     black slate. Nothing to do with the theme. */
+  --tile-food:#2b2b2b;
+  --tile-food-ink:#696969;
+  --tile:#f6f4f1;       /* empty photo slot, before an image loads */
+  --tile-fill:#f6f4f1;  /* fill behind the name on a photoless card */
+  --tile-ink:#b4ada0;   /* that card's lettering */
+  --on-magenta:#fff;    /* text sitting on a magenta background */
+
+  /* Jost carries no Hangul, so Korean would otherwise drop to whatever the
+     device happens to have. Noto Sans KR picks up only the characters Jost
+     cannot draw — Latin text is unaffected in any language. */
+  font-family:'Jost','Noto Sans KR',system-ui,sans-serif;
+}
+
+/* ========================================================================================================================
+   DARK MODE — one attribute on <html>, set by applyTheme().
+
+   Asphalt rather than true black: on #000 the magenta goes muddy
+   and the photographs float. Everything below is a value swap;
+   no layout, no type, no geometry changes with the theme.
+
+   Two things deliberately do NOT invert. The flame tints step
+   DARKER to the left here, not lighter, so the right-hand flame
+   stays the strongest one on a dark ground. And the foot of an
+   order inverts to paper, so the button a customer holds up to
+   a waiter is the brightest thing on the screen.
+   ======================================================================================================================== */
+html[data-theme="dark"]{
+  --paper:#1f1f1f;
+  --ink:#f2f0eb;
+  --dim:#8a8a94;
+  --rule:#3f3f45;
+
+  --magenta:#dd5880;
+  --magenta-dim:#9f556c;
+  --heat-mid:#a33a58;
+  --heat-soft:#6e2a3e;
+  --on-magenta:#fff;
+
+  /* In dark, drinks land on the same tile as food — so point at that pair
+     rather than repeating its hexes and letting the two drift apart. */
+  --tile:var(--tile-food);
+  --tile-fill:var(--tile-food);
+  --tile-ink:var(--tile-food-ink);
+
+  --obar-rule:#3f3f45;
+
+  --soc-ink:var(--dim);
+  --foot-bg:#f2f0eb;
+  --foot-ink:#131313;
+  --foot-dim:#807f8b;
+  --foot-rule:#3f3f45;
+}
+
+/* the whole switch — one attribute, set by paintChrome() */
+html[lang="ko"]{--tscale:var(--ko-type);--sscale:var(--ko-small);
+  --tr:var(--ko-track);--lead:var(--ko-lead);--fscale:var(--ko-foot);
+  --pick-scale:var(--ko-pick)}
+
+body{background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:40px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- playground end ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+*/
+/* -------------------- masthead -------------------- */
+/* Masthead and tabs stick as ONE element. They used to stick separately,
+   with the nav pinned at top:57px — a hardcoded guess at the masthead's
+   height. Any change to it (the language icon, --ko-type raising the
+   wordmark) made that number wrong and the tabs slid under. Nothing here
+   measures anything now. */
+/* The footnote belongs at the foot of the SCREEN, not at the end of the
+   content: on a short tab (Specials, Shots) it used to float wherever the
+   sections happened to stop. body and main are flex columns and .flow takes
+   the slack, so the footer is pushed down when content is short and behaves
+   as an ordinary block when it is long. min-height is dvh, not vh, or the
+   collapsing Chrome address bar leaves it a header's height too low.
+   body.hasbar's padding-bottom is inside the min-height (border-box), so the
+   footer clears the order bar without reserving a dead strip when it's absent. */
+body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+main{display:flex;flex-direction:column;flex:1}
+.flow{flex:1 0 auto}
+.topbar{position:sticky;top:0;z-index:30;background:var(--paper)}
+.mast{position:relative;background:var(--paper);
+  display:flex;align-items:center;justify-content:space-between;padding:18px var(--gut) 13px}
+.wordmark{font-family:inherit;font-weight:700;font-size:26px;letter-spacing:.01em;
+  text-transform:uppercase;line-height:1;color:var(--ink);background:none;border:0;
+  text-align:left;cursor:pointer}
+/* The burger opens a short list of languages. The masthead is sticky, which
+   makes it a containing block, so the panel hangs off its bottom edge. */
+.drawer{position:absolute;right:var(--gut);top:100%;z-index:31;
+  min-width:calc(var(--x)*46);background:var(--paper);border:1px solid var(--rule);
+  padding:calc(var(--x)*1.5) 0;display:none}
+.drawer.open{display:block}
+.drawer button{display:flex;align-items:center;gap:calc(var(--x)*3);
+  width:100%;text-align:left;color:var(--ink);
+  padding:calc(var(--x)*3) calc(var(--x)*5);
+  font-size:var(--t-item);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase}
+.drawer button.on{font-weight:600}
+/* a language that exists but has no words yet */
+.drawer button.soon{color:var(--rule);cursor:default}
+/* A hairline, because both the Korean and the English flag carry white to
+   their edges and would otherwise bleed into the paper. */
+.drawer .flag{width:calc(var(--x) * var(--flag-w));height:auto;display:block;
+  border:1px solid var(--rule)}
+/* the two masthead controls sit as one group on the right */
+.mast-r{display:flex;align-items:center;gap:calc(var(--x)*4)}
+.mode{display:flex;align-items:center;padding:6px 2px;color:var(--ink)}
+.mode svg{display:block;height:calc(var(--x) * var(--mode-icon-h));width:auto;
+  position:relative;top:calc(var(--x) * var(--mode-icon-y))}
+
+/* ---------------------------------------------------------------
+   THE LANGUAGE ICON. Same rule as the flame: to change it, replace the
+   d="..." strings and the viewBox, nothing else. Colour comes from
+   currentColor so it follows --ink. */
+.burger{display:flex;align-items:center;padding:6px 2px;color:var(--ink)}
+.burger svg{display:block;width:calc(var(--x) * var(--lang-icon));height:auto;
+  position:relative;top:calc(var(--x) * var(--lang-icon-y))}
+
+/* ---------- nav ---------- */
+.nav{background:var(--paper);display:flex;align-items:center;
+  overflow-x:auto;padding:0 var(--gut) 12px;scrollbar-width:none;border-bottom:1px solid var(--rule)}
+.nav::-webkit-scrollbar{display:none}
+.nav button{flex:0 0 auto;font-size:var(--t-nav);letter-spacing:calc(.05em + var(--tr));text-transform:uppercase;
+  white-space:nowrap;padding:2px 0;color:var(--ink);font-weight:400}
+.nav .bar{flex:0 0 auto;width:1px;height:calc(var(--t-nav)*.95);background:var(--rule);margin:0 10px}
+.nav button.on{font-weight:600;box-shadow:0 2px 0 var(--ink)}
+
+/* ---------- section ---------- */
+.sec{padding:30px 0 2px}
+.sec-head{display:flex;align-items:center;gap:15px;padding:0 var(--gut);margin-bottom:16px}
+.sec-head h2{font-weight:600;font-size:var(--t-head);letter-spacing:calc(.03em + var(--tr));text-transform:uppercase;white-space:nowrap}
+.sec-head .rule{flex:1;height:1px;background:var(--ink);opacity:.8}
+
+/* ---------- carousel ---------- */
+.rail{position:relative;display:flex;align-items:flex-start;gap:var(--gap);overflow-x:auto;padding:0 var(--gut) 2px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.rail::-webkit-scrollbar{display:none}
+.rail::before{content:'';flex:0 0 var(--lead)}
+.rail::after{content:'';flex:0 0 var(--trail)}
+
+.item{flex:0 0 auto;width:var(--w-card);transition:width .3s cubic-bezier(.3,.85,.35,1)}
+.item.open{width:var(--w-open)}
+/* same card width on both tabs — only the photo's aspect and the
+   panel's share of the open card differ */
+.rail.food  .item{--w-open:var(--w-open-food); --ar:1;   --shot-h:var(--w-card)}
+.rail.drink .item{--w-open:var(--w-open-drink);--ar:4/5; --shot-h:calc(var(--w-card)*1.25)}
+
+.frame{display:flex;align-items:flex-start}
+/* photo width is frozen — it never re-scales, so nothing repaints on open */
+.shot{position:relative;flex:0 0 var(--w-card);width:var(--w-card);aspect-ratio:var(--ar);overflow:hidden;
+  border:1px solid var(--rule);background:var(--tile)}
+/* Food is photographed on black slate, so a white tile between two of those
+   reads as a hole. Drinks are shot on white and keep the light tile. */
+.rail.food .shot,.setshot{background:var(--tile-food)}
+.rail.food .ph,.setshot .ph{background:var(--tile-food)}
+.rail.food .ph span,.setshot .ph span{color:var(--tile-food-ink)}
+.ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  padding:12px;text-align:center;background:var(--tile-fill)}
+.ph span{font-weight:500;font-size:var(--t-item);line-height:1.25;letter-spacing:calc(.06em + var(--tr));
+  text-transform:uppercase;color:var(--tile-ink)}
+
+/* the panel that unfurls — same hairline, shares the photo's edge */
+.panel{flex:0 0 0;width:0;height:0;min-width:0;overflow:hidden;opacity:0;
+  border:0;padding:0;
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:opacity .18s .08s}
+.item.open .panel{flex:1 1 auto;width:auto;height:var(--shot-h);opacity:1;
+  border:1px solid var(--rule);border-left:0;padding:9px 11px 8px}
+.desc{font-size:var(--t-ing);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;line-height:var(--lead)}
+.ing{list-style:none}
+.ing li{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;line-height:var(--lead)}
+.step{display:flex;align-items:center;justify-content:space-between;padding-top:8px}
+.step button{font-size:calc(var(--x)*10);line-height:1;font-weight:300;padding:0 4px}
+.step .q{font-size:calc(var(--x)*9);font-weight:400;min-width:22px;text-align:center}
+/* untouched item: just a magenta +. The − and the count hold their space
+   so the + doesn't jump when the first one is added. */
+.step [data-step="-1"],.step .q{transition:opacity .16s}
+.step.empty [data-step="-1"],.step.empty .q{opacity:0;pointer-events:none}
+.step.empty [data-step="1"]{color:var(--magenta)}
+
+/* ---------- add-ons ----------
+   A sub-line of the parent item: its own cart line, but it cannot exist
+   without the parent and never outnumbers it. Magenta + means another one
+   can be added; grey means it cannot — no parent yet, or already matched.
+   Two states only, because the customer is reading this in a dark bar. */
+.addrow{display:flex;align-items:center;justify-content:space-between;
+  gap:calc(var(--x)*2);border-top:1px solid var(--rule);
+  margin-top:calc(var(--x)*3);padding-top:calc(var(--x)*2.5)}
+.addlbl{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;
+  color:var(--dim);line-height:1.3}
+.addpr{color:var(--magenta)}
+.step.addon{padding-top:0;flex:0 0 auto}
+.step.addon button{font-size:calc(var(--x)*8);color:var(--dim)}
+.step.addon .q{font-size:calc(var(--x)*7);color:var(--dim);min-width:calc(var(--x)*7)}
+.step.addon [data-step="1"]{color:var(--rule)}
+.step.addon.can [data-step="1"]{color:var(--magenta)}
+
+/* caption — right-aligned to the PHOTO's right edge, never the panel's */
+.cap{width:var(--w-card);padding-top:9px;text-align:right}
+/* Each price sits directly under its own name. Names wrap to different
+   line counts, so prices across a row are deliberately ragged: the rail
+   shows about two cards at a time, so they are never compared side by
+   side, and padding every name up to the tallest one left a visible hole
+   under the short ones. */
+.cap .nm{font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;
+  line-height:1.3}
+.cap .pr{font-size:var(--t-item);color:var(--magenta);letter-spacing:calc(.03em + var(--tr));margin-top:1px}
+
+/* ---------- plain list tabs (mixers / beer / shots / bottles / non-alc) ---------- */
+.list{padding:0 var(--gut)}
+.listnote{font-size:var(--t-ing);letter-spacing:calc(.1em + var(--tr));text-transform:uppercase;color:var(--dim);
+  padding:0 var(--gut) 12px;margin-top:-6px}
+
+/* ---------- sets: static, full width, no expansion ---------- */
+.stack{padding:0 var(--gut)}
+.setcard+.setcard{margin-top:calc(var(--x) * var(--set-gap))}
+.setshot{position:relative;width:100%;overflow:hidden;border:1px solid var(--rule);background:var(--tile)}
+.setmeta{padding-top:calc(var(--x)*4)}
+/* Two columns, same idea as the two-price rows: the blurb belongs under the
+   name it describes, and the price with the control that buys it. */
+.setsplit{display:flex;align-items:flex-start;gap:calc(var(--x)*5)}
+.setleft{flex:1 1 auto;min-width:0}
+.setright{flex:0 0 auto;text-align:right}
+.setnm{font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;
+  line-height:1.3}
+.setpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:calc(.03em + var(--tr));white-space:nowrap}
+.setdesc{font-size:var(--t-ing);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;
+  line-height:var(--lead);margin-top:calc(var(--x)*2)}
+/* Under the price, in its own column, so the length of the blurb beside it
+   changes nothing. */
+.setmeta .step{justify-content:flex-end;gap:calc(var(--x)*2);
+  padding-top:calc(var(--x) * var(--set-step-gap))}
+
+/* ---------- non-alcoholic marker ---------- */
+.star{position:absolute;left:0;top:0;z-index:2;
+  padding:calc(var(--x)*1) calc(var(--x)*2.4);
+  color:var(--magenta);font-size:calc(var(--x)*7);line-height:1;font-weight:500}
+/* ---------- heat marker ----------
+   Bottom-LEFT, deliberately: the cart badge stays bottom-right so it reads
+   beside the item name. Flames overlap and get lighter leftwards, so the
+   right-hand one is always full magenta and always on top — later siblings
+   paint over earlier ones, so DOM order is simply left to right. */
+.heat{position:absolute;left:0;bottom:0;z-index:2;display:flex;align-items:flex-end;
+  padding:calc(var(--x) * var(--heat-inset-y)) calc(var(--x) * var(--heat-inset-x))}
+.heat svg{display:block;width:calc(var(--x) * var(--heat-size));height:auto;position:relative}
+.heat svg+svg{margin-left:calc(var(--x) * var(--heat-overlap) * -1)}
+.h1{color:var(--magenta)}
+.h2{color:var(--heat-mid)}
+.h3{color:var(--heat-soft)}
+
+.tag{display:inline-block;margin-bottom:calc(var(--x)*3);
+  padding:calc(var(--x)*1.2) calc(var(--x)*2.4);
+  background:var(--magenta);color:var(--on-magenta);
+  font-size:calc(var(--x)*3*var(--sscale));
+  letter-spacing:calc(.12em + var(--tr));text-transform:uppercase;font-weight:500}
+
+/* ---------- cart badge on the photo card ---------- */
+.badge{position:absolute;right:0;bottom:0;display:none;
+  min-width:calc(var(--x)*8);height:calc(var(--x)*8);padding:0 calc(var(--x)*1.6);
+  background:var(--magenta);color:var(--on-magenta);font-size:calc(var(--x)*4.4);font-weight:500;
+  letter-spacing:calc(.02em + var(--tr));align-items:center;justify-content:center}
+.badge.on{display:flex}
+
+/* ---------- list rows ---------- */
+.row{border-bottom:1px solid var(--rule);padding:calc(var(--x)*4) 0}
+.row:first-child{border-top:1px solid var(--rule)}
+.rowname{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));text-transform:uppercase;line-height:1.3}
+.rowname .sub{margin-left:calc(var(--x)*2.4);font-size:var(--t-ing);
+  letter-spacing:calc(.09em + var(--tr));color:var(--dim)}
+/* The +/- buttons are set about twice the height of the item name beside
+   them, and a centred flex row takes its height from the tallest child. So
+   the name sat in the middle of a stepper-height row, with dead space under
+   it that --note-gap could add to but never remove. Negative block margins
+   let the buttons overhang the row instead of inflating it: the tap target
+   is unchanged, the row is now the height of the name, and --note-gap goes
+   all the way down to 0. Only on note-below rows — Beer and Bottles keep
+   the roomier row they already had. */
+.nbrow .vrow .step{margin-block:calc(var(--x) * var(--step-squeeze) * -1)}
+/* Note-below rows are two lines tall, so the stepper centres against the
+   pair instead of sitting on the name's line. The price stays up with the
+   name — unless the section asks for "centreRow", which sends the price
+   down to the middle with the stepper. */
+.nbtext{flex:1;min-width:0}
+.nbtop{display:flex;align-items:baseline;gap:calc(var(--x)*3)}
+.nbtop .rowname{flex:1;min-width:0}
+.nbrow .subline{margin-top:calc(var(--x) * var(--note-gap))}
+
+/* set by "noteBelow": true on a section — the note drops under the name
+   instead of trailing it, for sections whose notes are ingredient lists.
+   Price and stepper stay on the name's line, not centred on the pair. */
+.subline{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;
+  color:var(--dim);line-height:var(--note-lead);
+  margin-top:calc(var(--x) * var(--note-gap))}
+.vrow{display:flex;align-items:center;gap:calc(var(--x)*4);padding:calc(var(--x)*1.5) 0}
+.vrow.single{padding:0}
+.vrow .rowname{flex:1;min-width:0}
+.vname{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;color:var(--dim)}
+/* ---------- two-price rows (Mixers, Bottles) ----------
+   Left column names the thing, right column stacks its sizes. Side by side
+   the two steppers sat next to the wrong prices, and the variety line
+   ("Bourbon") was styled identically to the size line ("Shot") — same grey,
+   same caps, different job. Splitting them by column tells them apart by
+   position instead of by adding a third grey, and gives the variety line a
+   home: on Mixers it can finally say which gin is in the gin and tonic.
+   One stepper per line, all of them ending at the same right edge. */
+.vsplit{display:flex;align-items:flex-start;gap:calc(var(--x)*5)}
+.vleft{flex:1 1 0;min-width:0}
+.vright{flex:1 1 0;min-width:0}
+/* The size label and its price stack; the stepper sits beside the pair and
+   centres against both, rather than riding the price's line. */
+.vline{display:flex;align-items:center;gap:calc(var(--x)*2)}
+.vline+.vline{border-top:1px solid var(--rule);
+  margin-top:calc(var(--x)*2.5);padding-top:calc(var(--x)*2.5)}
+.vtext{flex:1;min-width:0}
+.vline .vname{display:block}
+.vline .vpr{display:block;text-align:left;margin-top:calc(var(--x)*.5)}
+/* same trick as the note-below rows: let the buttons overhang rather than
+   inflate the line they sit on */
+.vline .step{padding-top:0;gap:calc(var(--x)*1);flex:0 0 auto;
+  margin-block:calc(var(--x) * var(--step-squeeze) * -1)}
+.vpr{font-size:var(--t-item);color:var(--magenta);letter-spacing:calc(.03em + var(--tr));
+  white-space:nowrap;text-align:right}
+.vrow .step{padding-top:0;gap:calc(var(--x)*1);flex:0 0 auto;
+  min-width:calc(var(--x)*22);justify-content:flex-end}
+.chip{display:none}
+
+/* ---------- order bar ---------- */
+body.hasbar{padding-bottom:calc(var(--x)*30)}
+.obar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--ink);color:var(--paper);
+  border-top:1px solid var(--obar-rule);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:calc(var(--x)*4) var(--gut) calc(var(--x)*4 + env(safe-area-inset-bottom));
+  transform:translateY(110%);transition:transform .24s cubic-bezier(.3,.85,.35,1)}
+.obar.show{transform:none}
+.ob-l{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));text-transform:uppercase}
+.ob-l .dot{margin:0 7px;opacity:.5}
+.ob-go{border:1px solid var(--paper);padding:calc(var(--x)*3) calc(var(--x)*7);
+  font-size:var(--t-item);letter-spacing:calc(.12em + var(--tr));text-transform:uppercase}
+
+/* ---------- order page ---------- */
+.sheet,.waiter{position:fixed;inset:0;z-index:50;background:var(--paper);
+  display:flex;flex-direction:column;transform:translateY(100%);
+  transition:transform .26s cubic-bezier(.3,.85,.35,1)}
+.sheet.show,.waiter.show{transform:none}
+.waiter{z-index:60}
+.sheet-top,.wtop{display:flex;align-items:center;justify-content:space-between;
+  padding:calc(var(--x)*7) var(--gut) calc(var(--x)*5);border-bottom:1px solid var(--rule)}
+.sheet-top h2,.wtop h2{font-size:var(--t-head);font-weight:600;letter-spacing:calc(.06em + var(--tr));text-transform:uppercase}
+.x{font-size:calc(var(--x)*11);line-height:1;padding:0 4px;color:var(--dim)}
+.sheet-body{flex:1;overflow-y:auto;padding:0 var(--gut)}
+/* An item and its add-ons are one block with one divider around them.
+   Add-on rows are always present while the parent is in the order, even at
+   zero, so a customer can add or take back fries without going hunting for
+   the card again — and cannot accidentally delete the row out of existence. */
+.ogroup{border-bottom:1px solid var(--rule)}
+.oline{display:flex;align-items:center;gap:calc(var(--x)*4);padding:calc(var(--x)*5) 0}
+.oline.ohas{padding-bottom:calc(var(--x)*1.5)}
+/* An add-on is a line the customer will be charged for, so on the order it
+   is set like one: same type size, same stepper, same price column. Grey
+   text and a softer magenta keep it subordinate to its dish, and the indent
+   does the work the smaller size used to. */
+.oline.oadd{padding:calc(var(--x)*2.5) 0 calc(var(--x)*4)}
+.oadd .ol{padding-left:calc(var(--x) * var(--addon-indent))}
+.oaddnm{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));
+  text-transform:uppercase;color:var(--dim);line-height:1.3}
+.oadd .ostep button{color:var(--dim)}
+.oadd .ostep .q{color:var(--dim)}
+.oadd .ostep .q.off,.oadd .ostep [data-o="-1"].off{opacity:0;pointer-events:none}
+.oadd .ostep [data-o="1"]{color:var(--rule)}
+.oadd .ostep [data-o="1"].can{color:var(--magenta)}
+.oadd .opr{color:var(--magenta-dim)}
+.oadd .opr.zero{color:var(--dim)}
+/* keeps the add-on's price in the same column as the item's, where the
+   parent row has a × button and the add-on row does not */
+.oxs{flex:0 0 calc(var(--x)*9)}
+.ol{flex:1;min-width:0}
+.onm{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));text-transform:uppercase;line-height:1.3}
+.osub{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;color:var(--dim);margin-top:3px}
+.ostep{display:flex;align-items:center;gap:calc(var(--x)*2)}
+.ostep button{font-size:calc(var(--x)*8);line-height:1;font-weight:300;padding:0 calc(var(--x)*1.5)}
+.ostep .q{font-size:var(--t-item);min-width:calc(var(--x)*7);text-align:center}
+.opr{font-size:var(--t-item);color:var(--magenta);min-width:calc(var(--x)*13);text-align:right}
+.ox{flex:0 0 calc(var(--x)*9);font-size:calc(var(--x)*7);line-height:1;
+  color:var(--dim);padding:0;text-align:right}
+.sheet-foot{background:var(--foot-bg);border-top:1px solid var(--foot-ink);
+  padding:calc(var(--x)*5) var(--gut)
+  calc(var(--x)*6 + env(safe-area-inset-bottom))}
+.sheet-foot.hide{display:none}
+.totrow{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:calc(var(--x)*5)}
+.totlbl{font-size:var(--t-item);letter-spacing:calc(.14em + var(--tr));
+  text-transform:uppercase;color:var(--foot-ink)}
+.totval{font-size:calc(var(--x)*10);font-weight:600;color:var(--foot-ink)}
+/* Clear is a rare bulk action — every line already has its own × — and it
+   sat the same size as the primary button, right next to it. Same height and
+   the same row, a quarter of the width: still there, no longer a mis-tap
+   waiting to happen at 1am. */
+.acts{display:flex;gap:calc(var(--x)*3)}
+.btn{padding:calc(var(--x)*5);font-size:var(--t-item);letter-spacing:calc(.12em + var(--tr));text-transform:uppercase}
+.ghost{flex:var(--clear-share);border:1px solid var(--foot-rule);color:var(--foot-dim)}
+.solid{flex:var(--waiter-share);background:var(--foot-ink);color:var(--foot-bg)}
+
+/* ---------- undo ----------
+   Clearing happens immediately and is then recoverable, rather than being
+   guarded by a confirm. One tap either way, and it rescues the accident
+   instead of taxing everyone who meant it. */
+.undo{display:none;align-items:center;gap:calc(var(--x)*3);
+  background:var(--ink);color:var(--paper);
+  padding:calc(var(--x)*4) var(--gut)}
+.undo.show{display:flex}
+.undo-l{flex:1;min-width:0;font-size:calc(var(--t-ing) * var(--undo-type));
+  letter-spacing:calc(.08em + var(--tr));text-transform:uppercase}
+.undo-go{font-size:calc(var(--t-ing) * var(--undo-type));letter-spacing:calc(.12em + var(--tr));
+  text-transform:uppercase;font-weight:600;color:var(--paper);
+  border-bottom:1px solid var(--paper);padding-bottom:1px}
+.undo-x{font-size:calc(var(--x)*7*var(--undo-type));line-height:1;color:var(--paper);opacity:.6;padding:0 calc(var(--x)*1)}
+.mt{padding:calc(var(--x)*24) 0;text-align:center;color:var(--dim);
+  font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase}
+
+/* ---------- waiter view — no prices, big enough to read across a bar ---------- */
+/* Locked to WAITER_LANG, so it must not inherit the customer's type scale —
+   an English staff screen sized for Hangul would be oversized. */
+.waiter{--tscale:1;--sscale:1;--tr:var(--en-track);--lead:var(--en-lead);
+  --fscale:var(--en-foot)}
+.wbody{flex:1;overflow-y:auto;padding:calc(var(--x)*3) var(--gut) calc(var(--x)*10)}
+.wbody h3{font-size:var(--t-item);letter-spacing:calc(.18em + var(--tr));text-transform:uppercase;color:var(--dim);
+  padding:calc(var(--x)*8) 0 calc(var(--x)*2);border-bottom:1px solid var(--rule)}
+.wline{display:flex;align-items:baseline;gap:calc(var(--x)*4);
+  padding:calc(var(--x) * var(--wline-gap)) 0}
+/* A set carries its choice lines underneath, so it wants its own rhythm. */
+.wline.wset{padding:calc(var(--x) * var(--wset-gap)) 0}
+.wq{flex:0 0 calc(var(--x)*13);text-align:right;white-space:nowrap;
+  font-size:calc(var(--x)*7);font-weight:600}
+/* flex, not inline text: the add-on note sits on the vertical centre of the
+   dish name rather than dropping to its baseline, which reads as a footnote */
+.wn{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;
+  gap:calc(var(--x)*2.5);font-size:calc(var(--x)*7);letter-spacing:calc(.04em + var(--tr));
+  text-transform:uppercase;line-height:1.25}
+.wn em{font-style:normal;color:var(--dim);font-size:calc(var(--x)*5);line-height:1.25}
+
+/* staff notice when running from cache */
+/* ---------- sets with choices ---------- */
+.setctl{display:flex;align-items:center;gap:calc(var(--x)*3);justify-content:flex-end;
+  margin-top:calc(var(--x) * var(--add-gap))}
+.setn{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));color:var(--dim);opacity:0}
+.setn.on{opacity:1}
+.setadd{border:1px solid var(--ink);color:var(--ink);background:none;
+  font-family:inherit;font-size:var(--t-ing);font-weight:600;
+  letter-spacing:calc(.12em + var(--tr));text-transform:uppercase;
+  padding:calc(var(--x)*2) calc(var(--x)*5);cursor:pointer}
+/* the picks hang under their set the way an add-on hangs under its dish */
+.oline.opickrow{padding:0 0 calc(var(--x)*4);align-items:flex-start}
+/* The row is align-items:flex-start, so the picks and the Edit button can
+   be nudged independently — moving one does not drag the other. */
+.opickrow .ol{padding-left:calc(var(--x) * var(--addon-indent));
+  padding-top:calc(var(--x) * var(--pick-gap))}
+/* Off --x directly rather than --t-ing, so --ko-small (which is tuned for
+   descriptions) cannot multiply into it. Korean comes in via --pick-scale. */
+.opick{font-size:calc(var(--x)*3*var(--pick-type)*var(--pick-scale));letter-spacing:calc(.09em + var(--tr));
+  text-transform:uppercase;color:var(--dim);line-height:1.5}
+/* Sits in the slot the stepper occupies on an ordinary row, so its right
+   edge lines up with theirs for free. --edit-shift pushes it further left. */
+.oedit{border:1px solid var(--rule);color:var(--dim);background:none;font-family:inherit;
+  flex:none;margin-right:calc(var(--x) * var(--edit-shift));
+  font-size:var(--t-ing);letter-spacing:calc(.1em + var(--tr));text-transform:uppercase;
+  padding:calc(var(--x)*1.5) calc(var(--x)*3);cursor:pointer}
+/* Matches .wn em — the waiter view pins its own scale, so this borrows the
+   size the grey note already uses rather than inventing one. */
+.wpick{font-size:calc(var(--x)*5*var(--wpick-type));line-height:1.35;color:var(--dim);
+  padding-left:calc(var(--x) * var(--wpick-indent))}
+/* Only the FIRST pick under a set gets the gap — the rest follow each other
+   at their own line-height, so this knob does not double as line spacing. */
+.wline + .wpick{margin-top:calc(var(--x) * var(--wpick-gap))}
+
+/* The chooser floats rather than filling the screen: it is a question about
+   one card, not a page, and seeing the menu behind it says so. */
+.chooser{position:fixed;inset:0;z-index:60;display:none;
+  align-items:center;justify-content:center;padding:var(--gut);
+  background:rgba(0,0,0,.55)}
+.chooser.show{display:flex}
+.ch-card{background:var(--paper);color:var(--ink);border:1px solid var(--ink);
+  width:100%;max-width:calc(var(--railw) * .92);max-height:80vh;max-height:80dvh;
+  display:flex;flex-direction:column}
+.ch-top{display:flex;align-items:center;justify-content:space-between;
+  padding:calc(var(--x)*5) var(--gut) calc(var(--x)*4);border-bottom:1px solid var(--rule)}
+.ch-top h2{font-weight:600;font-size:var(--t-head);letter-spacing:calc(.03em + var(--tr));
+  text-transform:uppercase}
+.ch-body{overflow:auto;padding:calc(var(--x)*2) var(--gut) calc(var(--x)*5)}
+.chgrp{padding-top:calc(var(--x)*5)}
+.chlbl{display:flex;align-items:baseline;justify-content:space-between;
+  font-size:var(--t-ing);letter-spacing:calc(.1em + var(--tr));text-transform:uppercase;
+  color:var(--dim);margin-bottom:calc(var(--x)*3)}
+.chopt{display:flex;align-items:center;justify-content:space-between;width:100%;
+  gap:calc(var(--x)*3);border:1px solid var(--rule);background:none;color:var(--ink);
+  font-family:inherit;font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));
+  text-transform:uppercase;text-align:left;cursor:pointer;
+  padding:calc(var(--x)*4);margin-bottom:calc(var(--x)*2)}
+.chopt.on{border-color:var(--ink);font-weight:600}
+.chn{color:var(--magenta);font-weight:600}
+.chnone{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));
+  text-transform:uppercase;color:var(--dim)}
+.ch-foot{border-top:1px solid var(--rule);padding:calc(var(--x)*4) var(--gut)}
+.ch-foot .btn{width:100%}
+.ch-foot .btn[disabled]{opacity:.35;pointer-events:none}
+
+.stale{position:fixed;left:0;right:0;top:0;z-index:99;background:var(--magenta);color:var(--on-magenta);
+  padding:calc(var(--x)*3) var(--gut);font-size:var(--t-ing);letter-spacing:calc(.06em + var(--tr));
+  text-transform:uppercase;line-height:1.5;text-align:center}
+
+/* ---------- event poster ---------- */
+.poster-sec{padding:calc(var(--x)*11) 0 0}
+.poster{position:relative;margin:0 var(--gut);aspect-ratio:4/5;
+  overflow:hidden;border:1px solid var(--rule);background:var(--tile)}
+.poster .ph span{font-size:calc(var(--x)*9)}
+
+.stub{padding:60px var(--gut);text-align:center;color:var(--dim);
+  font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase}
+.foot{padding:calc(var(--x) * var(--foot-top)) var(--gut) calc(var(--x) * var(--foot-bottom));
+  margin-top:calc(var(--x) * var(--foot-clear));border-top:1px solid var(--rule);
+  text-align:var(--foot-align);
+  font-size:calc(var(--x)*4*var(--fscale));line-height:1.8;color:var(--dim);
+  letter-spacing:calc(.02em + var(--tr))}
+/* The address is text, not a link — it is there to be read aloud to a taxi
+   driver or long-pressed and copied. The map pins are the links. */
+.faddr{color:var(--soc-ink);-webkit-user-select:text;user-select:text}
+/* Alignment is one text-align on .foot, inherited by everything inside. The
+   icon row is therefore an inline-flex in a block, not a flex row — flex
+   would need justify-content and a second value to keep in step. */
+.fsocwrap{margin-top:calc(var(--x)*5)}
+.fsoc{display:inline-flex;align-items:center;gap:calc(var(--x) * var(--soc-gap))}
+.fsoc a{display:block;color:var(--soc-ink)}
+.fsoc svg{display:block;width:calc(var(--x) * var(--soc-icon));height:auto}
+/* Only ever under a poster. Whole row is the target, not the icon alone. */
+.evwrap{text-align:var(--follow-align);margin:calc(var(--x)*4) var(--gut) 0}
+/* The icon carries the affordance; an underline on top of it is belt and braces. */
+.evfollow{display:inline-flex;align-items:center;gap:calc(var(--x)*3);
+  color:var(--dim);text-decoration:none;
+  font-size:calc(var(--x)*4*var(--fscale));letter-spacing:calc(.02em + var(--tr))}
+.evfollow svg{display:block;width:calc(var(--x) * var(--soc-icon));height:auto;flex:none}
+
+@media(min-width:560px){
+  body{max-width:430px;margin:0 auto;border-left:1px solid var(--rule);border-right:1px solid var(--rule);min-height:100vh}
+}
