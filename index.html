@@ -188,7 +188,7 @@
    a waiter is the brightest thing on the screen.
    ============================================================ */
 html[data-theme="dark"]{
-  --paper:#1b1b1e;
+  --paper:#1f1f1f;
   --ink:#f2f0eb;
   --dim:#8a8a94;
   --rule:#3f3f45;
@@ -759,10 +759,10 @@ const pic = id => IMG[id] || null;
 
    Adding Spanish is this list plus a label, and nothing else.
    ============================================================ */
-const LANGS = ['en', 'ko'];
+const LANGS = ['en', 'ko', 'es'];
 /* Listed in the drawer but not selectable — the words do not exist yet.
    Moving 'es' from here into LANGS above is the whole of switching it on. */
-const LANG_SOON  = ['es'];
+const LANG_SOON  = [];
 const LANG_LABEL = {en:'EN',   ko:'KOR',  es:'ESP'};
 const LANG_FLAG  = {en:'🇬🇧', ko:'🇰🇷', es:'🇪🇸'};
 
@@ -877,28 +877,31 @@ function locArr(v){
 /* The site's own wording. Not in the JSON files — the owners have no
    business editing it, and it changes only when the code does. */
 const UI = {
-  order:        {en:'Order',            ko:'주문'},
-  yourOrder:    {en:'Your order',       ko:'주문 내역'},
-  total:        {en:'Total',            ko:'합계'},
-  clear:        {en:'Clear',            ko:'비우기'},
-  showWaiter:   {en:'Show to waiter',   ko:'직원에게 보여주기'},
-  emptyOrder:   {en:'Nothing here yet', ko:'아직 담긴 것이 없음'},
-  nothingShow:  {en:'Nothing to show',  ko:'표시할 것이 없음'},
-  cleared:      {en:'Order cleared',    ko:'주문 내역을 비웠음'},
-  undo:         {en:'Undo',             ko:'되돌리기'},
-  mocktail:     {en:'Non-alcoholic!',   ko:'무알코올!'},
-  spicy:        {en:'Spicy!',           ko:'매운맛!'},
-  noSpecials:   {en:'Nothing on special right now', ko:'현재 스페셜 메뉴가 없음'},
-  specialsBad:  {en:'Specials unavailable',         ko:'스페셜 메뉴를 불러올 수 없음'},
+  order:        {en:'Order',            ko:'주문',            es:'Pedido'},
+  yourOrder:    {en:'Your order',       ko:'주문 내역',       es:'Tu pedido'},
+  total:        {en:'Total',            ko:'합계',            es:'Total'},
+  clear:        {en:'Clear',            ko:'비우기',          es:'Vaciar'},
+  showWaiter:   {en:'Show to waiter',   ko:'직원에게 보여주기', es:'Mostrar al mesero'},
+  emptyOrder:   {en:'Nothing here yet', ko:'아직 담긴 것이 없음', es:'Aún no hay nada aquí'},
+  nothingShow:  {en:'Nothing to show',  ko:'표시할 것이 없음',  es:'Nada que mostrar'},
+  cleared:      {en:'Order cleared',    ko:'주문 내역을 비웠음', es:'Pedido vaciado'},
+  undo:         {en:'Undo',             ko:'되돌리기',         es:'Deshacer'},
+  mocktail:     {en:'Non-alcoholic!',   ko:'무알코올!',        es:'¡Sin alcohol!'},
+  spicy:        {en:'Spicy!',           ko:'매운맛!',          es:'¡Picante!'},
+  noSpecials:   {en:'Nothing on special right now', ko:'현재 스페셜 메뉴가 없음', es:'No hay especiales ahora'},
+  specialsBad:  {en:'Specials unavailable',         ko:'스페셜 메뉴를 불러올 수 없음', es:'Especiales no disponibles'},
   menuBad:      {en:'Menu unavailable. Please ask at the bar.',
-                 ko:'메뉴를 불러올 수 없습니다. 바에 문의해 주세요.'},
+                 ko:'메뉴를 불러올 수 없습니다. 바에 문의해 주세요.',
+                 es:'Menú no disponible. Pregunta en la barra.'},
   needServer:   {en:'This page needs to be opened through a local server, not by opening the file directly.',
-                 ko:'이 페이지는 파일을 직접 열지 말고 로컬 서버를 통해 열어야 합니다.'},
-  drinks:       {en:'Drinks',           ko:'음료'},
-  food:         {en:'Food',             ko:'음식'},
+                 ko:'이 페이지는 파일을 직접 열지 말고 로컬 서버를 통해 열어야 합니다.',
+                 es:'Esta página debe abrirse a través de un servidor local, no abriendo el archivo directamente.'},
+  drinks:       {en:'Drinks',           ko:'음료',            es:'Bebidas'},
+  food:         {en:'Food',             ko:'음식',            es:'Comida'},
   /* one sentence per line — locLines() gives each entry its own line */
   footNote:     {en:['Tap any item to open it. Your order is kept on this device.'],
-                 ko:['항목을 누르면 자세히 볼 수 있음. 주문 내역은 이 기기에 저장됨.']}
+                 ko:['항목을 누르면 자세히 볼 수 있음. 주문 내역은 이 기기에 저장됨.'],
+                 es:['Toca cualquier elemento para abrirlo. Tu pedido se guarda en este dispositivo.']}
 };
 const u = k => loc(UI[k]);
 const w = k => pick(UI[k], WAITER_LANG);   // staff wording, never the customer's
@@ -907,6 +910,7 @@ const w = k => pick(UI[k], WAITER_LANG);   // staff wording, never the customer'
    not inflect, so this cannot be a format string with a plural rule. */
 function itemCount(k){
   if(LANG === 'ko') return k + '개';
+  if(LANG === 'es') return k + (k === 1 ? ' artículo' : ' artículos');
   return k + (k === 1 ? ' item' : ' items');
 }
 
@@ -1400,13 +1404,26 @@ function setCard(it){
   </article>`;
 }
 
+/* ---------- dark-mode photography ----------
+   A dark variant is the same filename with -dm before the extension.
+   We never keep a list of which ones exist: the first 404 tells us, and
+   NO_DM remembers for the session so the request isn't repeated. Missing
+   -dm therefore degrades to the light shot, not to the typographic tile. */
+const NO_DM   = new Set();
+const dmSrc   = p => p.replace(/\.(jpe?g|png|webp)$/i, '-dm.$1');
+const shotSrc = p => (THEME === 'dark' && !NO_DM.has(p)) ? dmSrc(p) : p;
+
+function artTag(it){
+  return it.img
+    ? `<img loading="lazy" src="${shotSrc(it.img)}" data-light="${it.img}" alt="" data-fallback="${esc(loc(it.n))}">`
+    : `<div class="ph"><span>${esc(loc(it.n))}</span></div>`;
+}
+
 function card(it, kind, key){
   const inner = kind==='food'
     ? `<p class="desc">${locLines(it.desc)}</p>`
     : `<ul class="ing">${locArr(it.ing).map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
-  const art = it.img
-    ? `<img loading="lazy" src="${it.img}" alt="" data-fallback="${esc(loc(it.n))}">`
-    : `<div class="ph"><span>${esc(loc(it.n))}</span></div>`;
+    const art = artTag(it);
   return `<article class="item" data-key="${key}">
     <div class="frame">
       <div class="shot" data-tap="${key}">${art}${it.mocktail?'<span class="star">&lowast;</span>':''}${heatMark(it.heat)}<span class="badge" data-b="${it.id}"></span></div>
@@ -1591,6 +1608,10 @@ function parkRails(){
 main.addEventListener('error', e=>{
   const img = e.target;
   if(!img || img.tagName !== 'IMG' || !img.dataset.fallback) return;
+  /* A missing -dm is not a missing photo. Drop to the light shot and
+     remember; only a light shot that also fails earns the tile. */
+  const lit = img.dataset.light;
+  if(lit && !img.src.endsWith(lit)){ NO_DM.add(lit); img.src = lit; return; }
   const tile = document.createElement('div');
   tile.className = 'ph';
   tile.innerHTML = `<span>${esc(img.dataset.fallback)}</span>`;
@@ -1894,6 +1915,12 @@ function applyTheme(){
   /* Must match --paper for the theme, or the phone paints a strip of the
      wrong colour above the menu. There is a test tying these to the CSS. */
   const meta = document.querySelector('meta[name="theme-color"]');
+    /* Photography follows the theme without a re-render — swapping src keeps
+     scroll position, open panels and the carousel's parked offset intact. */
+  document.querySelectorAll('img[data-light]').forEach(img=>{
+    const want = shotSrc(img.dataset.light);
+    if(!img.src.endsWith(want)) img.src = want;
+  });
   if(meta) meta.setAttribute('content', THEME === 'dark' ? '#1b1b1e' : '#fff');
 }
 
