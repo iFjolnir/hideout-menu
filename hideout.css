@@ -4,7 +4,7 @@
    =========================================================== */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  /* ---------------------------------------------------------
+  /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
      Everything below is a proportion of screen width, taken
      from the 1179px draft. Change --railw and the whole grid
      rescales; nothing here is a magic pixel.
@@ -16,7 +16,7 @@
        food panel  523.5179 / 1179 = .4440   → 1.00 × card
        food open  1047.0358 / 1179 = .8881
        type unit        7.5 / 1179 = .00636
-     --------------------------------------------------------- */
+     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
   --railw:393px;                     /* set by JS to the live width */
 
   --f-card:.4440;
@@ -53,7 +53,7 @@
   --t-item:calc(var(--x)*5*var(--tscale));
   --t-ing:calc(var(--x)*3*var(--sscale));
 
-  --paper:#fff;     /* page background */
+  --paper:#fff;        /* page background */
   --ink:#131313;       /* body text, headings, order bar */
   --dim:#8b877f;       /* secondary text: notes, variant labels, descriptions */
   --rule:#b3b0a8;      /* hairlines: card borders, row dividers */
@@ -61,7 +61,7 @@
   --heat-mid:#f2679a;  /* second flame from the right */
   --heat-soft:#f9b4cd; /* third — each step left is lighter */
   --magenta-dim:#f2679a; /* an add-on's price: a real charge, quieter */
-/*
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -234,26 +234,26 @@ html[data-theme="dark"]{
   --ink:#f2f0eb;
   --dim:#8a8a94;
   --rule:#3f3f45;
-
-  --magenta:#dd5880;
-  --magenta-dim:#9f556c;
-  --heat-mid:#a33a58;
-  --heat-soft:#6e2a3e;
-  --on-magenta:#fff;
+/* accents */
+  --magenta:#cac426;
+  --magenta-dim:#9e9c51; 
+  --heat-mid:#928d00; /* middle flame */
+  --heat-soft:#656215; /* third flame */
+  --on-magenta:#1f1f1f; /* text on loud flags */
 
   /* In dark, drinks land on the same tile as food — so point at that pair
      rather than repeating its hexes and letting the two drift apart. */
   --tile:var(--tile-food);
   --tile-fill:var(--tile-food);
   --tile-ink:var(--tile-food-ink);
+/* order screen */
+  --obar-rule:transparent; /* order bar's border */
 
-  --obar-rule:#3f3f45;
-
-  --soc-ink:var(--dim);
-  --foot-bg:#f2f0eb;
-  --foot-ink:#131313;
-  --foot-dim:#807f8b;
-  --foot-rule:#3f3f45;
+  --soc-ink:var(--dim); /* socials in footer */
+  --foot-bg:#f2f0eb; /* order bar's bottom panel */
+  --foot-ink:#131313; /* bottom panel's text */
+  --foot-dim:#807f8b; /* [clear] text */
+  --foot-rule:#453f43; /* [clear] border */
 }
 
 /* the whole switch — one attribute, set by paintChrome() */
