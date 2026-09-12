@@ -200,11 +200,11 @@
   --foot-dim:var(--dim);
   --foot-rule:var(--rule);
 
-  /* The lettered tile behind a card with no photo. Two of them, because it
-     sits against the photography either side: cocktails on white, food on
-     black slate. Nothing to do with the theme. */
-  --tile-food:#2b2b2b;
-  --tile-food-ink:#696969;
+  /* The lettered tile behind a card with no photo. One set of values now:
+     food used to need its own dark pair because it was shot on black slate in
+     both modes, so a light tile would have punched a hole in the rail. Now
+     that food has light and dark variants like everything else, the tile
+     simply follows the theme and the food-only pair is gone. */
   --tile:#f6f4f1;       /* empty photo slot, before an image loads */
   --tile-fill:#f6f4f1;  /* fill behind the name on a photoless card */
   --tile-ink:#b4ada0;   /* that card's lettering */
@@ -241,11 +241,9 @@ html[data-theme="dark"]{
   --heat-soft:#656215; /* third flame */
   --on-magenta:#1f1f1f; /* text on loud flags */
 
-  /* In dark, drinks land on the same tile as food — so point at that pair
-     rather than repeating its hexes and letting the two drift apart. */
-  --tile:var(--tile-food);
-  --tile-fill:var(--tile-food);
-  --tile-ink:var(--tile-food-ink);
+  --tile:#2b2b2b;
+  --tile-fill:#2b2b2b;
+  --tile-ink:#696969;
 /* order screen */
   --obar-rule:transparent; /* order bar's border */
 
@@ -359,22 +357,26 @@ main{display:flex;flex-direction:column;flex:1}
 .rail::before{content:'';flex:0 0 var(--lead)}
 .rail::after{content:'';flex:0 0 var(--trail)}
 
-.item{flex:0 0 auto;width:var(--w-card);transition:width .3s cubic-bezier(.3,.85,.35,1)}
+.item{flex:0 0 auto;width:var(--w-card);transition:width .3s cubic-bezier(.3,.85,.35,1);
+  --shot-h:calc(var(--w-card) * var(--ar-h) / var(--ar-w))}
 .item.open{width:var(--w-open)}
 /* same card width on both tabs — only the photo's aspect and the
    panel's share of the open card differ */
-.rail.food  .item{--w-open:var(--w-open-food); --ar:1;   --shot-h:var(--w-card)}
-.rail.drink .item{--w-open:var(--w-open-drink);--ar:4/5; --shot-h:calc(var(--w-card)*1.25)}
+/* Photo shape, as two numbers rather than a ratio string: --shot-h is derived
+   from them below, so the open panel's height can never drift out of step with
+   the photo it sits beside. Change these; never touch --shot-h.
+       1:1 square    -> 1 / 1
+       3:4 portrait  -> 3 / 4
+       4:3 landscape -> 4 / 3          (width first, height second) */
+.rail.food  .item{--w-open:var(--w-open-food); --ar-w:1; --ar-h:1}
+.rail.drink .item{--w-open:var(--w-open-drink);--ar-w:4; --ar-h:5}
 
 .frame{display:flex;align-items:flex-start}
 /* photo width is frozen — it never re-scales, so nothing repaints on open */
-.shot{position:relative;flex:0 0 var(--w-card);width:var(--w-card);aspect-ratio:var(--ar);overflow:hidden;
+.shot{position:relative;flex:0 0 var(--w-card);width:var(--w-card);aspect-ratio:var(--ar-w)/var(--ar-h);overflow:hidden;
   border:1px solid var(--rule);background:var(--tile)}
 /* Food is photographed on black slate, so a white tile between two of those
    reads as a hole. Drinks are shot on white and keep the light tile. */
-.rail.food .shot,.setshot{background:var(--tile-food)}
-.rail.food .ph,.setshot .ph{background:var(--tile-food)}
-.rail.food .ph span,.setshot .ph span{color:var(--tile-food-ink)}
 .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
   padding:12px;text-align:center;background:var(--tile-fill)}
 .ph span{font-weight:500;font-size:var(--t-item);line-height:1.25;letter-spacing:calc(.06em + var(--tr));
