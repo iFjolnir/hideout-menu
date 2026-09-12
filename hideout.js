@@ -1,3 +1,4 @@
+/* Hideout menu — extracted from the single-file look_test-v4 HTML. */
 (() => {
   if (window.__HIDEOUT_BOOTED) return;
   window.__HIDEOUT_BOOTED = true;
