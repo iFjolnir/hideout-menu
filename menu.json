@@ -141,7 +141,7 @@
               "heat": 1,
               "price": 13,
               "description": {
-                "en": "Slow-cooked shredded birria pork, mozzarella, pickles. Served with birria dip\nand pickled onions.",
+                "en": "Slow-cooked shredded birria\npork, mozzarella, pickles.\nServed with birria dip\nand pickled onions.",
                 "ko": "천천히 저온 조리한\n비리아 돼지고기, 모짜렐라.\n비리아 디핑 소스, 피클 곁들임.",
                 "es": "Cerdo desmenuzado cocido lentamente, mozzarella, pepinillos. Servido con\nconsomé de birria."
               },
@@ -190,7 +190,7 @@
               },
               "price": 8,
               "description": {
-                "en": "Tortilla with cheddar cheese, mozzarella. Served with salsa and pickled onions.",
+                "en": "Tortilla with cheddar cheese,\nmozzarella. Served with salsa\nand pickled onions.",
                 "ko": "체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공.",
                 "es": "Tortilla con queso cheddar, mozzarella. Servida con salsa\ny cebolla encurtida."
               },
@@ -205,7 +205,7 @@
               "heat": 3,
               "price": 14,
               "description": {
-                "en": "Tortilla with chicken thigh meat, spicy jalapeños, curry seasoning, cheddar cheese, and mozzarella. Served with salsa and pickled onions.",
+                "en": "Tortilla with chicken thigh\nmeat, spicy jalapeños, curry\nseasoning, cheddar cheese,\nand mozzarella. Served with salsa\nand pickled onions.",
                 "ko": "닭다리살, 할라피뇨, 커리 양념,\n체다 치즈, 모짜렐라, 또르띠야.\n살사, 피클 어니언 제공.",
                 "es": "Tortilla con muslo de pollo, jalapeños picantes, sazonado\nal curry, queso cheddar\ny mozzarella. Servida con\nsalsa y cebolla encurtida."
               },
