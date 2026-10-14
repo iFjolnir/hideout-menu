@@ -1,4 +1,5 @@
-/* Hideout menu — extracted from the single-file look_test-v4 HTML. */
+/* Hideout menu — application code. Markup in index.html, styles in hideout.css.
+   Data comes from menu.json, specials.json and events.json at runtime. */
 (() => {
   if (window.__HIDEOUT_BOOTED) return;
   window.__HIDEOUT_BOOTED = true;
@@ -9,23 +10,18 @@ const pic = id => IMG[id] || null;
 /* ============================================================
    LANGUAGES
 
-   Every visible string in the JSON files may be either a plain
-   string or an object keyed by language:
-
-       "name": "Birria Tacos"
+   Any string in the JSON may be plain or keyed by language:
        "name": { "en": "Birria Tacos", "ko": "비리아 타코" }
+   A plain string counts as English; a missing translation falls
+   back to English rather than blanking, so partial translation
+   is safe to ship.
 
-   A plain string is treated as English, so a half-translated
-   file works: untranslated entries simply stay in English
-   rather than going blank.
+   English is load-bearing and cannot be dropped: cart ids, photo
+   filenames and the waiter screen are all derived from it via
+   can(). That is what lets a customer switch language mid-order
+   without the basket moving.
 
-   ENGLISH IS LOAD-BEARING and cannot be dropped. It generates
-   the cart ids and the photo filenames, which is what lets a
-   customer switch language mid-order without losing their
-   basket — the ids never move because they are built from a
-   string that never changes.
-
-   Adding Spanish is this list plus a label, and nothing else.
+   A new language is this list plus a label.
    ============================================================ */
 const LANGS = ['en', 'ko', 'es'];
 /* Listed in the drawer but not selectable — the words do not exist yet.
@@ -44,11 +40,9 @@ const LANG_FLAG  = {en:'img/flags/gb.svg', ko:'img/flags/kr.svg', es:'img/flags/
 const WAITER_LANG = 'en';
 
 /* ============================================================
-   CONTACT — edit these four. Nothing else in the file needs touching.
-
-   The address is a language block like everything else: Korean puts the
-   district before the street, and a Korean-speaking customer wants that
-   order. English stays as the structural fallback.
+   CONTACT — edit these four; nothing else needs touching.
+   Address is a language block: Korean orders district before
+   street, and a Korean reader expects that order.
    ============================================================ */
 const CONTACT = {
   instagram: 'https://www.instagram.com/hideoutbusan',
@@ -68,14 +62,11 @@ const LANG_KEY = 'hideout.lang';
 /* ============================================================
    THEME
 
-   The device decides, because a customer who has set their
-   phone to dark at 11pm has already told us what they want.
-   Only when the device will not say — an old browser, a
-   webview that answers neither query — do we fall back to the
-   clock, and to Seoul's clock rather than the phone's, since
-   the thing that is actually dark is this bar.
-
-   A manual choice outranks both and is remembered.
+   Device preference first — a phone set to dark at 11pm has
+   already answered. Only if it answers neither media query do
+   we fall back to Seoul's clock (18:00–08:00), since what is
+   dark is the bar, not the tourist's home timezone. A manual
+   choice outranks both and is remembered.
    ============================================================ */
 const THEME_KEY = 'hideout.theme';
 const THEMES = ['light', 'dark'];
@@ -166,8 +157,8 @@ function locArr(v){
   return Array.isArray(a) ? a.map(loc) : [];
 }
 
-/* The site's own wording. Not in the JSON files — the owners have no
-   business editing it, and it changes only when the code does. */
+/* The interface's own wording. Not in the JSON files: it changes with the
+   code, not with the menu. */
 const UI = {
   order:        {en:'Order',            ko:'주문',            es:'Pedido'},
   yourOrder:    {en:'Your order',       ko:'주문 내역',       es:'Tu pedido'},
@@ -218,14 +209,13 @@ function itemCount(k){
 }
 
 /* ============================================================
-   MENU DATA — lives in menu.json, not in this file.
+   MENU DATA — menu.json, fetched at runtime.
 
-   Single source of truth. There is deliberately no duplicate copy
-   baked in here: a stale duplicate would silently serve last year's
-   prices the day menu.json breaks, and wrong prices are worse than
-   no menu. Instead, the last version that parsed cleanly is cached
-   on the device, so a bad commit mid-service degrades to yesterday's
-   menu rather than a blank screen.
+   No copy of any data file is baked into the markup: a duplicate
+   drifts the moment one side is edited, then serves wrong prices
+   or a poster on the wrong night. The last version that parsed
+   cleanly is cached on the device instead, so a bad commit
+   mid-service degrades to yesterday's menu, not a blank screen.
    ============================================================ */
 const MENU_CACHE = 'hideout.menu.v1';
 let TABS = {}, TAB_ORDER = [];
@@ -253,18 +243,14 @@ function buildTabs(json){
         return {
           t: s.title || '',
           vl: Array.isArray(s.variants) ? s.variants : null,
-          /* Optional parallel list used ONLY on the order and waiter screens.
-             Choosing wants the full label — "Standard", "Double shot" —
-             while a summary wants it short, or gone. An empty string here
-             means no label at all. Falls back to the full label when absent,
-             so a section that needs no shortening says nothing. */
+          /* Labels for the order and waiter screens, where the menu's full
+             wording is too long. "" means no label at all. Absent falls back
+             to variants. */
           vs: Array.isArray(s.variantsShort) ? s.variantsShort : null,
           nb: s.noteBelow === true,
-          /* "titleOnOrder": true sends the section heading along as the row's
-             qualifier — a beer needs "Bottled" or "On Tap" beside it once it
-             is off the menu page and sitting in a list. Off by default: most
-             headings ("Bartender's Choice") are shelf labels, not facts about
-             the drink. */
+          /* Sends the section heading onto the order as the row's qualifier.
+             For headings that are facts about the drink ("Bottled", "On Tap"),
+             not shelf labels ("Bartender's Choice"). */
           tl: s.titleOnOrder === true ? (s.title || '') : null,
           ctr: s.centreRow === true,
           rows: (s.rows||[]).map(r => Array.isArray(r.prices)
@@ -378,12 +364,10 @@ function indexAll(){
       });
     }));
     if(T.list) T.list.forEach(s => {
-      /* A note earns its place on an order only when it is doing work: two
-         rows sharing a name are told apart by their notes alone, so the bar
-         must see it. A note on a row with no twin — a country, a gin, an
-         ingredient list — is information for someone choosing, and only
-         clutters a summary. The id still uses the note either way, so
-         nothing can collide. */
+      /* A note travels to the order only when two rows in the section share
+         a name — then it is the only thing telling them apart. A lone note
+         (a country, a gin, an ingredient list) is for choosing, not for the
+         bar. Ids use the note either way, so nothing collides. */
       const twins = {};
       s.rows.forEach(r => { twins[can(r.n)] = (twins[can(r.n)] || 0) + 1; });
       s.rows.forEach(r => {
@@ -405,11 +389,8 @@ function indexAll(){
 }
 
 /* ============================================================
-   SPECIALS — the only part the owners touch.
-
-   Source of truth is specials.json sitting next to index.html.
-   The block baked into the page below is the fallback, so the
-   menu still works if that file is missing, empty or malformed.
+   SPECIALS — this month's cocktails, from specials.json.
+   Fetched after first paint; the tab shows its stub until then.
    Nothing here can break the rest of the menu.
    ============================================================ */
 function applySpecials(raw, where){
@@ -441,8 +422,7 @@ function applySpecials(raw, where){
   return true;
 }
 
-/* If a standalone specials.json is present, it wins. Fails silently
-   on file:// where fetch is blocked — the baked-in block covers it. */
+/* Specials arrive after first paint. Until then the tab shows its stub. */
 function refreshSpecials(){
   if(typeof fetch !== 'function') return;
   try{
@@ -450,10 +430,9 @@ function refreshSpecials(){
       .then(r => r.ok ? r.text() : Promise.reject(r.status))
       .then(txt => {
         if(!applySpecials(txt, 'specials.json')) return;
-        /* The basket was checked against the placeholder specials baked into
-           this file, so anything ordered from the real list looked unknown
-           and was dropped. Now that the actual specials are indexed, read it
-           again — localStorage still holds the full saved basket. */
+        /* start() validated the basket before specials existed, so anything
+           ordered from them was dropped as unknown. localStorage still holds
+           the full saved basket; this is the first moment it can be checked. */
         cart = loadCart();
         sets = loadSets();     // a slot aimed at Specials has just changed under it
         pruneCart();
@@ -465,19 +444,18 @@ function refreshSpecials(){
         saveSets();
         paintAllQty();
         paintBar();
-        if(tab === 'Specials'){ render(); sizeRails(); requestAnimationFrame(parkRails); }
+        arrived();
       })
       .catch(()=>{});
   }catch(e){}
 }
 
 /* ============================================================
-   EVENTS — one-night things, logged ahead, shown only on the night.
-
-   Times are Asia/Seoul wall clock, NOT the customer's device clock.
-   A tourist's phone on London time would otherwise never see tonight's
-   poster. Default window is 18:00 on the date through 04:00 the next
-   morning, because the bar day doesn't end at midnight.
+   EVENTS — shown only during their own window.
+   Times are Asia/Seoul wall clock, not the device's: a tourist's
+   phone on London time would otherwise never see tonight's
+   poster. Default window is 18:00 through 04:00, because the bar
+   day does not end at midnight.
    ============================================================ */
 let EVENTS = [];
 
@@ -505,18 +483,9 @@ function dayNum(iso){
   return Math.round(Date.UTC(y, m-1, d) / 86400000);
 }
 
-/* Current Seoul date + minutes-past-midnight.
-   ?when=2026-08-15        → that night at 21:00
-   ?when=2026-08-16T02:30  → those small hours
-   Both are read as Seoul wall clock, so testing isn't tz-dependent. */
+/* Current Seoul date + minutes past midnight. Seoul, not the device: what is
+   open or dark is the bar, wherever the phone thinks it is. */
 function seoulNow(){
-  try{
-    const q = new URLSearchParams(location.search).get('when');
-    if(q){
-      const m = /^(\d{4}-\d{2}-\d{2})(?:[T ](\d{1,2}):(\d{2}))?$/.exec(q.trim());
-      if(m) return { date:m[1], min: m[2] ? (+m[2])*60 + (+m[3]) : 21*60 };
-    }
-  }catch(e){}
   const p = {};
   new Intl.DateTimeFormat('en-CA', {
     timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit',
@@ -527,11 +496,9 @@ function seoulNow(){
 }
 
 /* One continuous window, however many nights long. "until" is the LAST
-   night of a run — Chuseok over the 24th, 25th and 26th is one entry with
-   date 2026-09-24 and until 2026-09-26, and the poster stays up the whole
-   time rather than blinking out each morning. Omit it for a single night.
-   First match in file order wins, so if two ever overlap, put the more
-   specific one higher up. */
+   night of a run, and the poster stays up throughout rather than blinking
+   out each morning. Omit for a single night. First match in file order
+   wins, so put the more specific of two overlapping events higher. */
 function activeEvent(){
   const now  = seoulNow();
   const nowN = dayNum(now.date) * 1440 + now.min;
@@ -562,16 +529,12 @@ function posterHTML(ev){
     <div class="poster">${art}</div>${follow}</section>`;
 }
 
-applyEvents(document.getElementById('events-data').textContent, 'the built-in block');
-
 function refreshEvents(){
   if(typeof fetch !== 'function') return;
   try{
     fetch('events.json', {cache:'no-store'})
       .then(r => r.ok ? r.text() : Promise.reject(r.status))
-      .then(txt => { if(applyEvents(txt, 'events.json') && tab === 'Specials'){
-        render(); sizeRails(); requestAnimationFrame(parkRails);
-      }})
+      .then(txt => { if(applyEvents(txt, 'events.json')) arrived(); })
       .catch(()=>{});
   }catch(e){}
 }
@@ -591,6 +554,7 @@ function landingTab(){
 }
 
 let tab = 'Food';
+let tabPicked = false;          // set once the customer chooses one themselves
 /* Empty for now. A saved basket cannot be validated until the menu has
    arrived and INDEX exists, so it is restored in start() instead — reading
    it here would check every saved id against an empty index, find none of
@@ -645,25 +609,11 @@ function clampAddons(){
 /* ============================================================
    SETS WITH CHOICES
 
-   A set that says "dessert of choice" is not a variant and must not be
-   made one: variants are a closed list the menu declares, and these are
-   open, customer-made, and in the Monthly Special's case regenerate every
-   month. So sets live beside the cart rather than inside it.
-
-   `cart` stays exactly what it was — {id: qty} — and `sets` is a list of
-   instances, each one configured set:
-
-       {sid, of, picks:{slotKey:[optionId, ...]}}
-
-   One Add is one instance. Two identical sets are two rows, deliberately:
-   the moment identical picks merged into a quantity, minus would have to
-   decide which instance to kill, which is the ambiguity that took the
-   stepper off these cards in the first place.
-
-   Option ids are slugged from English like every other id, so switching
-   language never moves one. A pick pointing at a special that has since
-   been replaced cannot be honoured, so the instance is dropped on load —
-   the same rule pruneCart() already applies to a vanished drink.
+   "Dessert of choice" is not a variant: variants are a closed
+   list the menu declares, these are open and customer-made, and
+   the Monthly Special's options change every month. So sets live
+   beside the cart rather than inside it — `cart` stays {id: qty}
+   and `sets` holds the instances with their picks.
    ============================================================ */
 let sets = [];
 const SETS_KEY = 'hideout.sets';
@@ -735,11 +685,9 @@ function validSet(s){
   });
 }
 
-/* Reads and validates, and deliberately does NOT write back what it rejected:
-   at boot this runs against the placeholder specials, where a perfectly good
-   instance looks invalid only because the real cocktails have not arrived
-   yet. Saving here would delete a valid basket a quarter-second before it
-   became verifiable. The write happens once specials.json has landed. */
+/* Validates but deliberately does not write back what it rejected: at boot
+   the specials have not arrived, so a valid instance looks invalid. Saving
+   here would delete a good basket moments before it became verifiable. */
 function loadSets(){
   try{
     const a = JSON.parse(localStorage.getItem(SETS_KEY) || '[]');
@@ -806,12 +754,9 @@ function stepper(id, kind){
   </div>`;
 }
 
-/* ---------------------------------------------------------------
-   THE FLAME. To change the icon, replace the d="..." string below and
-   nothing else — the viewBox must match whatever the new path is drawn
-   against. Everything about stacking, colour and placement is handled by
-   heatMark() and the .heat rules in the stylesheet.
-   --------------------------------------------------------------- */
+/* THE FLAME. To swap the icon, replace the d="..." and the matching
+   viewBox; stacking, colour and placement are handled by heatMark() and
+   the .heat rules. */
 const FLAME_BOX  = '0 0 24.634 33.978';
 const FLAME_PATH = 'M14.865,0c-5.521,5.09-7.645,11.879-7.645,17.83-1.699-2.553-1.699-4.679-2.124-8.07C.849,15.278,0,18.249,0,23.351c0,5.667,3.935,9.351,8.494,10.626-1-1.258-1.699-3.018-1.699-4.667,0-2.125.425-4.246,1.699-5.946.187,1.528.951,2.673,1.699,3.822,0-2.679.967-6.628,3.398-8.919.934,4.97,4.247,6.832,4.247,11.043,0,1.664-.705,3.403-1.699,4.667,4.714-1.241,8.494-4.904,8.494-10.626,0-9.351-7.645-12.312-9.769-23.351Z';
 
@@ -878,10 +823,9 @@ function setCard(it){
 }
 
 /* ---------- dark-mode photography ----------
-   A dark variant is the same filename with -dm before the extension.
-   We never keep a list of which ones exist: the first 404 tells us, and
-   NO_DM remembers for the session so the request isn't repeated. Missing
-   -dm therefore degrades to the light shot, not to the typographic tile. */
+   A dark variant is the same filename with -dm before the extension. No
+   list is kept of which exist: the first 404 says so and NO_DM remembers
+   for the session. A missing -dm degrades to the light shot. */
 const NO_DM   = new Set();
 const dmSrc   = p => p.replace(/\.(jpe?g|png|webp)$/i, '-dm.$1');
 const shotSrc = p => (THEME === 'dark' && !NO_DM.has(p)) ? dmSrc(p) : p;
@@ -1218,11 +1162,8 @@ function paintSheet(){
         <span class="oxs"></span>
       </div>
     </div>`;};
-  /* Drinks first, then food — the same split the waiter view uses, so the
-     customer and the bar read the order in the same sequence. No headings
-     here: an order is short, and the customer knows what they ordered.
-     Sets fall into their own group's block rather than trailing the whole
-     list, which is where they used to sit. */
+  /* Drinks then food, the same split the waiter view uses, so customer and
+     bar read the order in the same order. No headings: an order is short. */
   const GROUPS = ['drink','food'];
   body.innerHTML = GROUPS.map(g =>
       ls.filter(l => !l.parent && l.group === g).map(lineHTML).join('')
@@ -1269,10 +1210,9 @@ function paintWaiter(){
 }
 
 /* ---------- the chooser ----------
-   Open question, not a page: it floats over the card that raised it. It
-   goes through openPanel() all the same, so back and the edge swipe close
-   it like every other panel — including when it is opened from the order
-   sheet to edit, where it sits on top and back reveals the sheet again. */
+   Floats over the card that raised it, but goes through openPanel() like
+   every other panel, so back and the edge swipe close it — including when
+   it is opened from the order sheet, where back reveals the sheet again. */
 const chooser = document.getElementById('chooser');
 let choosing = null;            // {of, sid|null, picks}
 
@@ -1369,22 +1309,17 @@ main.addEventListener('click', e => {
 /* ============================================================
    BACK / SWIPE
 
-   The order sheet and the waiter view cover the whole screen, so
-   every phone user reads them as pages and reaches for back to
-   leave one. Without this, back leaves the SITE — the worst
-   failure we have, because it looks like the order was thrown
-   away.
+   Full-screen panels read as pages, so phone users reach for
+   back to leave one; without this, back leaves the site and
+   looks like the order was discarded.
 
-   Each panel pushes one history entry as it opens. Back — or an
-   edge swipe on iOS, which is the same event — pops it, and the
-   handler closes whatever is on top. The × buttons deliberately
-   go through history.back() as well rather than hiding the panel
-   directly: if they didn't, the pushed entry would still be
-   sitting there and a later back press would reopen a panel the
-   customer had already dismissed.
+   Each panel pushes one history entry as it opens; back (and the
+   iOS edge swipe, which is the same event) pops it and closes
+   whatever is on top. The × buttons go through history.back()
+   too — otherwise the entry lingers and a later back press
+   reopens a panel the customer already dismissed.
 
-   The URL never changes, so nothing here needs anything of the
-   server, and ?when= survives untouched.
+   The URL never changes, so this needs nothing of the server.
    ============================================================ */
 let depth = 0;                  // history entries we are responsible for
 
@@ -1485,6 +1420,7 @@ document.getElementById('home').addEventListener('click', () => {
 
 document.getElementById('nav').addEventListener('click', e=>{
   const b = e.target.closest('[data-tab]'); if(!b) return;
+  tabPicked = true;
   showTab(b.dataset.tab);
   scrollTo({top:0});
 });
@@ -1498,11 +1434,9 @@ function showTab(name){
 }
 
 /* ============================================================
-   LANGUAGE SWITCHING
-
-   Nothing is re-fetched and nothing is re-indexed: the cart ids
-   are built from English, so they are identical in every
-   language and the basket rides through a switch untouched.
+   LANGUAGE SWITCHING — nothing is re-fetched or re-indexed. Cart
+   ids are built from English, so they are identical in every
+   language and the basket rides through untouched.
    ============================================================ */
 function paintLangs(){
   document.getElementById('drawer').innerHTML =
@@ -1608,14 +1542,29 @@ function fatal(msg){
   document.getElementById('nav').innerHTML = '';
 }
 
-/* Staff-only notice. Customers see a working menu; whoever is on shift
-   sees that it is the cached one and that menu.json needs fixing. */
+/* Diagnostic, not an error message: the menu on screen works, it is simply
+   the cached copy. Shown only on ?check so a customer never meets it; always
+   logged to the console. Whoever is on shift opens the menu with ?check to
+   find out whether menu.json is healthy. */
 function staleWarning(){
+  console.warn('menu: serving the device cache — menu.json needs fixing');
+  try{ if(!new URLSearchParams(location.search).has('check')) return; }catch(e){ return; }
   const el = document.createElement('div');
   el.className = 'stale';
   el.textContent = 'Menu file has an error — showing the last saved version. Tell whoever edited it.';
   document.body.appendChild(el);
   el.addEventListener('click', ()=> el.remove());
+}
+
+/* Specials and events are fetched after the first paint, so the landing tab is
+   decided before either exists and would always fall through to Food. Until the
+   customer picks a tab themselves, reconsider it as the data lands. */
+function arrived(){
+  if(!tabPicked){
+    const want = landingTab();
+    if(want !== tab){ showTab(want); return; }
+  }
+  if(tab === 'Specials'){ render(); sizeRails(); requestAnimationFrame(parkRails); }
 }
 
 function start(){
@@ -1624,7 +1573,6 @@ function start(){
   paintLangs();
   paintChrome();
   paintNav();
-  applySpecials(document.getElementById('specials-data').textContent, 'the built-in block');
   cart = loadCart();          // INDEX is populated by now, so ids can be checked
   sets = loadSets();          // same reason, and its picks need the options to exist
   showTab(landingTab());
@@ -1636,10 +1584,7 @@ function start(){
 function loadMenu(){
   const cached = (()=>{ try{ return localStorage.getItem(MENU_CACHE); }catch(e){ return null; } })();
 
-  /* Two tiers, deliberately. There is no copy of the menu baked into this
-     file: one would need regenerating every time menu.json changed, and a
-     forgotten regeneration means serving last year's prices to a paying
-     customer. Wrong prices are worse than no menu. */
+  /* Network first, device cache second, error third. */
   const useCached = (why) => {
     console.warn('menu: could not use menu.json —', why);
     if(cached){

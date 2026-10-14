@@ -1,22 +1,19 @@
-/* ===========================================================
-   TYPE SCALE — one knob. Ratios locked to your mockup:
-   nav 6x · section head 8x · item name+price 5x · ingredients 3x
-   =========================================================== */
+/* ------------------------------------------------------------
+   HIDEOUT MENU — stylesheet
+
+   Three layers, in this order:
+     1. GRID        proportions of screen width, not pixels
+     2. TYPE        one scale unit, --x, with per-language adjustment
+     3. TWEAK       the numbers worth nudging while looking at a phone
+     4. COLOUR      light, then dark, as matching value sets
+   Everything after that is components.
+   ------------------------------------------------------------ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  /* ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-     Everything below is a proportion of screen width, taken
-     from the 1179px draft. Change --railw and the whole grid
-     rescales; nothing here is a magic pixel.
-
-       card width  523.5179 / 1179 = .4440   (both tabs)
-       ckt photo   650.0545 / 1179 = .5514   → 4:5
-       ckt panel   342.0555 / 1179 = .2901   → .653 × card
-       ckt open    865.5734 / 1179 = .7342
-       food panel  523.5179 / 1179 = .4440   → 1.00 × card
-       food open  1047.0358 / 1179 = .8881
-       type unit        7.5 / 1179 = .00636
-     --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+  /* ---------- 1. GRID ----------
+     Proportions of screen width, derived from the 1179px draft; no magic
+     pixels. Change --railw and the whole grid rescales.
+       card .4440 · cocktail open .7342 · food open .8881 · type unit .00636 */
   --railw:393px;                     /* set by JS to the live width */
 
   --f-card:.4440;
@@ -35,14 +32,13 @@
   --lead:calc(var(--railw) * var(--f-lead));
   --trail:calc(var(--railw) * var(--f-trail));
 
-  /* type: 1x scales with the screen, clamped so it stays readable
-     on a 320px phone and doesn't bloat on a 430px one */
+  /* ---------- 2. TYPE ----------
+     --x scales with the screen, clamped to stay readable at 320px and not
+     bloat at 430px. */
   --x:clamp(2.15px, calc(var(--railw) * .00636), 2.95px);
-  /* Hangul has no ascenders or descenders and fills more of its box, so at
-     an identical pixel size it reads smaller than Jost beside it. --tscale
-     lifts type only — not padding, not card widths — so the layout holds
-     while the Korean stops looking undersized. Latin inside a Korean menu
-     ("IPA", "No. 1") grows with it, which keeps a mixed line even. */
+  /* Hangul fills more of its box than Jost, so it reads smaller at the same
+     pixel size. These lift type only — never padding or card widths — so the
+     layout holds. Set per language further down. */
   --tscale:1;          /* tabs, section headings, item names and prices */
   --sscale:1;          /* descriptions, notes, subtitles — the small stuff */
   --tr:var(--en-track);  /* letter-spacing nudge, set per language below */
@@ -53,31 +49,11 @@
   --t-item:calc(var(--x)*5*var(--tscale));
   --t-ing:calc(var(--x)*3*var(--sscale));
 
-  --paper:#fff;        /* page background */
-  --ink:#131313;       /* body text, headings, order bar */
-  --dim:#8b877f;       /* secondary text: notes, variant labels, descriptions */
-  --rule:#b3b0a8;      /* hairlines: card borders, row dividers */
-  --magenta:#e6155a;   /* prices, cart badge, non-alcoholic tag */
-  --heat-mid:#f2679a;  /* second flame from the right */
-  --heat-soft:#f9b4cd; /* third — each step left is lighter */
-  --magenta-dim:#f2679a; /* an add-on's price: a real charge, quieter */
-/*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  /* ---------- 3. TWEAK ----------
+     The numbers worth nudging while looking at a phone. All are multipliers
+     of --x unless marked otherwise: change the multiplier, not the unit. */
 
-
-
-
-
-
-
-- playground -*/
-  /* -------------------------------------------------------------------------------------------------------------------------------------------------
-     TWEAK BLOCK — the numbers you will actually want to nudge
-     while looking at the thing on a phone. Everything is in
-     units of --x, so it scales with the screen: bump the
-     multiplier, not the unit.
-     ------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-  /* ---------- MASTHEAD ---------------------------------------------------------------------------------------------------- */
+  /* ---- MASTHEAD ---- */
   --mode-icon-h:9.5;    /* HEIGHT of the light/dark icon. Sized by height, not
                            width: the sun and the speech-bubble have different
                            proportions, so matching widths reads as unequal. */
@@ -94,7 +70,7 @@
                            this and the width follows; never set a width. */
 
 
-  /* ---------- CARDS ---------------------------------------------------------------------------------------------------- */
+  /* ---- CARDS ---- */
   --heat-inset-x:4;     /* flame's gap from the LEFT edge of the photo */
   --heat-inset-y:3;     /* and from the BOTTOM edge */
   --heat-size:4;        /* width of one flame */
@@ -107,14 +83,14 @@
                            --note-gap bottoms out; 0 restores the old spacing. */
 
 
-  /* ---------- SET CARDS ---------------------------------------------------------------------------------------------------- */
+  /* ---- SET CARDS ---- */
   --set-gap:20;         /* one set card to the next — end of a blurb to the top
                            of the following photo */
   --set-step-gap:5;     /* space above and below the +/- on a set card */
   --add-gap:3;          /* set card: price -> Add button */
 
 
-  /* ---------- ORDER SHEET ---------------------------------------------------------------------------------------------------- */
+  /* ---- ORDER SHEET ---- */
   --addon-indent:8;     /* how far an add-on line is inset from its dish. Size
                            no longer signals that it is subordinate, so
                            position has to. 0 lines them up flush. */
@@ -130,7 +106,7 @@
   --waiter-share:3;     /* 1 and 3 = Clear takes a quarter of the width */
 
 
-  /* ---------- WAITER VIEW ----------------------------------------------------------------------------------------------------
+  /* ---- WAITER VIEW ----
      Pinned to Latin no matter what the customer was reading, so none of these
      move when the language does. That is why they need their own numbers
      rather than sharing the order sheet's. */
@@ -142,7 +118,7 @@
   --wpick-type:1.4;     /* choice line size, off the waiter's own scale */
 
 
-  /* ---------- FOOTER ---------------------------------------------------------------------------------------------------- */
+  /* ---- FOOTER ---- */
   --foot-clear:15;      /* content ends -> footer rule */
   --foot-top:5;         /* footer rule -> address */
   --foot-bottom:0;      /* icons -> bottom of the screen */
@@ -152,7 +128,7 @@
   --soc-gap:5;          /* gap between the social icons */
 
 
-  /* ---------- TYPE: LATIN ---------------------------------------------------------------------------------------------------- */
+  /* ---- TYPE: LATIN (and every other Latin-script language) ---- */
   --en-foot:1;          /* footnote size. Its own knob because the footnote is
                            the one piece of small text always on screen — it
                            wants to be quieter than a description. */
@@ -164,8 +140,7 @@
                            relative differences. 0em is the original. */
 
 
-  /* ---------- TYPE: KOREAN ----------------------------------------------------------------------------------------------------
-     Latin is never touched by these. */
+  /* ---- TYPE: KOREAN — Latin is never touched by these ---- */
   --ko-type:1.12;       /* tabs, headings, item names */
   --ko-small:1.5;       /* descriptions, ingredient lines, notes, subtitles,
                            the order-sheet second line. The one that reads too
@@ -182,111 +157,98 @@
                            Jost — tracking that opens Latin scatters Korean. */
 
 
-  /* ---------- COLOURS ----------------------------------------------------------------------------------------------------
-     Not really tweaks; they are here because they are the other thing you
-     reach for. The order bar is the inverse of the page: in light mode a dark
-     block against white, needing no edge; in dark a pale block above pale
-     cocktail shots, which without a line run into each other. Transparent
-     keeps the geometry identical either way. */
-  --obar-rule:transparent;
-  --soc-ink:var(--dim); /* the social icons and the address line */
+  /* ---------- 4. COLOUR: LIGHT ----------
+     The dark set below mirrors this one token for token. Two groups do not
+     simply invert, and are named so they cannot: --foot-* is the panel under
+     an order, which goes pale in dark mode so the button held up to a waiter
+     is the brightest thing on screen; --obar-rule is the order bar's top
+     edge, needed only in dark where a pale bar meets pale photography. */
+  --paper:#fff;         /* page background */
+  --ink:#131313;        /* body text, headings, order bar */
+  --dim:#8b877f;        /* secondary text: notes, variant labels, descriptions */
+  --rule:#b3b0a8;       /* hairlines: card borders, row dividers */
 
-  /* The panel at the foot of an order. In light mode it is simply the page;
-     in dark it inverts to paper, which is where the one bright thing on
-     screen lives. Named separately because it does NOT follow --ink/--paper:
-     "Show to waiter" must stay dark on light in both modes. */
-  --foot-bg:var(--paper);
-  --foot-ink:var(--ink);
-  --foot-dim:var(--dim);
-  --foot-rule:var(--rule);
+  --magenta:#e6155a;    /* prices, cart badge, loud flags */
+  --magenta-dim:#f2679a;/* an add-on's price: a real charge, quieter */
+  --heat-mid:#f2679a;   /* second flame from the right */
+  --heat-soft:#f9b4cd;  /* third — each step left is lighter */
+  --on-magenta:#fff;    /* text sitting on a magenta background */
 
-  /* The lettered tile behind a card with no photo. One set of values now:
-     food used to need its own dark pair because it was shot on black slate in
-     both modes, so a light tile would have punched a hole in the rail. Now
-     that food has light and dark variants like everything else, the tile
-     simply follows the theme and the food-only pair is gone. */
   --tile:#f6f4f1;       /* empty photo slot, before an image loads */
   --tile-fill:#f6f4f1;  /* fill behind the name on a photoless card */
   --tile-ink:#b4ada0;   /* that card's lettering */
-  --on-magenta:#fff;    /* text sitting on a magenta background */
 
-  /* Jost carries no Hangul, so Korean would otherwise drop to whatever the
-     device happens to have. Noto Sans KR picks up only the characters Jost
-     cannot draw — Latin text is unaffected in any language. */
+  --obar-rule:transparent; /* order bar's top edge */
+  --foot-bg:var(--paper);  /* panel under an order */
+  --foot-ink:var(--ink);   /* its text */
+  --foot-dim:var(--dim);   /* [clear] text */
+  --foot-rule:var(--rule); /* [clear] border */
+  --soc-ink:var(--dim);    /* social icons and the address line */
+
+  /* Jost carries no Hangul, so Noto Sans KR picks up only what Jost cannot
+     draw. Latin is unaffected in every language. */
   font-family:'Jost','Noto Sans KR',system-ui,sans-serif;
 }
 
-/* ========================================================================================================================
-   DARK MODE — one attribute on <html>, set by applyTheme().
+/* ---------- 4. COLOUR: DARK ----------
+   Set by applyTheme() on <html>. A value swap only: no layout, type or
+   geometry changes with the theme. Asphalt rather than true black, or the
+   accent muddies and the photography floats.
 
-   Asphalt rather than true black: on #000 the magenta goes muddy
-   and the photographs float. Everything below is a value swap;
-   no layout, no type, no geometry changes with the theme.
-
-   Two things deliberately do NOT invert. The flame tints step
-   DARKER to the left here, not lighter, so the right-hand flame
-   stays the strongest one on a dark ground. And the foot of an
-   order inverts to paper, so the button a customer holds up to
-   a waiter is the brightest thing on the screen.
-   ======================================================================================================================== */
+   Two sets deliberately do not invert. The flame tints step DARKER to the
+   left here, not lighter, so the right-hand flame stays the strongest on a
+   dark ground. And --foot-* goes pale, so the panel under an order is the
+   brightest thing on screen rather than the dimmest. */
 html[data-theme="dark"]{
   --paper:#1f1f1f;
   --ink:#f2f0eb;
   --dim:#8a8a94;
   --rule:#3f3f45;
-/* accents */
+
   --magenta:#cac426;
-  --magenta-dim:#9e9c51; 
-  --heat-mid:#928d00; /* middle flame */
-  --heat-soft:#656215; /* third flame */
-  --on-magenta:#1f1f1f; /* text on loud flags */
+  --magenta-dim:#9e9c51;
+  --heat-mid:#928d00;
+  --heat-soft:#656215;
+  --on-magenta:#1f1f1f;
 
   --tile:#2b2b2b;
   --tile-fill:#2b2b2b;
   --tile-ink:#696969;
-/* order screen */
-  --obar-rule:transparent; /* order bar's border */
 
-  --soc-ink:var(--dim); /* socials in footer */
-  --foot-bg:#f2f0eb; /* order bar's bottom panel */
-  --foot-ink:#131313; /* bottom panel's text */
-  --foot-dim:#807f8b; /* [clear] text */
-  --foot-rule:#453f43; /* [clear] border */
+  --obar-rule:transparent;
+  --foot-bg:#f2f0eb;
+  --foot-ink:#131313;
+  --foot-dim:#807f8b;
+  --foot-rule:#453f43;
+  --soc-ink:var(--dim);
 }
 
-/* the whole switch — one attribute, set by paintChrome() */
+/* ---------- 4. COLOUR: (none) / TYPE per language ----------
+   Set by paintChrome(). Only Korean overrides the type knobs; every
+   Latin-script language inherits the defaults above. */
 html[lang="ko"]{--tscale:var(--ko-type);--sscale:var(--ko-small);
   --tr:var(--ko-track);--lead:var(--ko-lead);--fscale:var(--ko-foot);
   --pick-scale:var(--ko-pick)}
 
-body{background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;padding-bottom:40px}
+/* ------------------------------------------------------------
+   COMPONENTS
+   ------------------------------------------------------------ */
+
+/* body and main are flex columns and .flow takes the slack, so the footer is
+   pushed to the bottom of the SCREEN on a short tab and behaves as an ordinary
+   block on a long one. dvh, not vh, or Chrome's collapsing address bar leaves
+   it a header's height low. body.hasbar's padding is inside the min-height
+   (border-box), so the footer clears the order bar without reserving a dead
+   strip when there isn't one. */
+body{background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;
+  padding-bottom:40px;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 img{display:block;width:100%;height:100%;object-fit:cover}
 
-/* ---------- playground end ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-*/
-/* -------------------- masthead -------------------- */
-/* Masthead and tabs stick as ONE element. They used to stick separately,
-   with the nav pinned at top:57px — a hardcoded guess at the masthead's
-   height. Any change to it (the language icon, --ko-type raising the
-   wordmark) made that number wrong and the tabs slid under. Nothing here
-   measures anything now. */
-/* The footnote belongs at the foot of the SCREEN, not at the end of the
-   content: on a short tab (Specials, Shots) it used to float wherever the
-   sections happened to stop. body and main are flex columns and .flow takes
-   the slack, so the footer is pushed down when content is short and behaves
-   as an ordinary block when it is long. min-height is dvh, not vh, or the
-   collapsing Chrome address bar leaves it a header's height too low.
-   body.hasbar's padding-bottom is inside the min-height (border-box), so the
-   footer clears the order bar without reserving a dead strip when it's absent. */
-body{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
+/* ---------- masthead ----------
+   Masthead and tabs stick as ONE element; they used to stick separately with
+   the nav pinned at a hardcoded guess at the masthead's height, which any
+   change to it made wrong. Nothing here measures anything. */
 main{display:flex;flex-direction:column;flex:1}
 .flow{flex:1 0 auto}
 .topbar{position:sticky;top:0;z-index:30;background:var(--paper)}
@@ -294,11 +256,9 @@ main{display:flex;flex-direction:column;flex:1}
   display:flex;align-items:center;justify-content:space-between;padding:18px var(--gut) 13px}
 .wordmark{color:var(--ink);background:none;border:0;padding:0;
   display:flex;align-items:center;cursor:pointer}
-/* The logo is one file, not two. It is monochrome distressed type, so all of
-   it lives in the alpha channel: the mask supplies the shape and currentColor
-   supplies the colour, which means it follows --ink into dark mode and into
-   any theme added later. A pair of coloured PNGs would have to be re-exported
-   every time a theme colour moved. */
+/* One file, not two: the logo is monochrome distressed type living entirely
+   in its alpha channel, so the mask supplies the shape and currentColor the
+   colour. It follows --ink into dark mode and into any theme added later. */
 .wordmark .mark{display:block;
   height:var(--logo-h);width:calc(var(--logo-h) * var(--logo-ar));
   background:currentColor;
@@ -362,12 +322,9 @@ main{display:flex;flex-direction:column;flex:1}
 .item.open{width:var(--w-open)}
 /* same card width on both tabs — only the photo's aspect and the
    panel's share of the open card differ */
-/* Photo shape, as two numbers rather than a ratio string: --shot-h is derived
-   from them below, so the open panel's height can never drift out of step with
-   the photo it sits beside. Change these; never touch --shot-h.
-       1:1 square    -> 1 / 1
-       3:4 portrait  -> 3 / 4
-       4:3 landscape -> 4 / 3          (width first, height second) */
+/* Photo shape as two numbers rather than a ratio string — --shot-h is derived
+   from them, so the open panel can never drift out of step with the photo.
+   Change these; never touch --shot-h. 1/1 square, 3/4 portrait, 4/3 landscape. */
 .rail.food  .item{--w-open:var(--w-open-food); --ar-w:1; --ar-h:1}
 .rail.drink .item{--w-open:var(--w-open-drink);--ar-w:4; --ar-h:5}
 
@@ -375,8 +332,7 @@ main{display:flex;flex-direction:column;flex:1}
 /* photo width is frozen — it never re-scales, so nothing repaints on open */
 .shot{position:relative;flex:0 0 var(--w-card);width:var(--w-card);aspect-ratio:var(--ar-w)/var(--ar-h);overflow:hidden;
   border:1px solid var(--rule);background:var(--tile)}
-/* Food is photographed on black slate, so a white tile between two of those
-   reads as a hole. Drinks are shot on white and keep the light tile. */
+/* Lettered stand-in when a card has no photo; follows the theme. */
 .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
   padding:12px;text-align:center;background:var(--tile-fill)}
 .ph span{font-weight:500;font-size:var(--t-item);line-height:1.25;letter-spacing:calc(.06em + var(--tr));
@@ -402,10 +358,9 @@ main{display:flex;flex-direction:column;flex:1}
 .step.empty [data-step="1"]{color:var(--magenta)}
 
 /* ---------- add-ons ----------
-   A sub-line of the parent item: its own cart line, but it cannot exist
-   without the parent and never outnumbers it. Magenta + means another one
-   can be added; grey means it cannot — no parent yet, or already matched.
-   Two states only, because the customer is reading this in a dark bar. */
+   Its own cart line, but it cannot exist without its parent and never
+   outnumbers it. Magenta + means another can be added, grey means it cannot.
+   Two states only — this is read one-handed in a dark room. */
 .addrow{display:flex;align-items:center;justify-content:space-between;
   gap:calc(var(--x)*2);border-top:1px solid var(--rule);
   margin-top:calc(var(--x)*3);padding-top:calc(var(--x)*2.5)}
@@ -420,11 +375,10 @@ main{display:flex;flex-direction:column;flex:1}
 
 /* caption — right-aligned to the PHOTO's right edge, never the panel's */
 .cap{width:var(--w-card);padding-top:9px;text-align:right}
-/* Each price sits directly under its own name. Names wrap to different
-   line counts, so prices across a row are deliberately ragged: the rail
-   shows about two cards at a time, so they are never compared side by
-   side, and padding every name up to the tallest one left a visible hole
-   under the short ones. */
+/* Each price sits under its own name, so prices across a row are deliberately
+   ragged. The rail shows about two cards at a time and they are never compared
+   side by side; padding every name to the tallest left a hole under the short
+   ones. */
 .cap .nm{font-size:var(--t-item);letter-spacing:calc(.08em + var(--tr));text-transform:uppercase;
   line-height:1.3}
 .cap .pr{font-size:var(--t-item);color:var(--magenta);letter-spacing:calc(.03em + var(--tr));margin-top:1px}
@@ -459,10 +413,10 @@ main{display:flex;flex-direction:column;flex:1}
   padding:calc(var(--x)*1) calc(var(--x)*2.4);
   color:var(--magenta);font-size:calc(var(--x)*7);line-height:1;font-weight:500}
 /* ---------- heat marker ----------
-   Bottom-LEFT, deliberately: the cart badge stays bottom-right so it reads
-   beside the item name. Flames overlap and get lighter leftwards, so the
-   right-hand one is always full magenta and always on top — later siblings
-   paint over earlier ones, so DOM order is simply left to right. */
+   Bottom-LEFT: the cart badge keeps bottom-right, beside the item name.
+   Flames overlap and lighten leftwards, so the right-hand one is full
+   magenta and on top — later siblings paint over earlier, so DOM order is
+   simply left to right. */
 .heat{position:absolute;left:0;bottom:0;z-index:2;display:flex;align-items:flex-end;
   padding:calc(var(--x) * var(--heat-inset-y)) calc(var(--x) * var(--heat-inset-x))}
 .heat svg{display:block;width:calc(var(--x) * var(--heat-size));height:auto;position:relative}
@@ -490,14 +444,11 @@ main{display:flex;flex-direction:column;flex:1}
 .rowname{font-size:var(--t-item);letter-spacing:calc(.07em + var(--tr));text-transform:uppercase;line-height:1.3}
 .rowname .sub{margin-left:calc(var(--x)*2.4);font-size:var(--t-ing);
   letter-spacing:calc(.09em + var(--tr));color:var(--dim)}
-/* The +/- buttons are set about twice the height of the item name beside
-   them, and a centred flex row takes its height from the tallest child. So
-   the name sat in the middle of a stepper-height row, with dead space under
-   it that --note-gap could add to but never remove. Negative block margins
-   let the buttons overhang the row instead of inflating it: the tap target
-   is unchanged, the row is now the height of the name, and --note-gap goes
-   all the way down to 0. Only on note-below rows — Beer and Bottles keep
-   the roomier row they already had. */
+/* The +/- buttons are about twice the height of the name beside them, and a
+   centred flex row takes its height from its tallest child — so the name sat
+   in the middle of a stepper-height row with dead space beneath it. Negative
+   block margins let the buttons overhang instead of inflating the row: the tap
+   target is unchanged and --note-gap can reach zero. */
 .nbrow .vrow .step{margin-block:calc(var(--x) * var(--step-squeeze) * -1)}
 /* Note-below rows are two lines tall, so the stepper centres against the
    pair instead of sitting on the name's line. The price stays up with the
@@ -519,13 +470,11 @@ main{display:flex;flex-direction:column;flex:1}
 .vrow .rowname{flex:1;min-width:0}
 .vname{font-size:var(--t-ing);letter-spacing:calc(.09em + var(--tr));text-transform:uppercase;color:var(--dim)}
 /* ---------- two-price rows (Mixers, Bottles) ----------
-   Left column names the thing, right column stacks its sizes. Side by side
-   the two steppers sat next to the wrong prices, and the variety line
-   ("Bourbon") was styled identically to the size line ("Shot") — same grey,
-   same caps, different job. Splitting them by column tells them apart by
-   position instead of by adding a third grey, and gives the variety line a
-   home: on Mixers it can finally say which gin is in the gin and tonic.
-   One stepper per line, all of them ending at the same right edge. */
+   Left column names the thing, right column stacks its sizes, one stepper per
+   line. Side by side, the two steppers sat beside the wrong prices and the
+   variety line ("Bourbon") was styled identically to the size line ("Shot").
+   Splitting by column tells them apart by position rather than by inventing a
+   third grey. */
 .vsplit{display:flex;align-items:flex-start;gap:calc(var(--x)*5)}
 .vleft{flex:1 1 0;min-width:0}
 .vright{flex:1 1 0;min-width:0}
@@ -565,7 +514,10 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
   display:flex;flex-direction:column;transform:translateY(100%);
   transition:transform .26s cubic-bezier(.3,.85,.35,1)}
 .sheet.show,.waiter.show{transform:none}
-.waiter{z-index:60}
+/* Locked to WAITER_LANG, so it pins the type knobs: an English staff screen
+   must not inherit sizing meant for Hangul. */
+.waiter{z-index:60;--tscale:1;--sscale:1;--tr:var(--en-track);
+  --lead:var(--en-lead);--fscale:var(--en-foot)}
 .sheet-top,.wtop{display:flex;align-items:center;justify-content:space-between;
   padding:calc(var(--x)*7) var(--gut) calc(var(--x)*5);border-bottom:1px solid var(--rule)}
 .sheet-top h2,.wtop h2{font-size:var(--t-head);font-weight:600;letter-spacing:calc(.06em + var(--tr));text-transform:uppercase}
@@ -642,8 +594,6 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 /* ---------- waiter view — no prices, big enough to read across a bar ---------- */
 /* Locked to WAITER_LANG, so it must not inherit the customer's type scale —
    an English staff screen sized for Hangul would be oversized. */
-.waiter{--tscale:1;--sscale:1;--tr:var(--en-track);--lead:var(--en-lead);
-  --fscale:var(--en-foot)}
 .wbody{flex:1;overflow-y:auto;padding:calc(var(--x)*3) var(--gut) calc(var(--x)*10)}
 .wbody h3{font-size:var(--t-item);letter-spacing:calc(.18em + var(--tr));text-transform:uppercase;color:var(--dim);
   padding:calc(var(--x)*8) 0 calc(var(--x)*2);border-bottom:1px solid var(--rule);
@@ -663,7 +613,6 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
   text-transform:uppercase;line-height:1.25}
 .wn em{font-style:normal;color:var(--dim);font-size:calc(var(--x)*5);line-height:1.25}
 
-/* staff notice when running from cache */
 /* ---------- sets with choices ---------- */
 .setctl{display:flex;align-items:center;gap:calc(var(--x)*3);justify-content:flex-end;
   margin-top:calc(var(--x) * var(--add-gap))}

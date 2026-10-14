@@ -1,82 +1,29 @@
 {
   "events": [
     {
-      "date": "2026-09-15",
-      "name": "Caipirinha Festival",
-      "poster": "caipirinha-festival.jpg",
-      "from": "02:50",
-      "to": "02:00"
+      "date": "2026-10-18",
+      "name": { "en": "Trivia Night" },
+      "poster": "1018-trivia-night.jpg"
     },
     {
-      "date": "2026-09-10",
-      "name": "Industry Night",
-      "poster": "0914-industry-night.jpg",
-      "from": "18:00",
-      "to": "02:00"
+      "date": "2026-10-20",
+      "name": { "en": "Taco Tuesday" },
+      "poster": "1020-taco-tuesday.jpg"
     },
     {
-      "date": "2026-09-15",
-      "name": "Taco Tuesday",
-      "poster": "taco-tuesday.jpg",
-      "from": "18:00",
-      "to": "02:00"
+      "date": "2026-10-23",
+      "name": { "en": "Cocktail World Tour" },
+      "poster": "1023-cocktail-world-tour.jpg"
     },
     {
-      "date": "2026-09-16",
-      "name": "Mexico National Day",
-      "poster": "mexico-national-day.jpg",
-      "from": "18:00",
-      "to": "02:00"
+      "date": "2026-10-27",
+      "name": { "en": "Taco Tuesday" },
+      "poster": "1027-taco-tuesday.jpg"
     },
     {
-      "date": "2026-09-18",
-      "name": "Mojito Night",
-      "poster": "mojito-night.jpg",
-      "from": "18:00",
-      "to": "02:00"
-    },
-    {
-      "date": "2026-09-19",
-      "name": "Cocktail World Tour",
-      "poster": "0919-cwt.jpg",
-      "from": "18:00",
-      "to": "02:00"
-    },
-    {
-      "date": "2026-09-20",
-      "name": "Trivia Night",
-      "poster": "trivia-night.jpg",
-      "from": "18:00",
-      "to": "02:00"
-    },
-    {
-      "date": "2026-09-22",
-      "name": "Taco Tuesday",
-      "poster": "taco-tuesday.jpg",
-      "from": "18:00",
-      "to": "02:00"
-    },
-    {
-      "date": "2026-09-24",
-      "until": "2026-09-26",
-      "name": "Chuseok",
-      "poster": "chuseok.jpg",
-      "from": "18:00",
-      "to": "02:00"
-    },
-    {
-      "date": "2026-09-27",
-      "name": "Spritz Brunch",
-      "poster": "spritz-brunch.jpg",
-      "from": "16:00",
-      "to": "02:00"
-    },
-    {
-      "date": "2026-09-29",
-      "name": "Taco Tuesday",
-      "poster": "taco-tuesday.jpg",
-      "from": "18:00",
-      "to": "02:00"
+      "date": "2026-10-14",
+      "name": { "en": "Halloween Party" },
+      "poster": "1031-halloween-party.jpg"
     }
   ]
 }

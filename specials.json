@@ -1,124 +1,47 @@
 {
   "sections": [
     {
-      "title": {
-        "en": "Cocktails of the Month",
-        "ko": "이달의 스페셜",
-        "es": "Cócteles del Mes"
-      },
+      "title": { "en": "Cocktails of the Month", "ko": "이달의 칵테일", "es": "Cocteles del mes" },
       "items": [
         {
-          "name": {
-            "en": "Pear Me Up",
-            "ko": "페어 미 업"
-          },
+          "name": { "en": "Ghost Orchard", "ko": "유령 과수원" },
           "price": 13,
-          "photo": "0926-pear-me-up.jpg",
+          "photo": "1026-ghost-orchard.jpg",
           "ingredients": {
-            "en": [
-              "Gin",
-              "Kor. pear cordial",
-              "Sauvignon Blanc",
-              "Sparkling water",
-              "Lemon juice"
-            ],
-            "ko": [
-              "진",
-              "배 코디얼",
-              "소비뇽 블랑",
-              "레몬 주스",
-              "탄산수"
-            ],
-            "es": [
-              "Ginebra",
-              "Cordial de pera coreana",
-              "Sauvignon Blanc",
-              "Agua con gas",
-              "Zumo de limón"
-            ]
+            "en": ["· Aged rum", "· Persimmon cordial", "· Roasted sweet potato syrup", "· Lemon", "· Black tea"],
+            "ko": ["숙성 럼", "감 코디얼", "군고구마 시럽", "레몬", "홍차"],
+            "es": ["· Ron añejo", "· Cordial de caqui", "· Sirope de boniato asado", "· Limón", "· Té negro"]
           }
         },
         {
-          "name": {
-            "en": "Is It Pink?",
-            "ko": "이거 핑크야?",
-            "es": "¿Es Rosa?"
-          },
+          "name": { "en": "Pear Pressure", "ko": "페어 프레셔" },
           "price": 13,
-          "photo": "0926-is-it-pink.jpg",
+          "photo": "1026-pear-pressure.jpg",
           "ingredients": {
-            "en": [
-              "Tequila blanco",
-              "Orange liqueur",
-              "Omija cordial",
-              "Sparkling water"
-            ],
-            "ko": [
-              "테킬라 블랑코",
-              "오렌지 리큐어",
-              "오미자 코디얼",
-              "탄산수"
-            ],
-            "es": [
-              "Tequila blanco",
-              "Licor de naranja",
-              "Cordial de omija",
-              "Agua con gas"
-            ]
+            "en": ["· Tequila", "· Korean pear & ginger cordial", "· Fino sherry", "· Carbonated water"],
+            "ko": ["테킬라", "배·생강 코디얼", "피노 셰리", "탄산수"],
+            "es": ["· Tequila", "· Cordial de pera coreana y jengibre", "· Jerez fino", "· Agua con gas"]
           }
         },
         {
-          "name": {
-            "en": "Storm Chaser",
-            "ko": "스톰 체이서"
-          },
+          "name": { "en": "Autumn Ledger", "ko": "가을 장부" },
           "price": 13,
-          "photo": "0926-storm-chaser.jpg",
+          "photo": "1026-autumn-ledger.jpg",
           "ingredients": {
-            "en": [
-              "Plant. dark rum",
-              "Captain Morgan",
-              "Ginger soda"
-            ],
-            "ko": [
-              "플랜테이션 다크 럼",
-              "캡틴 모건 럼",
-              "진저 소다"
-            ],
-            "es": [
-              "Ron oscuro Plantation",
-              "Captain Morgan",
-              "Soda de jengibre"
-            ]
+            "en": ["· Roasted chestnut-infused bourbon", "· Chestnut syrup", "· Jujube tincture", "· Aromatic bitters", "· Orange peel"],
+            "ko": ["군밤 인퓨즈드 버번", "밤 시럽", "대추 팅크처", "아로마틱 비터스", "오렌지 필"],
+            "es": ["· Bourbon infusionado con castaña asada", "· Sirope de castaña", "· Tintura de azufaifa", "· Amargo aromático", "· Piel de naranja"]
           }
         },
         {
-          "name": {
-            "en": "Pinky Promise",
-            "ko": "핑키 프로미스"
-          },
+          "name": { "en": "Golden Moon", "ko": "황금 달" },
           "price": 9,
-          "photo": "0926-pinky-promise.jpg",
+          "photo": "1026-golden-moon.jpg",
           "mocktail": true,
           "ingredients": {
-            "en": [
-              "Kor. pear cordial",
-              "Omija cordial",
-              "Sugar syrup",
-              "Sparkling water"
-            ],
-            "ko": [
-              "배 코디얼",
-              "오미자 코디얼",
-              "탄산수",
-              "시럽"
-            ],
-            "es": [
-              "Cordial de pera coreana",
-              "Cordial de omija",
-              "Jarabe de azúcar",
-              "Agua con gas"
-            ]
+            "en": ["· Roasted chestnut syrup", "· Pear juice", "· Lemon", "· Dried pear", "· Edible flower"],
+            "ko": ["군밤 시럽", "배 주스", "레몬", "건조 배", "식용 꽃"],
+            "es": ["· Sirope de castaña asada", "· Zumo de pera", "· Limón", "· Pera deshidratada", "· Flor comestible"]
           }
         }
       ]
