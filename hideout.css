@@ -509,11 +509,18 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 .ob-go{border:1px solid var(--paper);padding:calc(var(--x)*3) calc(var(--x)*7);
   font-size:var(--t-item);letter-spacing:calc(.12em + var(--tr));text-transform:uppercase}
 
-/* ---------- order page ---------- */
+/* ---------- order page ----------
+   Parked one viewport-height below and slid up. visibility, not transform
+   alone: the panel is inset:0 so its height follows the viewport, and when a
+   mobile browser collapses its address bar mid-scroll the height and the
+   100% translate update on different frames — long enough for the top strip
+   of the panel to peek above the bottom edge. The delay keeps the slide-out
+   visible before it is hidden. */
 .sheet,.waiter{position:fixed;inset:0;z-index:50;background:var(--paper);
-  display:flex;flex-direction:column;transform:translateY(100%);
-  transition:transform .26s cubic-bezier(.3,.85,.35,1)}
-.sheet.show,.waiter.show{transform:none}
+  display:flex;flex-direction:column;transform:translateY(100%);visibility:hidden;
+  transition:transform .26s cubic-bezier(.3,.85,.35,1), visibility 0s linear .26s}
+.sheet.show,.waiter.show{transform:none;visibility:visible;
+  transition:transform .26s cubic-bezier(.3,.85,.35,1), visibility 0s}
 /* Locked to WAITER_LANG, so it pins the type knobs: an English staff screen
    must not inherit sizing meant for Hangul. */
 .waiter{z-index:60;--tscale:1;--sscale:1;--tr:var(--en-track);
@@ -677,9 +684,36 @@ body.hasbar{padding-bottom:calc(var(--x)*30)}
 .ch-foot .btn{width:100%}
 .ch-foot .btn[disabled]{opacity:.35;pointer-events:none}
 
-.stale{position:fixed;left:0;right:0;top:0;z-index:99;background:var(--magenta);color:var(--on-magenta);
-  padding:calc(var(--x)*3) var(--gut);font-size:var(--t-ing);letter-spacing:calc(.06em + var(--tr));
-  text-transform:uppercase;line-height:1.5;text-align:center}
+/* ---------- pre-shift check ----------
+   Shown only on ?check, and centred rather than tucked at the top: it is read
+   deliberately before a shift, not glimpsed. Staff-facing, so English only,
+   like the waiter view. */
+.check{position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.55);padding:var(--gut)}
+.check-card{width:100%;max-width:380px;background:var(--paper);color:var(--ink);
+  border:1px solid var(--rule);padding:calc(var(--x)*7) calc(var(--x)*7) calc(var(--x)*6)}
+.check-card h2{font-size:var(--t-head);font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:calc(var(--x)*2)}
+.check-when{font-size:var(--t-ing);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.check-line{display:flex;gap:calc(var(--x)*4);align-items:baseline;
+  padding:calc(var(--x)*4) 0;border-top:1px solid var(--rule);margin-top:calc(var(--x)*4)}
+.check-line:not(:first-of-type){margin-top:0}
+.check-k{flex:0 0 calc(var(--x)*26);font-size:var(--t-ing);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--dim)}
+.check-v{flex:1;font-size:var(--t-item);letter-spacing:.05em;line-height:1.35}
+/* A failed file fills its whole row with the accent rather than tinting the
+   text: coloured words in a list of four read as emphasis, a filled band
+   reads as a fault. Full-bleed to the card's edges, so it cannot be mistaken
+   for one more line of the report. */
+.check-line.bad{background:var(--magenta);border-top-color:var(--magenta);
+  margin-left:calc(var(--x)*-7);margin-right:calc(var(--x)*-7);
+  padding-left:calc(var(--x)*7);padding-right:calc(var(--x)*7)}
+.check-line.bad .check-k,
+.check-line.bad .check-v{color:var(--on-magenta)}
+.check-line.bad .check-v{font-weight:500}
+.check-x{display:block;width:100%;margin-top:calc(var(--x)*5);
+  background:var(--ink);color:var(--paper);padding:calc(var(--x)*4);
+  font-size:var(--t-item);letter-spacing:.12em;text-transform:uppercase}
 
 /* ---------- event poster ---------- */
 .poster-sec{padding:calc(var(--x)*11) 0 0}

@@ -217,7 +217,12 @@ function itemCount(k){
    cleanly is cached on the device instead, so a bad commit
    mid-service degrades to yesterday's menu, not a blank screen.
    ============================================================ */
-const MENU_CACHE = 'hideout.menu.v1';
+const MENU_CACHE     = 'hideout.menu.v1';
+const SPECIALS_CACHE = 'hideout.specials.v1';
+const EVENTS_CACHE   = 'hideout.events.v1';
+
+const cacheGet = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
+const cacheSet = (k, v) => { try{ localStorage.setItem(k, v); }catch(e){} };
 let TABS = {}, TAB_ORDER = [];
 
 function buildTabs(json){
@@ -422,14 +427,30 @@ function applySpecials(raw, where){
   return true;
 }
 
-/* Specials arrive after first paint. Until then the tab shows its stub. */
+/* The panel is drawn once all three files have reported, so it never shows a
+   half-finished picture. */
+function settled(){
+  if(CHECK.menu && CHECK.specials && CHECK.events) setTimeout(showCheck, 0);
+}
+
+let specialsShown = null;   // raw text currently on screen, to skip a no-op repaint
+
+/* Painted from the device cache at boot, then refreshed from the file. */
 function refreshSpecials(){
   if(typeof fetch !== 'function') return;
   try{
     fetch('specials.json', {cache:'no-store'})
       .then(r => r.ok ? r.text() : Promise.reject(r.status))
       .then(txt => {
-        if(!applySpecials(txt, 'specials.json')) return;
+        CHECK.specials = { ok:true, text: txt === specialsShown ? 'loaded, unchanged' : 'loaded' };
+        settled();
+        if(txt === specialsShown) return;        // identical to what is painted
+        if(!applySpecials(txt, 'specials.json')){
+          CHECK.specials = { ok:false, text:'file is malformed — showing nothing' };
+          return;
+        }
+        specialsShown = txt;
+        cacheSet(SPECIALS_CACHE, txt);
         /* start() validated the basket before specials existed, so anything
            ordered from them was dropped as unknown. localStorage still holds
            the full saved basket; this is the first moment it can be checked. */
@@ -446,7 +467,7 @@ function refreshSpecials(){
         paintBar();
         arrived();
       })
-      .catch(()=>{});
+      .catch(()=>{ CHECK.specials = { ok:false, text:'did not load' }; settled(); });
   }catch(e){}
 }
 
@@ -529,13 +550,21 @@ function posterHTML(ev){
     <div class="poster">${art}</div>${follow}</section>`;
 }
 
+let eventsShown = null;
+
 function refreshEvents(){
   if(typeof fetch !== 'function') return;
   try{
     fetch('events.json', {cache:'no-store'})
       .then(r => r.ok ? r.text() : Promise.reject(r.status))
-      .then(txt => { if(applyEvents(txt, 'events.json')) arrived(); })
-      .catch(()=>{});
+      .then(txt => {
+        CHECK.events = { ok:true, text:'loaded' };
+        settled();
+        if(txt === eventsShown) return;
+        if(applyEvents(txt, 'events.json')){ eventsShown = txt; cacheSet(EVENTS_CACHE, txt); arrived(); }
+        else CHECK.events = { ok:false, text:'file is malformed — no posters will show' };
+      })
+      .catch(()=>{ CHECK.events = { ok:false, text:'did not load' }; settled(); });
   }catch(e){}
 }
 
@@ -1546,14 +1575,64 @@ function fatal(msg){
    the cached copy. Shown only on ?check so a customer never meets it; always
    logged to the console. Whoever is on shift opens the menu with ?check to
    find out whether menu.json is healthy. */
-function staleWarning(){
-  console.warn('menu: serving the device cache — menu.json needs fixing');
-  try{ if(!new URLSearchParams(location.search).has('check')) return; }catch(e){ return; }
+/* ---------- pre-shift check ----------
+   ?check answers three questions in one panel: did each file load, and is
+   there a poster up now or due later tonight. Reports in both directions —
+   a diagnostic that says nothing when all is well is indistinguishable from
+   one that is broken. Staff-facing, so English regardless of the menu's
+   language. */
+const CHECK = { menu:null, specials:null, events:null };
+
+function checkRequested(){
+  try{ return new URLSearchParams(location.search).has('check'); }catch(e){ return false; }
+}
+
+const hhmm = m => String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0');
+
+/* What the poster will do over the rest of this shift. */
+function eventReport(){
+  const now = seoulNow();
+  const live = activeEvent();
+  let next = null;
+  for(const ev of EVENTS){
+    const on = ev.date === 'today' ? now.date : ev.date;
+    if(on !== now.date) continue;
+    const from = toMin(ev.from) ?? 18*60;
+    if(from > now.min && (!next || from < next.min)) next = { ev, min:from };
+  }
+  return { live, next, now };
+}
+
+function showCheck(){
+  if(!checkRequested() || document.querySelector('.check')) return;
+  const { live, next, now } = eventReport();
+
+  const rows = [
+    ['Menu',     CHECK.menu],
+    ['Specials', CHECK.specials]
+  ];
+
+  if(live) rows.push(['Event', { ok:true, text:'“' + can(live.name) + '” is up now' }]);
+  else if(next) rows.push(['Event', { ok:true,
+    text:'“' + can(next.ev.name) + '” goes up at ' + hhmm(next.min) }]);
+  else if(CHECK.events && !CHECK.events.ok) rows.push(['Event', CHECK.events]);
+  else rows.push(['Event', { ok:true, text:'nothing scheduled for today' }]);
+
   const el = document.createElement('div');
-  el.className = 'stale';
-  el.textContent = 'Menu file has an error — showing the last saved version. Tell whoever edited it.';
+  el.className = 'check';
+  el.innerHTML = `<div class="check-card" role="dialog" aria-modal="true">
+    <h2>Pre-shift check</h2>
+    <div class="check-when">${esc(now.date)} · ${esc(hhmm(now.min))} Seoul</div>
+    ${rows.map(([k, v]) => `<div class="check-line${v && v.ok ? '' : ' bad'}">
+      <span class="check-k">${esc(k)}</span>
+      <span class="check-v">${esc(v ? v.text : 'not loaded')}</span>
+    </div>`).join('')}
+    <button class="check-x">Close</button>
+  </div>`;
   document.body.appendChild(el);
-  el.addEventListener('click', ()=> el.remove());
+  const close = () => el.remove();
+  el.querySelector('.check-x').addEventListener('click', close);
+  el.addEventListener('click', e => { if(e.target === el) close(); });
 }
 
 /* Specials and events are fetched after the first paint, so the landing tab is
@@ -1573,6 +1652,17 @@ function start(){
   paintLangs();
   paintChrome();
   paintNav();
+
+  /* Specials and events from the device cache before anything is painted, so a
+     returning customer gets the finished page in one go rather than watching
+     the poster and the specials drop in a moment later. Both are refreshed
+     from their files immediately after, and a repaint is skipped when the
+     file matches what is already on screen. */
+  const cs = cacheGet(SPECIALS_CACHE);
+  if(cs && applySpecials(cs, 'device cache')) specialsShown = cs;
+  const ce = cacheGet(EVENTS_CACHE);
+  if(ce && applyEvents(ce, 'device cache')) eventsShown = ce;
+
   cart = loadCart();          // INDEX is populated by now, so ids can be checked
   sets = loadSets();          // same reason, and its picks need the options to exist
   showTab(landingTab());
@@ -1581,28 +1671,48 @@ function start(){
   refreshEvents();
 }
 
-function loadMenu(){
-  const cached = (()=>{ try{ return localStorage.getItem(MENU_CACHE); }catch(e){ return null; } })();
+/* Cache first, network second.
 
-  /* Network first, device cache second, error third. */
-  const useCached = (why) => {
+   Waiting for menu.json before painting anything meant a blank screen on
+   every single load, cache or no cache — the cached copy was only ever
+   consulted when the network failed. Now a device that has been here before
+   paints immediately from what it has and quietly catches up; only a genuine
+   first visit waits.
+
+   A repaint is skipped when the file matches the cache byte for byte, which
+   is the usual case, so there is no second flash either. */
+function loadMenu(){
+  const cached = cacheGet(MENU_CACHE);
+  let booted = false;
+
+  const bootFrom = (txt, where) => {
+    applyMenu(txt, where);                  // throws if malformed
+    if(!booted){ booted = true; start(); }
+    else { showTab(TABS[tab] ? tab : landingTab()); paintBar(); }
+  };
+
+  const fail = (why) => {
     console.warn('menu: could not use menu.json —', why);
-    if(cached){
-      try{ applyMenu(cached, 'device cache'); start(); staleWarning(); return; }catch(e){}
-    }
+    CHECK.menu = { ok:false, text:'did not load — running on the saved copy. Fix menu.json.' };
+    if(booted){ settled(); return; }             // already running on the cache
     fatal(location.protocol === 'file:' ? u('needServer') : u('menuBad'));
   };
 
-  if(typeof fetch !== 'function'){ useCached('no fetch available'); return; }
+  if(cached){
+    try{ bootFrom(cached, 'device cache'); }catch(e){ console.warn('menu: cache unusable', e); }
+  }
+
+  if(typeof fetch !== 'function'){ fail('no fetch available'); return; }
 
   fetch('menu.json', {cache:'no-store'})
     .then(r => r.ok ? r.text() : Promise.reject('HTTP ' + r.status))
     .then(txt => {
-      applyMenu(txt, 'menu.json');          // throws if malformed
-      try{ localStorage.setItem(MENU_CACHE, txt); }catch(e){}
-      start();
+      const same = cached && txt === cached;
+      if(!same){ bootFrom(txt, 'menu.json'); cacheSet(MENU_CACHE, txt); }
+      CHECK.menu = { ok:true, text: same ? 'loaded, unchanged' : 'loaded' };
+      settled();
     })
-    .catch(useCached);
+    .catch(fail);
 }
 
 loadMenu();
